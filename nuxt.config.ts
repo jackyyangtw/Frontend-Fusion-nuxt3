@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     devtools: { enabled: true },
-    modules: ["@pinia/nuxt"],
+    modules: ["@pinia/nuxt", "@nuxtjs/tailwindcss"],
     app: {
         head: {
             title: "Frontend Fusion", // 從你的 package.json 中替換
@@ -46,4 +46,10 @@ export default defineNuxtConfig({
             firebaseBaseUrl: process.env.FIREBASE_BASE_URL,
         },
     },
+    imports: {
+        dirs: ["types"],
+    },
+    // typescript: {
+    //     typeCheck: true,
+    // },
 });

@@ -1,6 +1,8 @@
 # ISSUE
 
--   post-filter not working
+## VSCODE shortcut
+
+-   https://ithelp.ithome.com.tw/articles/10237385
 
 ## nuxtServerInit to nuxt3
 

@@ -37,9 +37,8 @@ const filteredPosts = computed(() => {
     if (selectedTag.value === "全部類型") {
         return loadedPosts.value;
     }
-
     return loadedPosts.value.filter((post) =>
-        post.tags.filter((tag) => tag.name === selectedTag.value)
+        post.tags.includes(selectedTag.value)
     );
 });
 

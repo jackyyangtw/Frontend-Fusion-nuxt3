@@ -93,7 +93,7 @@ const props = defineProps<{
     title: string;
     previewText: string;
     thumbnail: string;
-    tags: Tag[];
+    tags: string[];
     isAdmin: boolean;
     previewImgUrl?: string;
     index: number;

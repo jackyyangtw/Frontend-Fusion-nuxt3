@@ -3,7 +3,7 @@ export interface Post {
     id: string;
     title: string;
     thumbnail: string;
-    tags: Tag[];
+    tags: string[];
     previewImgUrl: string;
     updatedDate: string;
     photoURL: string;

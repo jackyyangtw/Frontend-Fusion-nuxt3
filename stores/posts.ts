@@ -1,23 +1,33 @@
-// import type { Post } from "../types/posts";
-export const usePostsStore = defineStore("posts", {
-    state: () => ({
-        loadedPosts: [] as Post[],
-        isLoadingPosts: true,
-    }),
-    actions: {
-        setPosts(posts: Post[]) {
-            this.loadedPosts = posts;
-        },
-        setIsLoadingPosts(isLoading: boolean) {
-            this.isLoadingPosts = isLoading;
-        },
-        async getAllPosts() {
-            const data = await $fetch<Post>("/api/GET/posts");
-            const postArr = [];
-            for (const key in data) {
-                postArr.push({ ...data[key], id: key });
+export const usePostsStore = defineStore("posts", () => {
+    const loadedPosts = ref<Post[]>([]);
+    const setPosts = (posts: Post[]) => {
+        loadedPosts.value = posts;
+    };
+
+    const isLoadingPosts = ref(true);
+    const setIsLoadingPosts = (isLoading: boolean) => {
+        isLoadingPosts.value = isLoading;
+    };
+
+    const getAllPosts = async () => {
+        const data = await $fetch<{ [key: string]: Post }>(
+            "/api/realTime/posts",
+            {
+                method: "GET",
             }
-            this.loadedPosts = postArr;
-        },
-    },
+        );
+        const postArr = [];
+        for (const key in data) {
+            postArr.push({ ...data[key], id: key });
+        }
+        loadedPosts.value = postArr;
+    };
+
+    return {
+        loadedPosts,
+        isLoadingPosts,
+        setPosts,
+        setIsLoadingPosts,
+        getAllPosts,
+    };
 });

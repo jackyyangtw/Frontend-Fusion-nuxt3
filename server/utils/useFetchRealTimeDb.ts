@@ -1,4 +1,4 @@
-export const useFetchFirebase = async (
+export const useFetchRealTimeDb = async (
     route: string,
     method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH",
     handler = {}
@@ -7,9 +7,6 @@ export const useFetchFirebase = async (
     try {
         const res = $fetch(`${config.public.firebaseBaseUrl}/${route}.json`, {
             method,
-            headers: {
-                "Content-Type": "application/json",
-            },
             handler,
         });
         return res;

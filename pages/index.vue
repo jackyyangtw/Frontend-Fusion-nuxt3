@@ -1,9 +1,10 @@
 <template>
+    <!-- <AppHeader /> -->
     <div class="home-page">
         <section
             class="banner relative intro bg-slate-100/[0.8] dark:bg-slate-950/[0.4]"
         >
-            <!-- <div class="w-full" :style="placeHolderHeight"></div> -->
+            <div class="w-full h-[60px]"></div>
             <div
                 class="rounded-md p-6 min-h-[200px] mx-auto"
                 style="z-index: 3"
@@ -39,14 +40,49 @@ import { storeToRefs } from "pinia";
 const postsStore = usePostsStore();
 const { loadedPosts, isLoadingPosts } = storeToRefs(postsStore);
 
-const tagsStore = useTagsStore();
-try {
-    await postsStore.getAllPosts();
-    await tagsStore.getTags();
-    isLoadingPosts.value = false;
-} catch (error) {
-    console.error("Failed to fetch posts:", error);
-}
+// const tagsStore = useTagsStore();
+// try {
+//     await postsStore.getAllPosts();
+//     await tagsStore.getAllTags();
+//     isLoadingPosts.value = false;
+// } catch (error) {
+//     console.error("Failed to fetch posts:", error);
+// }
+// const placeHolderHeight = {
+//     height: "calc(100vh - 64px)",
+// };
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+.intro {
+    height: 480px;
+    position: relative;
+    padding: 30px;
+    box-sizing: border-box;
+    background-position: bottom;
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+h1 {
+    background-image: -webkit-linear-gradient(92deg, #f35626, #feab3a);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: hue 10s infinite linear;
+}
+@keyframes hue {
+    from {
+        -webkit-filter: hue-rotate(0deg);
+        background-position: 0% 50%;
+    }
+    to {
+        -webkit-filter: hue-rotate(-360deg);
+        background-position: 100% 50%;
+    }
+}
+</style>

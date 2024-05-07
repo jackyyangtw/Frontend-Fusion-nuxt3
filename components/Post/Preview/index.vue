@@ -53,8 +53,7 @@
                             </p>
                             <div class="mt-2">
                                 <PostBadge
-                                    v-for="tag in tags"
-                                    v-if="tags"
+                                    v-for="tag in thisTags"
                                     :key="tag.id"
                                     :badgeName="tag.name"
                                     :classes="tag.style"
@@ -112,12 +111,9 @@ const setShowButtons = () => {
 
 const tagStore = useTagsStore();
 const { tags } = storeToRefs(tagStore);
-const getBadgeClass = (tagName: string) => {
-    const tag = tagStore.tags.find((tag) => tag.name === tagName);
-    if (tag) {
-        return tag.style;
-    }
-};
+const thisTags = computed(() => {
+    return tags.value.filter((tag) => props.tags.includes(tag.name));
+});
 
 const handleLoad = (src: string) => {
     // $store.dispatch("image/cacheImage", src);

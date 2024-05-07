@@ -1,7 +1,12 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     devtools: { enabled: true },
-    modules: ["@pinia/nuxt", "@nuxtjs/tailwindcss"],
+    modules: ["@pinia/nuxt", "@nuxtjs/tailwindcss", "@nuxtjs/color-mode"],
+    colorMode: {
+        classSuffix: "",
+        preference: "light",
+        fallback: "light",
+    },
     app: {
         head: {
             title: "Frontend Fusion", // 從你的 package.json 中替換
@@ -28,7 +33,7 @@ export default defineNuxtConfig({
             link: [
                 {
                     rel: "icon",
-                    type: "image/x-icon",
+                    type: "image/svg+xml",
                     href: "/images/site-icon.svg",
                 },
                 {
@@ -47,7 +52,8 @@ export default defineNuxtConfig({
         },
     },
     imports: {
-        dirs: ["types"],
+        dirs: ["types/*"],
+        autoImport: true,
     },
     // typescript: {
     //     typeCheck: true,

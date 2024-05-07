@@ -1,7 +1,7 @@
-import { useFetchFirebase } from "~/server/utils/useFetchFirebase";
+import { useFetchRealTimeDb } from "~/server/utils/useFetchRealTimeDb";
 export default defineEventHandler(async (event) => {
-    const data = await useFetchFirebase("tags", "GET", {
-        onResponse: ({ response }) => {
+    const data = await useFetchRealTimeDb("tags", "GET", {
+        onResponse: ({ response }: { response: any }) => {
             if (!response.ok) {
                 throw new Error("Failed to fetch posts");
             }

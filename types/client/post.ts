@@ -8,4 +8,5 @@ export interface Post {
     updatedDate: string;
     photoURL: string;
     author: string;
+    content: string;
 }

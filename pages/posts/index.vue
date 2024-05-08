@@ -26,8 +26,6 @@ useHead({
     ],
 });
 
-const placeHolderWidth = ref(0);
-
 const selectedTag = ref<string>("全部類型");
 
 const postsStore = usePostsStore();

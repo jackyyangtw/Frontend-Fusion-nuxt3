@@ -28,7 +28,7 @@
                 v-if="loadedPosts.length > 0"
                 :posts="loadedPosts"
                 :loadingPosts="isLoadingPosts"
-                isAdmin
+                :isAdmin="false"
             ></post-list>
         </div>
     </div>
@@ -39,18 +39,6 @@ import { storeToRefs } from "pinia";
 
 const postsStore = usePostsStore();
 const { loadedPosts, isLoadingPosts } = storeToRefs(postsStore);
-
-// const tagsStore = useTagsStore();
-// try {
-//     await postsStore.getAllPosts();
-//     await tagsStore.getAllTags();
-//     isLoadingPosts.value = false;
-// } catch (error) {
-//     console.error("Failed to fetch posts:", error);
-// }
-// const placeHolderHeight = {
-//     height: "calc(100vh - 64px)",
-// };
 </script>
 
 <style scoped>

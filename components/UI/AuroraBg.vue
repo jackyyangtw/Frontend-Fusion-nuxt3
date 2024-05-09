@@ -65,7 +65,6 @@
     height: 100%;
     opacity: 0.4;
     overflow: hidden;
-    z-index: 0;
     /* backdrop-filter: blur(10px); */
 }
 .glass {

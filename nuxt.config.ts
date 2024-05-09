@@ -1,3 +1,5 @@
+// import { config } from "firebase-functions/lib/v1";
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     devtools: { enabled: true },
@@ -7,6 +9,7 @@ export default defineNuxtConfig({
         "@nuxtjs/color-mode",
         "@vueuse/nuxt",
         "nuxt-schema-org",
+        "nuxt-vuefire",
     ],
     colorMode: {
         classSuffix: "",
@@ -51,10 +54,12 @@ export default defineNuxtConfig({
                 lang: "zh-Hant",
             },
         },
+        pageTransition: { name: "layout", mode: "out-in" },
     },
     runtimeConfig: {
         public: {
             firebaseBaseUrl: process.env.FIREBASE_BASE_URL,
+            firebaseApiKey: process.env.FIREBASE_API_KEY,
         },
     },
     imports: {

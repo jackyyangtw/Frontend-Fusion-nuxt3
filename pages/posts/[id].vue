@@ -1,11 +1,11 @@
 <template>
-    <div class="single-post-page container">
+    <div class="single-post-page container z-10 relative">
         <div
             class="w-full xl:w-[900px] mx-auto backdrop-blur-lg bg-slate-50 dark:bg-slate-950/[0.8] rounded overflow-hidden"
         >
             <section class="post">
                 <div class="mb-5 rel lg:min-h-[514px]">
-                    <BannerSkeleton
+                    <PostBannerSkeleton
                         v-if="isLoadingBanner"
                         class="w-full h-[300px] md:h-[400px] lg:h-[500px]"
                     />
@@ -23,7 +23,7 @@
                 <div class="px-5 py-5 lg:px-10">
                     <div class="flex justify-between">
                         <h1
-                            class="post-title text-sky-600 dark:text-pink-400 text-2xl md:text-4xl font-bold pb-2"
+                            class="post-title text-sky-600 dark:text-pink-400 text-2xl md:text-4xl font-bold pb-2 m-0"
                             v-if="loadedPost"
                         >
                             {{ loadedPost.title }}
@@ -86,7 +86,7 @@
 const route = useRoute();
 const postId = route.params.id;
 
-const { data: loadedPost } = useFetch<Post>(
+const { data: loadedPost } = await useFetch<Post>(
     `/api/realTime/post/${route.params.id}`
 );
 
@@ -135,8 +135,11 @@ onMounted(() => {
 const userEmailMain = computed(() => {
     return loadedPost.value ? loadedPost.value.author : "";
 });
+
+const authStore = useAuthStore();
+const { isAuthenicated } = storeToRefs(authStore);
 const isAuthor = computed(() => {
-    return false;
+    return isAuthenicated.value;
 });
 const userEmail = computed(() => {
     return loadedPost.value ? loadedPost.value.author : "";
@@ -144,8 +147,10 @@ const userEmail = computed(() => {
 
 const previewImg = computed(() => {
     return loadedPost.value
-        ? loadedPost.value.previewImgUrl || loadedPost.value.thumbnail || ""
-        : "/public/images/post-preview-picture.png";
+        ? loadedPost.value.previewImgUrl ||
+              loadedPost.value.thumbnail ||
+              "/images/post-preview-picture.png"
+        : "/images/post-preview-picture.png";
 });
 
 const postDate = useDateFormat(
@@ -162,9 +167,6 @@ const postDate = useDateFormat(
     .single-post-page {
         padding: 30px;
     }
-}
-.post-title {
-    margin: 0;
 }
 
 .post-details {

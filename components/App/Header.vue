@@ -1,7 +1,7 @@
 <template>
-    <div class="h-[60px] fixed z-20 w-full">
+    <div class="h-[60px] fixed z-30 w-full">
         <div class="glass" ref="glassRef"></div>
-        <header class="the-header z-30" ref="theHeader">
+        <header class="the-header" ref="theHeader">
             <TheSideNavToggle @toggle="$emit('sidenavToggle')" />
             <nuxt-link
                 to="/"

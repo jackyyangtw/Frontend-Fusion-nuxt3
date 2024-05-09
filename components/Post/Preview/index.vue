@@ -1,6 +1,6 @@
 <template>
     <div
-        class="mx-2 block my-4 group w-full md:w-[calc(50%-16px)] 2xl:w-[calc(33.333%-24px)] ease-in duration-300 transition relative"
+        class="mx-2 block my-4 group w-full md:w-[calc(50%-16px)] 2xl:w-[calc(33.333%-24px)] ease-in duration-300 transition relative z-0"
     >
         <transition name="vagueIn">
             <nuxt-link v-if="isMounted" :to="postLink">
@@ -66,7 +66,7 @@
         </transition>
         <transition name="fade">
             <div
-                class="z-10 buttons absolute inset-0 left-0 top-0 flex justify-center items-center bg-black/[0.5] dark:bg-black/[0.7]"
+                class="buttons absolute inset-0 left-0 top-0 flex justify-center items-center bg-black/[0.5] dark:bg-black/[0.7]"
                 v-show="onAdminRoute && showButtons"
                 @mouseenter.self="setShowButtons"
                 @mouseleave.self="setShowButtons"
@@ -137,7 +137,7 @@ const previewImg = computed(() => {
     return (
         props.previewImgUrl ||
         props.thumbnail ||
-        process.env.DEFAULT_PREVIEW_IMG_URL
+        "/images/post-preview-picture.png"
     );
 });
 

@@ -1,6 +1,5 @@
 <template>
-    <!-- <AppHeader /> -->
-    <div class="home-page">
+    <div class="home-page w-full">
         <section
             class="banner relative intro bg-slate-100/[0.8] dark:bg-slate-950/[0.4]"
         >
@@ -35,10 +34,22 @@
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-
+// import { storeToRefs } from "pinia";
+useHead({
+    title: "Frontend Fusion",
+    meta: [
+        {
+            hid: "description",
+            name: "description",
+            content: "Frontend Fusion",
+        },
+    ],
+});
 const postsStore = usePostsStore();
 const { loadedPosts, isLoadingPosts } = storeToRefs(postsStore);
+onMounted(() => {
+    isLoadingPosts.value = false;
+});
 </script>
 
 <style scoped>

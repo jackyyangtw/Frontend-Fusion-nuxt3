@@ -1,68 +1,58 @@
-export const useAuthStore = defineStore("auth", {
-    state: () => ({
-        token: "",
-    }),
-    actions: {
-        async authenticateUserWithEMail(authData: AuthData) {
-            // authData.isLogin 是從 auth頁面tab傳過來的，判斷是否為登入模式
-            const authUrl = authData.isLogin
-                ? `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.fbAPIKey}`
-                : `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.fbAPIKey}`;
-            try {
-                const res = await $fetch<AuthData>(authUrl, {
-                    method: "POST",
-                    body: {
-                        email: authData.email,
-                        password: authData.password,
-                        returnSecureToken: true,
-                    },
-                    onResponseError: ({ response }) => {
-                        if (response.status !== 200) {
-                            throw new Error("認證失敗");
-                        }
-                    },
-                });
-                const { data } = res;
-                const { idToken, expiresIn, localId } = data;
-                this.token = idToken;
-                Cookie.set("jwt", idToken);
-                Cookie.set(
-                    "tokenExpiration",
-                    new Date().getTime() + Number.parseInt(expiresIn) * 1000
-                );
-                const commitData = {
-                    name: authData.name,
-                    email: authData.email,
-                    password: authData.password,
-                    id: localId,
-                };
-                const serUserDataToCookie = (data) => {
-                    Cookie.set(`userData`, JSON.stringify(data));
-                };
-                const { data: userData } = await this.$axios.get(
-                    `/users/${localId}.json?auth=${idToken}`
-                );
-                const initUserData = (userData) => {
-                    serUserDataToCookie(userData);
-                    vuexContext.commit("user/setUserData", userData);
-                    vuexContext.dispatch("user/setUserData");
-                    vuexContext.dispatch("user/setUserPosts");
-                };
-                if (!authData.isLogin) {
-                    await this.$axios.put(
-                        `/users/${localId}.json?auth=${idToken}`,
-                        commitData
-                    );
-                    initUserData(commitData);
-                } else if (authData.isLogin && userData) {
-                    initUserData(userData);
-                }
-            } catch (error) {
-                vuexContext.dispatch(
-                    "ui/setErrorMsg",
-                    error.response.data.error.message
-                );
-            }
-        },
-    },
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+export const useAuthStore = defineStore("auth", () => {
+    const { $auth } = useNuxtApp();
+
+    const idToken = ref<string | null>(null);
+    const isAuthenicated = computed(() => idToken.value !== null);
+    const signinWithGoogle = async () => {
+        const provider = new GoogleAuthProvider();
+        try {
+            const res = await signInWithPopup($auth, provider);
+
+            const { displayName, email, photoURL, uid } = res.user;
+            const user = $auth.currentUser;
+            const token = await user.getIdToken();
+            idToken.value = token;
+
+            // const config = useRuntimeConfig();
+            // const { data: userDataFromFire } = await useFetch(
+            //     `${config.public.firebaseBaseUrl}/users/${uid}.json?auth=${token}`
+            // );
+            // let userData;
+
+            // // 檢查是否有該用戶資料，沒有就新增
+            // if (!userDataFromFire) {
+            //     userData = {
+            //         name: displayName,
+            //         email,
+            //         photoURL,
+            //         id: uid,
+            //     };
+            //     await useFetch(
+            //         `${config.public.firebaseBaseUrl}/users/${uid}.json?auth=${token}`,
+            //         {
+            //             method: "PUT",
+            //             body: userData,
+            //         }
+            //     );
+            // } else {
+            //     userData = userDataFromFire;
+            // }
+
+            // const userData = useCookie("userData", userData);
+
+            // Cookie.set(`userData`, JSON.stringify(userData));
+            // Cookie.set("jwt", token);
+            // Cookie.set("signinWithGoogle", true);
+            // vuexContext.commit("user/setUserData", userData);
+            // vuexContext.commit("setToken", token);
+            // vuexContext.dispatch("user/setUserPosts");
+
+            // await $auth.signInWithRedirect(provider);
+            // vuexContext.commit("setsigninWithGoogle", true);
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    return { signinWithGoogle, isAuthenicated };
 });

@@ -10,10 +10,17 @@ export const useUIStore = defineStore("ui", () => {
         loading.value = value;
     };
 
+    const toast = ref({
+        showToast: false,
+        message: "",
+        messageType: "success",
+    });
+
     return {
         headerHeight,
         setHeaderHeight,
         loading,
         setLoading,
+        toast,
     };
 });

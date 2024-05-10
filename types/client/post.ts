@@ -9,4 +9,5 @@ export interface Post {
     photoURL: string;
     author: string;
     content: string;
+    userId: string;
 }

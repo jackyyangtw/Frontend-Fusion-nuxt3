@@ -6,10 +6,10 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     // const tagsStore = useTagsStore();
     // try {
     //     // const { data: posts } = await useFetch<Ref<Post[]>>(
-    //     //     `${config.public.firebaseBaseUrl}/posts.json`
+    //     //     `${config.public.firebaseRealtimeDbBaseUrl}/posts.json`
     //     // );
     //     const data: Post = await $fetch(
-    //         `${config.public.firebaseBaseUrl}/posts.json`,
+    //         `${config.public.firebaseRealtimeDbBaseUrl}/posts.json`,
     //         {
     //             method: "GET",
     //             headers: {

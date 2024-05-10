@@ -18,9 +18,11 @@
         "firebase-admin": "^12.1.0",
         "firebase-functions": "^5.0.1",
         "nuxt": "^3.11.2",
+        "nuxt-vuefire": "^1.0.2",
         "pinia": "^2.1.7",
         "vue": "^3.4.21",
-        "vue-router": "^4.3.0"
+        "vue-router": "^4.3.0",
+        "vuefire": "^3.1.23"
     },
     "overrides": {
         "vue": "latest"
@@ -31,5 +33,10 @@
         "nuxt-schema-org": "^3.3.6",
         "typescript": "^5.4.5",
         "vue-tsc": "^1"
-    }
+    },
+    "version": "1.0.0",
+    "main": "index.js",
+    "repository": "https://github.com/jackyyangtw/Frontend-Fusion-nuxt3.git",
+    "author": "Jacky Yang <jaky2204@gmail.com>",
+    "license": "MIT"
 }

@@ -5,10 +5,13 @@ export const useFetchRealTimeDb = async (
 ) => {
     const config = useRuntimeConfig();
     try {
-        const res = $fetch(`${config.public.firebaseBaseUrl}/${route}.json`, {
-            method,
-            handler,
-        });
+        const res = $fetch(
+            `${config.public.firebaseRealtimeDbBaseUrl}/${route}.json`,
+            {
+                method,
+                handler,
+            }
+        );
         return res;
     } catch (err) {
         console.log(err);

@@ -1,5 +1,5 @@
 <template>
-    <div class="single-post-page container z-10 relative">
+    <div class="single-post-page container mx-auto z-10 relative">
         <div
             class="w-full xl:w-[900px] mx-auto backdrop-blur-lg bg-slate-50 dark:bg-slate-950/[0.8] rounded overflow-hidden"
         >
@@ -136,10 +136,10 @@ const userEmailMain = computed(() => {
     return loadedPost.value ? loadedPost.value.author : "";
 });
 
-const authStore = useAuthStore();
-const { isAuthenicated } = storeToRefs(authStore);
+const userStore = useUserStore();
+const { isAuthenticated } = storeToRefs(userStore);
 const isAuthor = computed(() => {
-    return isAuthenicated.value;
+    return isAuthenticated.value;
 });
 const userEmail = computed(() => {
     return loadedPost.value ? loadedPost.value.author : "";

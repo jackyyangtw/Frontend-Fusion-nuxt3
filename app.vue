@@ -6,11 +6,16 @@
 
 <script setup lang="ts">
 const postsStore = usePostsStore();
-
 const tagsStore = useTagsStore();
+const userStore = useUserStore();
 try {
     await postsStore.getAllPosts();
     await tagsStore.getAllTags();
+    const firebaseUserData = await getCurrentUser();
+    if (firebaseUserData) {
+        userStore.setFirebaseUser(firebaseUserData);
+        userStore.setToken(firebaseUserData.accessToken);
+    }
 } catch (error) {
     console.error("Failed to fetch posts:", error);
 }
@@ -18,7 +23,7 @@ try {
 
 <style>
 body {
-    @apply bg-slate-100 dark:bg-slate-800;
+    @apply bg-slate-100 dark:bg-slate-800 transition duration-300;
 }
 .layout-enter-active,
 .layout-leave-active {
@@ -28,5 +33,21 @@ body {
 .layout-leave-to {
     opacity: 0;
     /* filter: blur(1rem); */
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
+}
+
+.vagueIn-enter,
+.vagueIn-leave-to {
+    filter: blur(20px);
+    opacity: 0.5;
 }
 </style>

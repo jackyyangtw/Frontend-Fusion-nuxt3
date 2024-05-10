@@ -216,7 +216,7 @@
 //         },
 //     },
 //     getters: {
-//         isAuthenicated: (state) => state.token != null,
+//         isAuthenticated: (state) => state.token != null,
 //         searchText: (state) => state.searchText,
 //         signinWithGoogle: (state) => {
 //             const signinWithGoogle = Boolean(Cookie.get("signinWithGoogle"));

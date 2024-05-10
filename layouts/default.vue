@@ -4,9 +4,9 @@
 
         <div
             class="min-h-screen w-full relative z-10"
-            :class="{ 'flex items-center justify-center': !atPostsPage }"
             :style="{
-                paddingTop: atSinglePostPage ? headerHeight + 'px' : '0',
+                paddingTop:
+                    atSinglePostPage || atAdminPage ? headerHeight + 'px' : '0',
             }"
         >
             <slot
@@ -20,6 +20,7 @@ import { storeToRefs } from "pinia";
 const route = useRoute();
 const atPostsPage = computed(() => route.name === "posts");
 const atSinglePostPage = computed(() => route.name === "posts-id");
+const atAdminPage = computed(() => route.name === "admin");
 
 const uiStore = useUIStore();
 const { headerHeight } = storeToRefs(uiStore);

@@ -18,20 +18,17 @@
             <ModeSwitcher></ModeSwitcher>
             <div class="navigation-items">
                 <ul class="nav-list">
-                    <li class="nav-item" v-for="nav in navLinks" :key="nav.to">
+                    <li
+                        class="nav-item"
+                        v-for="nav in filteredNavLinks"
+                        :key="nav.to"
+                    >
                         <nuxt-link
                             class="text-slate-700 dark:text-white"
                             :to="nav.to"
                             >{{ nav.title }}</nuxt-link
                         >
                     </li>
-                    <!-- <li class="nav-item">
-                        <nuxt-link
-                            class="text-slate-700 dark:text-white"
-                            to="/admin"
-                            >管理</nuxt-link
-                        >
-                    </li> -->
                 </ul>
             </div>
         </header>
@@ -44,7 +41,7 @@ const isPostsPage = computed(() => route.path === "/posts");
 // const isDark
 
 const navStore = useNavigationStore();
-const navLinks = navStore.navLinks;
+const { filteredNavLinks } = storeToRefs(navStore);
 </script>
 
 <style scoped>

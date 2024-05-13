@@ -1,7 +1,6 @@
 <template>
     <section
         class="w-full pt-0 lg:pt-6 p-6 flex flex-wrap items-center justify-start container mx-auto relative z-10"
-        :style="{ marginTop: isPostsPage ? headerHeight + 'px' : '0' }"
     >
         <PostPreviewSkeleton
             v-for="i in posts.length"
@@ -34,9 +33,9 @@ defineProps<{
     posts: Post[];
     loadingPosts?: boolean;
 }>();
-const route = useRoute();
-const isPostsPage = computed(() => route.name === "posts");
+// const route = useRoute();
+// const isPostsPage = computed(() => route.name === "posts");
 
-const uiStore = useUIStore();
-const { headerHeight } = storeToRefs(uiStore);
+// const uiStore = useUIStore();
+// const { headerHeight } = storeToRefs(uiStore);
 </script>

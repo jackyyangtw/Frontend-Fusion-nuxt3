@@ -5,8 +5,7 @@
         <div
             class="min-h-screen w-full relative z-10"
             :style="{
-                paddingTop:
-                    atSinglePostPage || atAdminPage ? headerHeight + 'px' : '0',
+                paddingTop: headerHeight + 'px',
             }"
         >
             <slot

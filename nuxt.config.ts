@@ -2,14 +2,16 @@
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+    ssr: true,
     devtools: { enabled: true },
     modules: [
         "@pinia/nuxt",
-        "@nuxtjs/tailwindcss",
-        "@nuxtjs/color-mode",
+        // "@nuxtjs/tailwindcss",
+        // "@nuxtjs/color-mode",
         "@vueuse/nuxt",
         "nuxt-schema-org",
         "nuxt-vuefire",
+        "@nuxt/ui",
     ],
     vuefire: {
         config: {
@@ -24,13 +26,14 @@ export default defineNuxtConfig({
         auth: {
             enabled: true,
             persistence: ["indexedDBLocal"],
+            // popupRedirectResolver: false,
         },
     },
-    colorMode: {
-        classSuffix: "",
-        preference: "light",
-        fallback: "light",
-    },
+    // colorMode: {
+    //     classSuffix: "",
+    //     preference: "light",
+    //     fallback: "light",
+    // },
     app: {
         head: {
             title: "Frontend Fusion", // 從你的 package.json 中替換
@@ -81,7 +84,8 @@ export default defineNuxtConfig({
         dirs: ["types/*"],
         autoImport: true,
     },
-    // typescript: {
-    //     typeCheck: true,yarn
-    // },
+    ui: {
+        // global: true,
+        safelistColors: ["pink", "blue"],
+    },
 });

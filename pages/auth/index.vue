@@ -73,8 +73,7 @@
                         >
                             <img
                                 class="w-[20px] h-[20px] mr-2"
-                                src="/images/google-white.svg
-                                "
+                                src="/images/google-white.svg"
                             />
                             <div>使用Google登入</div>
                         </AppButton>
@@ -126,7 +125,6 @@ const SINGINWITHGOOGLE = async () => {
         router.push("/admin");
         toast.value.showToast = false;
     } catch (error) {
-        console.error(error);
         toast.value.showToast = true;
         toast.value.messageType = "error";
         toast.value.message = "登入失敗";

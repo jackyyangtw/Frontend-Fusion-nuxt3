@@ -3,7 +3,6 @@
         <section
             class="banner relative intro bg-slate-100/[0.8] dark:bg-slate-950/[0.4]"
         >
-            <div class="w-full h-[60px]"></div>
             <div
                 class="rounded-md p-6 min-h-[200px] mx-auto"
                 style="z-index: 3"

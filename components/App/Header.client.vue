@@ -1,5 +1,7 @@
 <template>
-    <div class="h-[60px] fixed z-30 w-full">
+    <div
+        class="h-[60px] fixed z-30 w-full bg-slate-100/[0.8] dark:bg-slate-950/[0.4]"
+    >
         <div class="glass" ref="glassRef"></div>
         <header class="the-header" ref="theHeader">
             <TheSideNavToggle @toggle="$emit('sidenavToggle')" />
@@ -36,8 +38,8 @@
 </template>
 
 <script setup lang="ts">
-const route = useRoute();
-const isPostsPage = computed(() => route.path === "/posts");
+// const route = useRoute();
+// const isPostsPage = computed(() => route.path === "/posts");
 // const isDark
 
 const navStore = useNavigationStore();

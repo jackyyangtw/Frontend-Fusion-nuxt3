@@ -1,4 +1,4 @@
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware(async (to, from) => {
     const userStore = useUserStore();
     const { isAuthenticated } = storeToRefs(userStore);
 
@@ -15,4 +15,12 @@ export default defineNuxtRouteMiddleware((to, from) => {
         };
         return navigateTo("/auth");
     }
+
+    // const user = await getCurrentUser();
+    // if (!user && to.path === "/auth") {
+    //     return navigateTo("/admin");
+    // }
+    // if (!user && to.path === "/admin") {
+    //     return navigateTo("/auth");
+    // }
 });

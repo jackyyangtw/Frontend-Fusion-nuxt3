@@ -80,7 +80,7 @@ const onLogout = async () => {
     await signout();
     router.push("/");
 };
-const emit = defineEmits();
+const emit = defineEmits(["showToast"]);
 const onPhotoChange = (e: Event) => {
     // const target = e.target as HTMLInputElement;
     // const file = target.files?.[0];

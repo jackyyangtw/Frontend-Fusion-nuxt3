@@ -1,5 +1,7 @@
 # ISSUE
 
+-   admin/postId 的 pinia 的 user = null
+
 ## VSCODE shortcut
 
 -   https://ithelp.ithome.com.tw/articles/10237385

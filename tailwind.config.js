@@ -10,4 +10,20 @@ module.exports = {
         `app.{js,ts,vue}`,
     ],
     darkMode: "class",
+    theme: {},
+    plugins: [],
+    safelist: [
+        // 為每個 color 提供樣式範圍
+        {
+            pattern: /(bg|ring)-(.*)-(600|700|800)/,
+            variants: [
+                "dark:hover",
+                "dark:focus",
+                "dark",
+                "hover",
+                "responsive",
+                "focus",
+            ],
+        },
+    ],
 };

@@ -2,7 +2,7 @@
     <UForm
         :schema="schema"
         :state="editedPost"
-        class="rounded p-5 max-w-[900px] mx-auto"
+        class="bg-slate-50 dark:bg-slate-950/[0.8] rounded p-5 max-w-[900px] mx-auto flex flex-col gap-5 shadow-md"
         @submit="onSubmit"
     >
         <UFormGroup label="作者名稱" name="author">
@@ -12,22 +12,39 @@
             <UInput :color="color" v-model="editedPost.title" />
         </UFormGroup>
         <UFormGroup label="預覽文字" name="previewText">
-            <UInput :color="color" v-model="editedPost.author" />
+            <UInput :color="color" v-model="editedPost.previewText" />
         </UFormGroup>
-
-        <UFormGroup label="Email" name="email">
-            <UInput :color="color" v-model="editedPost.email" />
-        </UFormGroup>
-
-        <UFormGroup label="Password" name="password">
+        <UFormGroup label="預覽縮圖(本地上傳)" name="previewImgUrl">
             <UInput
                 :color="color"
-                v-model="editedPost.password"
-                type="password"
+                type="file"
+                size="sm"
+                icon="i-heroicons-folder"
             />
         </UFormGroup>
 
-        <UButton type="submit" class="bg-red"> Submit </UButton>
+        <div>
+            <img
+                v-if="editedPost.previewImgUrl"
+                :src="editedPost.previewImgUrl"
+                alt=""
+            />
+        </div>
+
+        <div class="flex flex-wrap gap-3">
+            <UCheckbox
+                :color="color"
+                v-model="editedPost.tags"
+                v-for="tag in tags"
+                :key="tag"
+                :value="tag.name"
+                :label="tag.name"
+            />
+        </div>
+
+        <TiptapEditor :editedPost="post" />
+
+        <UButton type="submit"> Submit </UButton>
     </UForm>
 </template>
 
@@ -35,8 +52,9 @@
 import { object, string, type InferType } from "yup";
 import type { FormSubmitEvent } from "#ui/types";
 
-const userStore = useUserStore();
-const { user } = storeToRefs(userStore);
+const props = defineProps<{
+    post: Post;
+}>();
 
 const schema = object({
     aurhor: string().required("Required"),
@@ -48,16 +66,20 @@ const schema = object({
 
 type Schema = InferType<typeof schema>;
 
+const tagsStore = useTagsStore();
+const { tags } = storeToRefs(tagsStore);
+
+const userStore = useUserStore();
+const { user } = storeToRefs(userStore);
 const editedPost = reactive({
-    author: undefined,
-    email: undefined,
-    password: undefined,
-    title: "",
-    thumbnail: "",
-    content: ``,
-    previewText: "",
-    tags: [],
-    previewImgUrl: "/images/post-preview-picture.png",
+    author: user.value?.name,
+    title: props.post.title || "",
+    thumbnail: props.post.thumbnail || "",
+    content: props.post.content || "",
+    previewText: props.post.previewText || "",
+    tags: props.post.tags || [],
+    previewImgUrl:
+        props.post.previewImgUrl || "/images/post-preview-picture.png",
 });
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {

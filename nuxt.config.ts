@@ -5,14 +5,21 @@ export default defineNuxtConfig({
     ssr: true,
     devtools: { enabled: true },
     modules: [
-        "@pinia/nuxt",
-        // "@nuxtjs/tailwindcss",
+        "@pinia/nuxt", // "@nuxtjs/tailwindcss",
         // "@nuxtjs/color-mode",
         "@vueuse/nuxt",
         "nuxt-schema-org",
         "nuxt-vuefire",
         "@nuxt/ui",
+        "nuxt-tiptap-editor",
     ],
+    tiptap: {
+        prefix: "Tiptap", //prefix for Tiptap imports, composables not included
+        lowlight: {
+            // list https://github.com/modbender/nuxt-tiptap-editor/blob/7dfbe1c213af472f8f7a50b0e3dd5a7dd8552ce9/src/types.d.ts#L3
+            theme: "monokai-sublime",
+        },
+    },
     vuefire: {
         config: {
             apiKey: process.env.FIREBASE_API_KEY,
@@ -29,11 +36,6 @@ export default defineNuxtConfig({
             // popupRedirectResolver: false,
         },
     },
-    // colorMode: {
-    //     classSuffix: "",
-    //     preference: "light",
-    //     fallback: "light",
-    // },
     app: {
         head: {
             title: "Frontend Fusion", // 從你的 package.json 中替換

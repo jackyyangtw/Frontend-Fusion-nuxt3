@@ -6,9 +6,11 @@
             :type="toast.messageType"
         />
         <section class="update-form">
-            <admin-post-form></admin-post-form>
+            <admin-post-form
+                v-if="loadedPost"
+                :post="loadedPost"
+            ></admin-post-form>
         </section>
-        {{ loadedPost }}
     </div>
 </template>
 

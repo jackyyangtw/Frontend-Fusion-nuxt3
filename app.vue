@@ -15,6 +15,7 @@ try {
     if (firebaseUserData) {
         userStore.setFirebaseUser(firebaseUserData);
         userStore.setToken(firebaseUserData.accessToken);
+        await userStore.getUserData();
     }
 } catch (error) {
     console.error("Failed to fetch posts:", error);

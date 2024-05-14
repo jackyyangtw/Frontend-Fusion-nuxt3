@@ -10,6 +10,7 @@ export const useUserStore = defineStore("user", () => {
         firebaseUser.value = userData;
     };
     const getUserData = async () => {
+        if (user.value) return;
         await $fetch(
             `${realTimeDbBaseUrl}/users/${firebaseUser.value?.uid}.json`,
             {

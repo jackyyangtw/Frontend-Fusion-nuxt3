@@ -23,7 +23,7 @@
                 <div class="px-5 py-5 lg:px-10">
                     <div class="flex justify-between">
                         <h1
-                            class="post-title text-sky-600 dark:text-pink-400 text-2xl md:text-4xl font-bold pb-2 m-0"
+                            class="post-title text-primary-600 dark:text-primary-400 text-2xl md:text-4xl font-bold pb-2 m-0"
                             v-if="loadedPost"
                         >
                             {{ loadedPost.title }}

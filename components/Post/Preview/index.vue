@@ -22,7 +22,7 @@
                         />
                     </figure>
                     <div
-                        class="px-6 py-4 group-hover:bg-sky-500/[.1] dark:group-hover:bg-white/[.1] min-h-[220px] flex flex-col justify-center"
+                        class="px-6 py-4 group-hover:bg-primary-500/[.1] dark:group-hover:bg-white/[.1] min-h-[220px] flex flex-col justify-center"
                     >
                         <div>
                             <div class="flex items-center pb-1">

@@ -16,7 +16,7 @@
 
         <section class="pt-8">
             <h2
-                class="text-center text-blue-400 dark:text-pink-400 text-3xl font-bold"
+                class="text-center text-blue-400 dark:text-primary-400 text-3xl font-bold"
             >
                 {{ userPosts.length > 0 ? "現有的文章" : "目前沒有文章" }}
             </h2>

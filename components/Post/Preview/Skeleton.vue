@@ -11,7 +11,7 @@
                 ></div>
             </figure>
             <div
-                class="px-6 py-4 group-hover:bg-sky-500/[.1] dark:group-hover:bg-white/[.1]"
+                class="px-6 py-4 group-hover:bg-primary-500/[.1] dark:group-hover:bg-white/[.1]"
             >
                 <h2 class="font-bold text-xl mb-2 text-black dark:text-white">
                     <div

@@ -11,6 +11,7 @@
     },
     "dependencies": {
         "@firebase/app-types": "^0.9.1",
+        "@iconify-json/la": "^1.1.8",
         "@nuxt/ui": "^2.16.0",
         "@pinia/nuxt": "^0.5.1",
         "@vueuse/core": "^10.9.0",
@@ -28,6 +29,7 @@
         "yup": "^1.4.0"
     },
     "devDependencies": {
+        "@tiptap/extension-image": "^2.4.0",
         "nuxt-schema-org": "^3.3.6",
         "typescript": "^5.4.5",
         "vue-tsc": "^1"

@@ -1,5 +1,6 @@
 # ISSUE
 
+-   如果回到 admin，都會先回到 auth，再到 admin
 -   admin/postId 的 pinia 的 user = null
 
 ## VSCODE shortcut
@@ -17,3 +18,8 @@
 ## nuxt-fire
 
 -   https://medium.com/@jogarcia/set-up-firebase-on-nuxt3-f199cce98dbb
+
+## Design
+
+-   dark glass: https://www.figma.com/design/8Cc64d4jyEkeomprBwFcK5/UI-Design-a-Dark-Mode-NFT-app-(Community)?node-id=60-545&t=XWfNDoToSHAfX5g3-0
+-   dark & light: https://www.figma.com/design/t4oMD1FkqSi1pUyjLXj2aA/Glassmorphism-Components-(Community)?node-id=0-1&t=X3y5aZvZ0vS81GkT-0

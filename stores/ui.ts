@@ -1,6 +1,5 @@
 export const useUIStore = defineStore("ui", () => {
     const headerHeight = ref(60);
-
     const setHeaderHeight = (height: number) => {
         headerHeight.value = height;
     };
@@ -16,11 +15,14 @@ export const useUIStore = defineStore("ui", () => {
         messageType: "success",
     });
 
+    const isModalOpen = ref(false);
+
     return {
         headerHeight,
         setHeaderHeight,
         loading,
         setLoading,
         toast,
+        isModalOpen,
     };
 });

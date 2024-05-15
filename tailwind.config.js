@@ -10,8 +10,12 @@ module.exports = {
         `app.{js,ts,vue}`,
     ],
     darkMode: "class",
-    theme: {},
     plugins: [],
+    // theme: {
+    //     colors: {
+    //         danger: colors.red,
+    //     },
+    // },
     safelist: [
         // 為每個 color 提供樣式範圍
         {

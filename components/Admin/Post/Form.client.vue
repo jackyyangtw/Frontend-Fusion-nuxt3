@@ -2,21 +2,21 @@
     <UForm
         :schema="schema"
         :state="editedPost"
-        class="bg-slate-50 dark:bg-slate-950/[0.8] rounded p-5 max-w-[900px] mx-auto flex flex-col gap-5 shadow-md"
+        class="bg-slate-50 dark:bg-slate-950/[0.5] rounded p-5 max-w-[900px] mx-auto flex flex-col gap-5 shadow-md"
         @submit="onSubmit"
     >
         <UFormGroup label="作者名稱" name="author">
-            <UInput :color="color" v-model="editedPost.author" />
+            <UInput color="primary" v-model="editedPost.author" />
         </UFormGroup>
         <UFormGroup label="文章標題" name="title">
-            <UInput :color="color" v-model="editedPost.title" />
+            <UInput color="primary" v-model="editedPost.title" />
         </UFormGroup>
         <UFormGroup label="預覽文字" name="previewText">
-            <UInput :color="color" v-model="editedPost.previewText" />
+            <UInput color="primary" v-model="editedPost.previewText" />
         </UFormGroup>
         <UFormGroup label="預覽縮圖(本地上傳)" name="previewImgUrl">
             <UInput
-                :color="color"
+                color="primary"
                 type="file"
                 size="sm"
                 icon="i-heroicons-folder"
@@ -33,7 +33,7 @@
 
         <div class="flex flex-wrap gap-3">
             <UCheckbox
-                :color="color"
+                color="primary"
                 v-model="editedPost.tags"
                 v-for="tag in tags"
                 :key="tag"

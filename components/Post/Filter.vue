@@ -6,7 +6,7 @@
             data-drawer-toggle="default-sidebar"
             aria-controls="default-sidebar"
             type="button"
-            class="inline-flex items-center mt-5 ml-5 p-2 text-sm text-gray-500 rounded-lg bg-sky-500 dark:bg-pink-600/[0.5] xl:hidden"
+            class="inline-flex items-center mt-5 ml-5 p-2 text-sm text-gray-500 rounded-lg bg-primary-500 dark:bg-primary-600/[0.5] xl:hidden"
         >
             <span class="sr-only">Open sidebar</span>
             <svg
@@ -69,7 +69,7 @@
                             <span class="ml-3"
                                 >全部類型
                                 <span
-                                    class="font-bold text-sky-600 dark:text-pink-400"
+                                    class="font-bold text-primary-600 dark:text-primary-400"
                                     >({{ posts.length }})</span
                                 >
                             </span>
@@ -93,7 +93,7 @@
                             <span class="ml-3"
                                 >{{ tag.name }}
                                 <span
-                                    class="font-bold text-sky-600 dark:text-pink-400"
+                                    class="font-bold text-primary-600 dark:text-primary-400"
                                     >({{ getPostCount(tag.name) }})</span
                                 >
                             </span>

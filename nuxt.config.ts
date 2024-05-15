@@ -88,6 +88,7 @@ export default defineNuxtConfig({
     },
     ui: {
         // global: true,
-        safelistColors: ["pink", "blue"],
+        // safelistColors: ["sky"],
+        icons: ['la'],
     },
 });

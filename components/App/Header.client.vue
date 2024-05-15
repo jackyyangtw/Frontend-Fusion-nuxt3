@@ -125,6 +125,6 @@ html.dark .glass.active {
 .nav-item a:hover,
 .nav-item a:active,
 .nav-item a.nuxt-link-active {
-    @apply font-bold text-sky-600 dark:text-pink-400;
+    @apply font-bold text-primary-600 dark:text-primary-400;
 }
 </style>

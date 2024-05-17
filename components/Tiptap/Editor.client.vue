@@ -264,10 +264,10 @@ const stayPage = () => {
     shouldSaveContent.value = true;
 };
 onBeforeRouteLeave((to, from, next) => {
-    contentChangeCount.value = 0;
     if (shouldSaveContent.value) {
         isModalOpen.value = true;
     } else {
+        contentChangeCount.value = 0;
         next();
     }
 });

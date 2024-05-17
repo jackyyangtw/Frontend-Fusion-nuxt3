@@ -78,7 +78,7 @@ const updatePhoto = (Toast: Toast) => {
         }, 4000);
     }
 };
-const handleSelect = (value) => {};
+// const handleSelect = (value) => {};
 </script>
 
 <style scoped></style>

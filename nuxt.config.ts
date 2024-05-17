@@ -4,6 +4,12 @@
 export default defineNuxtConfig({
     ssr: true,
     devtools: { enabled: true },
+    // nitro: {
+    //     devProxy: {
+    //         "/auth": "http://localhost:3000",
+    //         "/admin": "http://localhost:3000",
+    //     },
+    // },
     modules: [
         "@pinia/nuxt", // "@nuxtjs/tailwindcss",
         // "@nuxtjs/color-mode",
@@ -89,6 +95,6 @@ export default defineNuxtConfig({
     ui: {
         // global: true,
         // safelistColors: ["sky"],
-        icons: ['la'],
+        icons: ["la"],
     },
 });

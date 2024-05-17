@@ -36,7 +36,7 @@
                 color="primary"
                 v-model="editedPost.tags"
                 v-for="tag in tags"
-                :key="tag"
+                :key="tag.name"
                 :value="tag.name"
                 :label="tag.name"
             />

@@ -1,10 +1,5 @@
 <template>
     <div class="admin-post-page">
-        <AppToast
-            :showToast="toast.showToast"
-            :message="toast.message"
-            :type="toast.messageType"
-        />
         <section class="update-form">
             <admin-post-form
                 v-if="loadedPost"

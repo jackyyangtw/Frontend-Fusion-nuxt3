@@ -57,7 +57,7 @@
                             >Tag管理</AppButton
                         >
                     </div>
-                    <AppButton btnStyle="danger" @click="onLogout"
+                    <AppButton btnStyle="danger" @click.prevent="onLogout"
                         >登出</AppButton
                     >
                 </div>
@@ -73,18 +73,13 @@ defineProps<{
     loadingCard: boolean;
 }>();
 
-const router = useRouter();
 const userStore = useUserStore();
-const { signout } = userStore;
+const { googleSignout } = userStore;
 const onLogout = async () => {
-    await signout();
-    router.push("/");
+    await googleSignout();
 };
 const emit = defineEmits(["showToast"]);
 const onPhotoChange = (e: Event) => {
-    // const target = e.target as HTMLInputElement;
-    // const file = target.files?.[0];
-    // console.log(file);
     emit("showToast", {
         showToast: true,
         messageType: "loading",

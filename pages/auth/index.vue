@@ -1,11 +1,5 @@
 <template>
     <div class="admin-auth-page w-[480px] mx-auto">
-        <AppToast
-            @closeToast="closeToast"
-            :showToast="toast.showToast"
-            :type="toast.messageType"
-            :message="toast.message"
-        />
         <section>
             <div
                 class="flex flex-col items-center justify-center px-6 mx-auto h-screen lg:py-0"
@@ -93,20 +87,16 @@ const name = ref("");
 const email = ref("");
 const password = ref("");
 
-const uiStore = useUIStore();
-const { toast } = storeToRefs(uiStore);
-const closeToast = () => {
-    toast.value.showToast = false;
-};
-
 const userStore = useUserStore();
-const { signinWithGoogle } = userStore;
+
 const { isAuthenticated } = storeToRefs(userStore);
 const router = useRouter();
 if (isAuthenticated.value) {
     router.push("/admin");
 }
 
+const uiStore = useUIStore();
+const { toast } = storeToRefs(uiStore);
 const onSubmit = async () => {
     toast.value.showToast = true;
     toast.value.messageType = "loading";
@@ -116,19 +106,10 @@ const onSubmit = async () => {
     toast.value.messageType = "success";
     toast.value.message = "登入成功";
 };
+
+const { signinWithGoogle } = userStore;
 const SINGINWITHGOOGLE = async () => {
-    toast.value.showToast = true;
-    toast.value.messageType = "loading";
-    toast.value.message = "Google登入中...";
-    try {
-        await signinWithGoogle();
-        router.push("/admin");
-        toast.value.showToast = false;
-    } catch (error) {
-        toast.value.showToast = true;
-        toast.value.messageType = "error";
-        toast.value.message = "登入失敗";
-    }
+    signinWithGoogle();
 };
 </script>
 

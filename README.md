@@ -1,7 +1,6 @@
 # ISSUE
 
--   如果回到 admin，都會先回到 auth，再到 admin
--   admin/postId 的 pinia 的 user = null
+-   auth.global.ts toast not working
 
 ## VSCODE shortcut
 

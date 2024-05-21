@@ -1,6 +1,12 @@
 <template>
     <NuxtLayout>
         <NuxtPage />
+        <AppToast
+            :showToast="toast.showToast"
+            :type="toast.messageType"
+            :message="toast.message"
+            @closeToast="closeToast"
+        />
     </NuxtLayout>
 </template>
 
@@ -8,6 +14,11 @@
 const postsStore = usePostsStore();
 const tagsStore = useTagsStore();
 const userStore = useUserStore();
+const uiStore = useUIStore();
+const { toast } = storeToRefs(uiStore);
+const closeToast = () => {
+    toast.value.showToast = false;
+};
 try {
     await postsStore.getAllPosts();
     await tagsStore.getAllTags();

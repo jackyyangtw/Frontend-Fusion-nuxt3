@@ -1,11 +1,5 @@
 <template>
     <div class="admin-page container mx-auto">
-        <AppToast
-            :showToast="toast.showToast"
-            :message="toast.message"
-            :type="toast.messageType"
-            @closeToast="closeToast"
-        />
         <UserCard
             v-if="user"
             @showToast="updatePhoto"
@@ -59,7 +53,6 @@ const userPosts = computed(() => {
 
 const uiStore = useUIStore();
 const { toast } = storeToRefs(uiStore);
-const closeToast = () => (toast.value.showToast = false);
 const updatePhoto = (Toast: Toast) => {
     if (Toast.showToast) {
         toast.value.showToast = true;
@@ -78,7 +71,6 @@ const updatePhoto = (Toast: Toast) => {
         }, 4000);
     }
 };
-// const handleSelect = (value) => {};
 </script>
 
 <style scoped></style>

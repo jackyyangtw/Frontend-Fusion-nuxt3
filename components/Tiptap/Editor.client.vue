@@ -106,7 +106,6 @@
         <div class="bg-slate-200 dark:bg-slate-950/[0.8] rounded-md">
             <TiptapEditorContent :editor="editor" />
         </div>
-        <button @click.prevent="saveContent">儲存內容</button>
         <AppModal title="尚有未儲存內容!!" danger>
             <template #body>
                 <p class="font-semibold">
@@ -136,10 +135,6 @@ const props = defineProps({
         required: true,
     },
 });
-// onMounted(() => {
-//     if (!editor.value) return;
-//     unref(editor.value).commands.setContent(props.editedPost.content);
-// });
 
 const localContent = useLocalStorage("editorContent", "");
 const editor = useEditor({
@@ -168,6 +163,7 @@ const editor = useEditor({
 const shouldSaveContent = ref(false);
 const contentChangeCount = ref(0);
 
+const emit = defineEmits(["saveContent", "addImage"]);
 watch(
     () => editor.value?.getHTML(),
     (newValue) => {
@@ -175,6 +171,7 @@ watch(
         contentChangeCount.value++;
         if (contentChangeCount.value > 1) {
             shouldSaveContent.value = true;
+            emit("saveContent", newValue);
         }
     }
 );
@@ -184,13 +181,21 @@ const imageFileInput = ref<HTMLInputElement | null>(null);
 const triggerImageFileInput = () => {
     imageFileInput.value?.click();
 };
+
+const uiStore = useUIStore();
+const { isModalOpen, toast } = storeToRefs(uiStore);
 const onUploadImgage = async (event: Event) => {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     if (file) {
         const reader = new FileReader();
         reader.onload = () => {
-            editor.value?.commands.setImage({ src: reader.result as string });
+            const imageUrl = reader.result as string;
+            editor.value?.commands.setImage({ src: imageUrl });
+            toast.value.message = "需更新圖片";
+            toast.value.showToast = true;
+            toast.value.messageType = "info";
+            emit("addImage", file);
         };
         reader.readAsDataURL(file);
     }
@@ -233,23 +238,17 @@ const setLink = () => {
 };
 
 // commit
-const emit = defineEmits(["saveContent"]);
 
-const saveContent = () => {
-    if (!editor.value) return;
-    const content = editor.value.getHTML();
-    console.log(content);
-    emit("saveContent", content);
-};
+// const saveContent = () => {
+//     if (!editor.value) return;
+//     const content = editor.value.getHTML();
+//     emit("saveContent", content);
+// };
 
 onBeforeUnmount(() => {
     if (!editor.value) return;
     unref(editor.value).destroy();
 });
-
-const uiStore = useUIStore();
-const { isModalOpen } = storeToRefs(uiStore);
-// isModalOpen.value = true;
 
 const router = useRouter();
 const leavePage = () => {
@@ -268,6 +267,9 @@ onBeforeRouteLeave((to, from, next) => {
         isModalOpen.value = true;
     } else {
         contentChangeCount.value = 0;
+        isModalOpen.value = false;
+        shouldSaveContent.value = false;
+        localContent.value = "";
         next();
     }
 });

@@ -62,4 +62,9 @@ body {
     filter: blur(20px);
     opacity: 0.5;
 }
+
+.vagueIn-enter-active,
+.vagueIn-leave-active {
+    transition: 0.3s;
+}
 </style>

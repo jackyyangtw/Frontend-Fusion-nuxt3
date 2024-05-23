@@ -92,6 +92,10 @@
                         <span class="sr-only">Loading...</span>
                     </div>
                 </div>
+                <UIcon
+                    v-if="type === 'info'"
+                    name="i-heroicons-information-circle-16-solid"
+                />
                 <!-- info -->
                 <div class="ml-3 text-sm font-normal">{{ message }}</div>
                 <!-- close button -->

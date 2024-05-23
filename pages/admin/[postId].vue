@@ -13,15 +13,24 @@
 import { ref as dbRef } from "firebase/database";
 const { $db } = useNuxtApp();
 const route = useRoute();
-const loadedPost = useDatabaseObject<Post>(
+const { data: loadedPost } = useDatabaseObject<Post>(
     dbRef($db, `posts/${route.params.postId}`)
 );
-useHeadSafe({
-    title: "編輯文章",
-});
-
-const uiStore = useUIStore();
-const { toast } = storeToRefs(uiStore);
+watch(
+    loadedPost,
+    (newVal) => {
+        if (newVal) {
+            useHead({
+                title: `編輯文章 - ${newVal.title || "無標題"}`,
+            });
+        } else {
+            useHead({
+                title: "載入中...",
+            });
+        }
+    },
+    { immediate: true }
+);
 </script>
 
 <style lang="scss" scoped></style>

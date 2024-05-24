@@ -30,7 +30,7 @@
                                     class="w-8 h-8 mr-3 rounded-full"
                                     :src="
                                         photoURL ||
-                                        require('/static/images/no-user-image.gif')
+                                        '/public/images/no-user-image.gif'
                                     "
                                     alt="user icon"
                                 />

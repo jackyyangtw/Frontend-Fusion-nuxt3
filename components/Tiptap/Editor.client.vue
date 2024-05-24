@@ -171,10 +171,7 @@ const onUploadImgage = async (event: Event) => {
         const reader = new FileReader();
         reader.onload = () => {
             const imageUrl = reader.result as string;
-            let fileNameWithoutExtension = file.name
-                .split(".")
-                .slice(0, -1)
-                .join(".");
+            const fileNameWithoutExtension = fileName(file.name);
             editor.value?.commands.setImage({
                 src: imageUrl,
                 alt: fileNameWithoutExtension,

@@ -1,6 +1,7 @@
 <template>
     <div class="single-post-page container mx-auto z-10 relative">
         <div
+            v-if="loadedPost"
             class="w-full xl:w-[900px] mx-auto backdrop-blur-lg bg-slate-50 dark:bg-slate-950/[0.8] rounded overflow-hidden"
         >
             <section class="post">
@@ -28,23 +29,25 @@
                         >
                             {{ loadedPost.title }}
                         </h1>
-                        <nuxt-link
-                            v-if="isAuthor"
-                            :to="`/admin/${postId}`"
-                            aria-label="edit icon"
-                        >
-                            <label
-                                for="photo"
-                                class="cursor-pointer w-10 h-10 p-2 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-slate-300"
+                        <client-only>
+                            <nuxt-link
+                                v-if="isAuthor"
+                                :to="`/admin/${postId}`"
+                                aria-label="edit icon"
                             >
-                                <img
-                                    src="
+                                <label
+                                    for="photo"
+                                    class="cursor-pointer w-10 h-10 p-2 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-slate-300"
+                                >
+                                    <img
+                                        src="
                                         /public/images/edit-pen-icon.svg
                                     "
-                                    alt=""
-                                />
-                            </label>
-                        </nuxt-link>
+                                        alt=""
+                                    />
+                                </label>
+                            </nuxt-link>
+                        </client-only>
                     </div>
                     <h2
                         class="post-content text-black dark:text-white text-md md:text-xl font-bold pb-3"
@@ -70,12 +73,10 @@
                             >
                         </div>
                     </div>
-                    <div class="ql-snow" v-if="loadedPost">
-                        <div
-                            class="post-content text-slate-950 dark:text-white ql-editor !p-0 !leading-8"
-                            v-html="loadedPost.content"
-                        ></div>
-                    </div>
+                    <div
+                        class="post-content text-slate-950 dark:text-white ql-editor !p-0 !leading-8"
+                        v-html="loadedPost.content"
+                    ></div>
                 </div>
             </section>
         </div>
@@ -128,18 +129,13 @@ onMounted(() => {
     isLoadingBanner.value = false;
 });
 
-// const userData = computed(() => {
-//     return "";
-// });
-
 const userEmailMain = computed(() => {
     return loadedPost.value ? loadedPost.value.author : "";
 });
 
-const userStore = useUserStore();
-const { isAuthenticated } = storeToRefs(userStore);
+const user = useCurrentUser();
 const isAuthor = computed(() => {
-    return isAuthenticated.value;
+    return user.value?.uid === loadedPost.value?.userId;
 });
 const userEmail = computed(() => {
     return loadedPost.value ? loadedPost.value.author : "";

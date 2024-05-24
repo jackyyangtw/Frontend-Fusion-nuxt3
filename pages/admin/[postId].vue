@@ -1,10 +1,7 @@
 <template>
     <div class="admin-post-page">
-        <section class="update-form">
-            <admin-post-form
-                v-if="loadedPost"
-                :post="loadedPost"
-            ></admin-post-form>
+        <section class="update-form" v-if="loadedPost">
+            <AdminPostForm :post="loadedPost"></AdminPostForm>
         </section>
     </div>
 </template>
@@ -32,5 +29,3 @@ watch(
     { immediate: true }
 );
 </script>
-
-<style lang="scss" scoped></style>

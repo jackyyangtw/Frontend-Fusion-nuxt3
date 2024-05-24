@@ -3,17 +3,22 @@
         :schema="schema"
         :state="editedPost"
         class="bg-slate-50 dark:bg-slate-950/[0.5] rounded p-5 max-w-[900px] mx-auto flex flex-col gap-5 shadow-md"
+        id="post-form"
     >
-        <UFormGroup label="作者名稱" name="author">
+        <UFormGroup label="作者名稱" name="author" id="author-group">
             <UInput color="primary" v-model="editedPost.author" />
         </UFormGroup>
-        <UFormGroup label="文章標題" name="title">
+        <UFormGroup label="文章標題" name="title" id="title-group">
             <UInput color="primary" v-model="editedPost.title" />
         </UFormGroup>
-        <UFormGroup label="預覽文字" name="previewText">
+        <UFormGroup label="預覽文字" name="previewText" id="previewText-group">
             <UInput color="primary" v-model="editedPost.previewText" />
         </UFormGroup>
-        <UFormGroup label="預覽縮圖(本地上傳)" name="previewImgUrl">
+        <UFormGroup
+            label="預覽縮圖(本地上傳)"
+            name="previewImgUrl"
+            id="previewImgUrl-group"
+        >
             <UInput
                 color="primary"
                 type="file"
@@ -67,7 +72,6 @@
 
 <script setup lang="ts">
 import { object, string, type InferType } from "yup";
-import type { FormSubmitEvent } from "#ui/types";
 import {
     ref as storageRef,
     uploadBytes,
@@ -76,9 +80,16 @@ import {
     deleteObject,
 } from "firebase/storage";
 import { ref as dbRef, update } from "firebase/database";
-const props = defineProps<{
-    post: Post;
-}>();
+const props = defineProps({
+    post: {
+        type: Object as PropType<Post>,
+        required: true,
+    },
+    newPost: {
+        type: Boolean,
+        default: false,
+    },
+});
 
 const schema = object({
     aurhor: string().required("Required"),
@@ -171,9 +182,19 @@ watch(editedPost, (newval) => {
     if (!newval) return;
     canSubmit.value = true;
 });
-const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-    const postId = props.post.id;
+const postId = props.post.id;
 
+const onSubmit = async () => {
+    if (props.newPost) {
+        await createPost();
+    } else {
+        await updatePost();
+    }
+};
+
+const createPost = async () => {};
+
+const updatePost = async () => {
     if (editedPost.previewImgUrl !== props.post.previewImgUrl) {
         if (updatedFile.value) {
             const storagePath = `/images/posts/${postId}/previewImg`;
@@ -208,10 +229,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
         });
         for (const img of base64Images) {
             const file = uploadedImages.value.find((f) => {
-                let fileNameWithoutExtension = f.name
-                    .split(".")
-                    .slice(0, -1)
-                    .join(".");
+                let fileNameWithoutExtension = fileName(f.name);
                 return img.alt === fileNameWithoutExtension;
             });
             if (file) {

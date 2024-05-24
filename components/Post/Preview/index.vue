@@ -29,8 +29,7 @@
                                 <img
                                     class="w-8 h-8 mr-3 rounded-full"
                                     :src="
-                                        photoURL ||
-                                        '/public/images/no-user-image.gif'
+                                        photoURL || '/images/no-user-image.gif'
                                     "
                                     alt="user icon"
                                 />

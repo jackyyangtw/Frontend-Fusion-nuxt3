@@ -1,7 +1,5 @@
 # ISSUE
 
--   開啟 localhost 後出現錯誤 [Vue Router warn]: No match found for location with path "/highLightTitle.png"
-
 ## VSCODE shortcut
 
 -   https://ithelp.ithome.com.tw/articles/10237385

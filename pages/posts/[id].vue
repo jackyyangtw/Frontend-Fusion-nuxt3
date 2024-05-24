@@ -41,7 +41,7 @@
                                 >
                                     <img
                                         src="
-                                        /public/images/edit-pen-icon.svg
+                                        /images/edit-pen-icon.svg
                                     "
                                         alt=""
                                     />

@@ -50,6 +50,19 @@
 
         <UButton type="submit" @click="onSubmit"> Submit </UButton>
     </UForm>
+    <AppModal title="尚有未儲存內容!!" danger>
+        <template #body>
+            <p class="font-semibold"> 確定要離開嗎?離開後會遺失編輯的內容 </p>
+        </template>
+        <template #footer>
+            <div class="flex justify-end gap-3">
+                <AppButton btnStyle="danger" @click="leavePage">
+                    確定
+                </AppButton>
+                <AppButton btnStyle="main" @click="stayPage"> 取消 </AppButton>
+            </div>
+        </template>
+    </AppModal>
 </template>
 
 <script setup lang="ts">
@@ -91,8 +104,38 @@ const editedPost = reactive({
         props.post.previewImgUrl || "/images/post-preview-picture.png",
 });
 
-const updatedFile = ref<File | null>(null);
+// 判斷是否有未儲存的內容
+const uiStore = useUIStore();
+const { toast, isModalOpen } = storeToRefs(uiStore);
+const shouldSaveContent = ref(false);
+const localContent = useLocalStorage("editorContent", "");
+let nextRoute: any = null;
+const leavePage = () => {
+    if (nextRoute) {
+        isModalOpen.value = false;
+        shouldSaveContent.value = false;
+        localContent.value = "";
+        nextRoute();
+    }
+};
+const stayPage = () => {
+    isModalOpen.value = false;
+    shouldSaveContent.value = true;
+};
+onBeforeRouteLeave((to, from, next) => {
+    if (shouldSaveContent.value) {
+        isModalOpen.value = true;
+        nextRoute = next;
+    } else {
+        isModalOpen.value = false;
+        shouldSaveContent.value = false;
+        localContent.value = "";
+        next();
+    }
+});
 
+// emit handler
+const updatedFile = ref<File | null>(null);
 const handleFileChange = (files: FileList) => {
     if (files && files[0]) {
         const file = files[0];
@@ -108,6 +151,7 @@ const handleFileChange = (files: FileList) => {
 };
 const handleSaveContent = (content: string) => {
     editedPost.content = content;
+    shouldSaveContent.value = true;
 };
 
 const uploadedImages = ref<File[]>([]);
@@ -116,19 +160,15 @@ const handlerAddImage = (addedImage: File) => {
         uploadedImages.value.push(addedImage);
     }
 };
+
+// submit
 const shouldTransformImageUrl = computed(() => {
     return uploadedImages.value.length > 0;
 });
-
 const { $storage, $db } = useNuxtApp();
-const uiStore = useUIStore();
-const { toast } = storeToRefs(uiStore);
 const canSubmit = ref(false);
 watch(editedPost, (newval) => {
     if (!newval) return;
-    toast.value.message = "有變更，可更新";
-    toast.value.showToast = true;
-    toast.value.messageType = "info";
     canSubmit.value = true;
 });
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
@@ -166,16 +206,22 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
         const base64Images = images.filter((img) => {
             return img.src.startsWith("data:image");
         });
-
         for (const img of base64Images) {
-            const file = uploadedImages.value.find((f) =>
-                img.src.includes(f.name)
-            );
+            const file = uploadedImages.value.find((f) => {
+                let fileNameWithoutExtension = f.name
+                    .split(".")
+                    .slice(0, -1)
+                    .join(".");
+                return img.alt === fileNameWithoutExtension;
+            });
             if (file) {
                 const storagePath = `/images/posts/${postId}/content/${file.name}`;
                 const storageReference = storageRef($storage, storagePath);
 
                 try {
+                    toast.value.message = "正在更新圖片...";
+                    toast.value.showToast = true;
+                    toast.value.messageType = "loading";
                     await uploadBytes(storageReference, file);
                     const downloadUrl = await getDownloadURL(storageReference);
                     img.src = downloadUrl;
@@ -195,6 +241,9 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
             $storage,
             `/images/posts/${postId}/content`
         );
+        toast.value.message = "正在檢查是否有多餘的圖片...";
+        toast.value.showToast = true;
+        toast.value.messageType = "loading";
         const storageList = await listAll(storageListRef);
         const usedImages = new Set(base64Images.map((img) => img.src));
 
@@ -207,24 +256,23 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
     }
 
     if (!canSubmit.value) {
-        toast.value.message = "沒有任何變更";
+        toast.value.message = "內容沒有任何變更";
         toast.value.showToast = true;
         toast.value.messageType = "info";
         return;
     }
 
-    const updatedPost = {
-        ...editedPost,
-    };
+    localContent.value = editedPost.content;
     const postRef = dbRef($db, `posts/${postId}`);
     try {
         toast.value.message = "正在更新文章內容...";
         toast.value.showToast = true;
         toast.value.messageType = "loading";
-        await update(postRef, updatedPost);
+        await update(postRef, editedPost);
         toast.value.message = "更新完成!";
         toast.value.showToast = true;
         toast.value.messageType = "success";
+        shouldSaveContent.value = false;
     } catch (error: any) {
         toast.value.message = error.message;
         toast.value.showToast = true;

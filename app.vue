@@ -19,6 +19,8 @@ const { toast } = storeToRefs(uiStore);
 const closeToast = () => {
     toast.value.showToast = false;
 };
+const localContent = useLocalStorage("editorContent", "");
+localContent.value = "";
 try {
     await postsStore.getAllPosts();
     await tagsStore.getAllTags();

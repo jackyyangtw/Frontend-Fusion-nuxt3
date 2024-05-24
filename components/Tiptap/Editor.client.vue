@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="tiptap-editor">
         <div
             class="control-bar rounded bg-slate-50 dark:bg-slate-950/[0]"
             v-if="editor"
@@ -106,23 +106,6 @@
         <div class="bg-slate-200 dark:bg-slate-950/[0.8] rounded-md">
             <TiptapEditorContent :editor="editor" />
         </div>
-        <AppModal title="尚有未儲存內容!!" danger>
-            <template #body>
-                <p class="font-semibold">
-                    確定要離開嗎?離開後會遺失編輯的內容
-                </p>
-            </template>
-            <template #footer>
-                <div class="flex justify-end gap-3">
-                    <AppButton btnStyle="danger" @click="leavePage">
-                        確定
-                    </AppButton>
-                    <AppButton btnStyle="main" @click="stayPage">
-                        取消
-                    </AppButton>
-                </div>
-            </template>
-        </AppModal>
     </div>
 </template>
 
@@ -160,17 +143,14 @@ const editor = useEditor({
         }),
     ],
 });
-const shouldSaveContent = ref(false);
-const contentChangeCount = ref(0);
-
 const emit = defineEmits(["saveContent", "addImage"]);
+const contentChangeCount = ref(0);
 watch(
     () => editor.value?.getHTML(),
     (newValue) => {
-        localContent.value = newValue;
         contentChangeCount.value++;
+        localContent.value = newValue;
         if (contentChangeCount.value > 1) {
-            shouldSaveContent.value = true;
             emit("saveContent", newValue);
         }
     }
@@ -183,7 +163,7 @@ const triggerImageFileInput = () => {
 };
 
 const uiStore = useUIStore();
-const { isModalOpen, toast } = storeToRefs(uiStore);
+const { toast } = storeToRefs(uiStore);
 const onUploadImgage = async (event: Event) => {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
@@ -191,7 +171,14 @@ const onUploadImgage = async (event: Event) => {
         const reader = new FileReader();
         reader.onload = () => {
             const imageUrl = reader.result as string;
-            editor.value?.commands.setImage({ src: imageUrl });
+            let fileNameWithoutExtension = file.name
+                .split(".")
+                .slice(0, -1)
+                .join(".");
+            editor.value?.commands.setImage({
+                src: imageUrl,
+                alt: fileNameWithoutExtension,
+            });
             toast.value.message = "需更新圖片";
             toast.value.showToast = true;
             toast.value.messageType = "info";
@@ -237,41 +224,9 @@ const setLink = () => {
         .run();
 };
 
-// commit
-
-// const saveContent = () => {
-//     if (!editor.value) return;
-//     const content = editor.value.getHTML();
-//     emit("saveContent", content);
-// };
-
 onBeforeUnmount(() => {
     if (!editor.value) return;
     unref(editor.value).destroy();
-});
-
-const router = useRouter();
-const leavePage = () => {
-    isModalOpen.value = false;
-    shouldSaveContent.value = false;
-    localContent.value = "";
-    // 放行
-    router.go(0);
-};
-const stayPage = () => {
-    isModalOpen.value = false;
-    shouldSaveContent.value = true;
-};
-onBeforeRouteLeave((to, from, next) => {
-    if (shouldSaveContent.value) {
-        isModalOpen.value = true;
-    } else {
-        contentChangeCount.value = 0;
-        isModalOpen.value = false;
-        shouldSaveContent.value = false;
-        localContent.value = "";
-        next();
-    }
 });
 </script>
 

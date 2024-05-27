@@ -7,7 +7,7 @@ export interface Post {
     previewImgUrl: string;
     updatedDate: string;
     photoURL: string;
-    author: string;
+    author: string | undefined;
     content: string;
     userId: string;
 }

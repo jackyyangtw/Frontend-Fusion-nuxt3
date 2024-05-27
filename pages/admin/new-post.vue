@@ -7,12 +7,14 @@
 </template>
 
 <script setup lang="ts">
+const userStore = useUserStore();
+const { user } = storeToRefs(userStore);
 const post = ref<Post>({
     title: "",
     content: "",
     previewImgUrl: "",
     previewText: "",
-    author: "",
+    author: user.value?.name,
     id: "",
     thumbnail: "",
     tags: [],

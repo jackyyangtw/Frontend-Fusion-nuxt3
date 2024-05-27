@@ -1,5 +1,10 @@
 # ISSUE
 
+-   新增 Post 的時候 author 不會自動帶入
+-   會員資料修改
+-   新增 POST
+-   post-preview transition
+
 ## VSCODE shortcut
 
 -   https://ithelp.ithome.com.tw/articles/10237385

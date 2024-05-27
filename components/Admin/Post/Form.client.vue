@@ -4,6 +4,8 @@
         :state="editedPost"
         class="bg-slate-50 dark:bg-slate-950/[0.5] rounded p-5 max-w-[900px] mx-auto flex flex-col gap-5 shadow-md"
         id="post-form"
+        @submit="onSubmit"
+        @error="onError"
     >
         <UFormGroup label="作者名稱" name="author" id="author-group">
             <UInput color="primary" v-model="editedPost.author" />
@@ -35,25 +37,25 @@
                 alt=""
             />
         </div>
-
-        <div class="flex flex-wrap gap-3">
-            <UCheckbox
-                color="primary"
-                v-model="editedPost.tags"
-                v-for="tag in tags"
-                :key="tag.name"
-                :value="tag.name"
-                :label="tag.name"
-            />
-        </div>
+        <UFormGroup label="文章標籤" name="tags" id="tags-group">
+            <div class="flex gap-3 flex-wrap">
+                <UCheckbox
+                    v-model="editedPost.tags"
+                    color="primary"
+                    v-for="tag in tags"
+                    :key="tag.name"
+                    :value="tag.name"
+                    :label="tag.name"
+                />
+            </div>
+        </UFormGroup>
 
         <TiptapEditor
             :editedPost="post"
             @saveContent="handleSaveContent"
             @addImage="handlerAddImage"
         />
-
-        <UButton type="submit" @click="onSubmit"> Submit </UButton>
+        <UButton type="submit" :disabled="errors.length > 0"> Submit </UButton>
     </UForm>
     <AppModal title="尚有未儲存內容!!" danger>
         <template #body>
@@ -71,7 +73,8 @@
 </template>
 
 <script setup lang="ts">
-import { object, string, type InferType } from "yup";
+import { object, string, array, type InferType } from "yup";
+import type { FormSubmitEvent, FormError, FormErrorEvent } from "#ui/types";
 import {
     ref as storageRef,
     uploadBytes,
@@ -79,7 +82,7 @@ import {
     listAll,
     deleteObject,
 } from "firebase/storage";
-import { ref as dbRef, update } from "firebase/database";
+import { ref as dbRef, update, push, set } from "firebase/database";
 const props = defineProps({
     post: {
         type: Object as PropType<Post>,
@@ -91,29 +94,30 @@ const props = defineProps({
     },
 });
 
-const schema = object({
-    aurhor: string().required("Required"),
-    title: string().required("Required"),
-    previewText: string().required("Required"),
-});
-
-type Schema = InferType<typeof schema>;
-
 const tagsStore = useTagsStore();
 const { tags } = storeToRefs(tagsStore);
 
 const userStore = useUserStore();
 const { user } = storeToRefs(userStore);
 const editedPost = reactive({
-    author: user.value?.name,
+    author: user.value?.name || "",
     title: props.post.title || "",
     thumbnail: props.post.thumbnail || "",
     content: props.post.content || "",
     previewText: props.post.previewText || "",
     tags: props.post.tags || [],
+    id: props.post.id || "",
     previewImgUrl:
         props.post.previewImgUrl || "/images/post-preview-picture.png",
 });
+// 監聽 props.post 的變化，並更新 editedPost
+watch(
+    () => props.post,
+    (newPost) => {
+        Object.assign(editedPost, newPost); // 保持響應性
+    },
+    { immediate: true, deep: true }
+);
 
 // 判斷是否有未儲存的內容
 const uiStore = useUIStore();
@@ -173,33 +177,60 @@ const handlerAddImage = (addedImage: File) => {
 };
 
 // submit
+const schema = object({
+    author: string().required("Required"),
+    title: string().required("Required"),
+    previewText: string().required("Required"),
+    tags: array().min(1, "至少要有一個標籤"),
+});
+
+type Schema = InferType<typeof schema>;
+// const validate = (state: any): FormError[] => {
+//     const errors = [];
+//     if (!state.author) {
+//         errors.push({
+//             path: "author",
+//             message: "作者名稱不能為空",
+//         });
+//     }
+//     if (!state.title) {
+//         errors.push({
+//             path: "title",
+//             message: "文章標題不能為空",
+//         });
+//     }
+//     if (!state.previewText) {
+//         errors.push({
+//             path: "previewText",
+//             message: "預覽文字不能為空",
+//         });
+//     }
+//     if (state.tags.length === 0) {
+//         errors.push({
+//             path: "tags",
+//             message: "至少要有一個標籤",
+//         });
+//     }
+//     return errors;
+// };
 const shouldTransformImageUrl = computed(() => {
     return uploadedImages.value.length > 0;
 });
 const { $storage, $db } = useNuxtApp();
-const canSubmit = ref(false);
+const contentChange = ref(false);
 watch(editedPost, (newval) => {
     if (!newval) return;
-    canSubmit.value = true;
+    contentChange.value = true;
 });
 const postId = props.post.id;
-
-const onSubmit = async () => {
-    if (props.newPost) {
-        await createPost();
-    } else {
-        await updatePost();
-    }
-};
-
-const createPost = async () => {};
-
-const updatePost = async () => {
+const updateImages = async () => {
     if (editedPost.previewImgUrl !== props.post.previewImgUrl) {
         if (updatedFile.value) {
             const storagePath = `/images/posts/${postId}/previewImg`;
             const storageReference = storageRef($storage, storagePath);
-            toast.value.message = "正在更新圖片...";
+            toast.value.message = props.newPost
+                ? "正在新增預覽圖片..."
+                : "正在更新預覽圖片...";
             toast.value.showToast = true;
             toast.value.messageType = "loading";
             try {
@@ -237,7 +268,9 @@ const updatePost = async () => {
                 const storageReference = storageRef($storage, storagePath);
 
                 try {
-                    toast.value.message = "正在更新圖片...";
+                    toast.value.message = props.newPost
+                        ? "正在新增文章圖片..."
+                        : "正在更新文章圖片...";
                     toast.value.showToast = true;
                     toast.value.messageType = "loading";
                     await uploadBytes(storageReference, file);
@@ -272,21 +305,77 @@ const updatePost = async () => {
             }
         }
     }
+};
 
-    if (!canSubmit.value) {
-        toast.value.message = "內容沒有任何變更";
+const postsStore = usePostsStore();
+const { loadedPosts } = storeToRefs(postsStore);
+const createPost = async () => {
+    try {
+        // 1. 生成新的文章 ID
+        const newPostRef = push(dbRef($db, "posts"));
+        const newPostId = newPostRef.key as string;
+
+        // 2. 設置新的文章 ID
+        editedPost.id = newPostId;
+
+        // 3. 更新圖片
+        await updateImages();
+
+        // 4. 新增文章至 Firebase Realtime Database
+        const newPost = {
+            ...editedPost,
+            updatedDate: new Date().toISOString(),
+            photoURL: user.value?.photoURL as string,
+            userId: user.value?.id as string,
+        };
+        await set(newPostRef, newPost);
+        loadedPosts.value.push(newPost);
+
+        toast.value.message = "文章新增成功!";
         toast.value.showToast = true;
-        toast.value.messageType = "info";
-        return;
-    }
+        toast.value.messageType = "success";
 
-    localContent.value = editedPost.content;
+        // 5. 清空表單
+        resetForm();
+    } catch (error: any) {
+        toast.value.message = error.message;
+        toast.value.showToast = true;
+        toast.value.messageType = "error";
+    }
+};
+
+const resetForm = () => {
+    editedPost.title = "";
+    editedPost.previewText = "";
+    editedPost.previewImgUrl = "/images/post-preview-picture.png";
+    editedPost.tags = [];
+    editedPost.content = "";
+    updatedFile.value = null;
+    uploadedImages.value = [];
+    contentChange.value = false;
+    shouldSaveContent.value = false;
+};
+
+const updatePost = async () => {
+    await updateImages();
     const postRef = dbRef($db, `posts/${postId}`);
     try {
         toast.value.message = "正在更新文章內容...";
         toast.value.showToast = true;
         toast.value.messageType = "loading";
-        await update(postRef, editedPost);
+        const updatedPost = {
+            ...editedPost,
+            updatedDate: new Date().toISOString(),
+            photoURL: user.value?.photoURL as string,
+            userId: user.value?.id as string,
+        };
+        await update(postRef, updatedPost);
+        loadedPosts.value = loadedPosts.value.map((post) => {
+            if (post.id === postId) {
+                return updatedPost;
+            }
+            return post;
+        });
         toast.value.message = "更新完成!";
         toast.value.showToast = true;
         toast.value.messageType = "success";
@@ -297,6 +386,28 @@ const updatePost = async () => {
         toast.value.messageType = "error";
     }
 };
-</script>
+const errors = ref<FormError[]>([]);
+const canSubmit = computed(() => {
+    return contentChange.value;
+});
+const onError = (err: FormErrorEvent) => {
+    toast.value.message = "有錯誤發生，請檢查表單";
+    toast.value.showToast = true;
+    toast.value.messageType = "error";
+};
+const onSubmit = async (event: FormSubmitEvent<Schema>) => {
+    if (!canSubmit.value) {
+        toast.value.message = "內容沒有任何變更";
+        toast.value.showToast = true;
+        toast.value.messageType = "info";
+        return;
+    }
 
-<style scoped></style>
+    if (props.newPost) {
+        await createPost();
+    } else {
+        await updatePost();
+    }
+    localContent.value = editedPost.content;
+};
+</script>

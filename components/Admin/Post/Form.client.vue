@@ -61,10 +61,6 @@
             <AppButton btnStyle="danger" type="button" @click="openDeleteModal">
                 刪除
             </AppButton>
-            <!-- <UButton type="submit" :disabled="errors.length > 0">
-                Submit
-            </UButton>
-            <UButton> 刪除 </UButton> -->
         </div>
     </UForm>
     <AppModal :title="modalContent.title" danger>
@@ -134,11 +130,12 @@ const editedPost = reactive({
     previewImgUrl:
         props.post.previewImgUrl || "/images/post-preview-picture.png",
 });
+// 保持props.post 跟 editedPost 的響應式
 watch(
     () => props.post,
     (newPost) => {
         if (props.newPost) return;
-        Object.assign(editedPost, newPost); // 保持響應性
+        Object.assign(editedPost, newPost); // editedPost = newPost 會導致編輯內容不響應式
     },
     { immediate: true, deep: true }
 );
@@ -181,6 +178,15 @@ onBeforeRouteLeave((to, from, next) => {
         next();
     }
 });
+const contentChange = reactive({
+    value: false,
+    count: 0,
+});
+watch(editedPost, (newval) => {
+    if (!newval) return;
+    contentChange.count++;
+    contentChange.value = true;
+});
 
 // 點選delete開啟Modal
 const openDeleteModal = () => {
@@ -193,8 +199,8 @@ const closeModal = () => {
     isModalOpen.value = false;
 };
 
-// emit handler
-const updatedPriewImage = ref<File | null>(null);
+// handle preview Img File
+const previewImgFile = ref<File | null>(null);
 const handleFileChange = (files: FileList) => {
     if (files && files[0]) {
         const file = files[0];
@@ -205,48 +211,41 @@ const handleFileChange = (files: FileList) => {
         };
 
         reader.readAsDataURL(file);
-        updatedPriewImage.value = file;
+        previewImgFile.value = file;
     }
 };
+
+// handle save content
 const handleSaveContent = (content: string) => {
     editedPost.content = content;
     shouldSaveContent.value = true;
 };
 
+// handle add image
 const uploadedImages = ref<File[]>([]);
 const handlerAddImage = (addedImage: File) => {
     if (addedImage) {
         uploadedImages.value.push(addedImage);
     }
 };
-
-// submit
-const schema = object({
-    author: string().required("Required"),
-    title: string().required("Required"),
-    previewText: string().required("Required"),
-    tags: array().min(1, "至少要有一個標籤"),
-});
-
-type Schema = InferType<typeof schema>;
-
 const shouldTransformImageUrl = computed(() => {
     return uploadedImages.value.length > 0;
 });
+
+// submit
+type Schema = InferType<typeof schema>;
+const schema = object({
+    author: string().required("必填"),
+    title: string().required("必填"),
+    previewText: string().required("必填"),
+    tags: array().min(1, "至少要有一個標籤"),
+});
 const { $storage, $db } = useNuxtApp();
-const contentChange = reactive({
-    value: false,
-    count: 0,
-});
-watch(editedPost, (newval) => {
-    if (!newval) return;
-    contentChange.count++;
-    contentChange.value = true;
-});
-// const postId = props.post.id;
+
+// 上傳文章圖片
 const updateImages = async (postId: string) => {
     if (editedPost.previewImgUrl !== props.post.previewImgUrl) {
-        if (updatedPriewImage.value) {
+        if (previewImgFile.value) {
             const storagePath = `/images/posts/${postId}/previewImg`;
             const storageReference = storageRef($storage, storagePath);
             toast.value.message = props.newPost
@@ -255,7 +254,7 @@ const updateImages = async (postId: string) => {
             toast.value.showToast = true;
             toast.value.messageType = "loading";
             try {
-                await uploadBytes(storageReference, updatedPriewImage.value);
+                await uploadBytes(storageReference, previewImgFile.value);
                 const downloadUrl = await getDownloadURL(storageReference);
                 editedPost.previewImgUrl = downloadUrl;
             } catch (error: any) {
@@ -328,6 +327,19 @@ const updateImages = async (postId: string) => {
     }
 };
 
+const resetForm = () => {
+    editedPost.title = "";
+    editedPost.previewText = "";
+    editedPost.previewImgUrl = "/images/post-preview-picture.png";
+    editedPost.tags = [];
+    editedPost.content = "";
+    previewImgFile.value = null;
+    uploadedImages.value = [];
+    contentChange.value = false;
+    contentChange.count = 0;
+    shouldSaveContent.value = false;
+};
+
 const postsStore = usePostsStore();
 const { loadedPosts } = storeToRefs(postsStore);
 const router = useRouter();
@@ -368,19 +380,6 @@ const createPost = async () => {
         toast.value.messageType = "error";
     }
 };
-
-const resetForm = () => {
-    editedPost.title = "";
-    editedPost.previewText = "";
-    editedPost.previewImgUrl = "/images/post-preview-picture.png";
-    editedPost.tags = [];
-    editedPost.content = "";
-    updatedPriewImage.value = null;
-    uploadedImages.value = [];
-    contentChange.value = false;
-    contentChange.count = 0;
-    shouldSaveContent.value = false;
-};
 const updatePost = async () => {
     const postId = props.post.id;
     await updateImages(postId);
@@ -417,12 +416,11 @@ const canSubmit = computed(() => {
     return contentChange.count > 1;
 });
 const onError = (err: FormErrorEvent) => {
-    toast.value.message = "有錯誤發生，請檢查表單";
+    toast.value.message = "表單資料不完整，請檢查表單";
     toast.value.showToast = true;
     toast.value.messageType = "error";
 };
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-    console.log("onSubmit");
     if (!canSubmit.value) {
         toast.value.message = "內容沒有任何變更";
         toast.value.showToast = true;
@@ -437,15 +435,6 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
     }
     localContent.value = editedPost.content;
 };
-// const onDelete = async () => {
-//     // 1. 刪除文章預覽圖片
-//     // 2. 刪除文章內容圖片
-//     // 3. 刪除文章
-//     // 4. 重置localStorage
-//     // 5. 刪除store 的文章
-//     // 6. 回 /admin
-// };
-
 const onDelete = async () => {
     const postId = props.post.id;
     if (!postId) {

@@ -178,15 +178,6 @@ onBeforeRouteLeave((to, from, next) => {
         next();
     }
 });
-const contentChange = reactive({
-    value: false,
-    count: 0,
-});
-watch(editedPost, (newval) => {
-    if (!newval) return;
-    contentChange.count++;
-    contentChange.value = true;
-});
 
 // 點選delete開啟Modal
 const openDeleteModal = () => {
@@ -335,8 +326,6 @@ const resetForm = () => {
     editedPost.content = "";
     previewImgFile.value = null;
     uploadedImages.value = [];
-    contentChange.value = false;
-    contentChange.count = 0;
     shouldSaveContent.value = false;
 };
 
@@ -413,7 +402,7 @@ const updatePost = async () => {
 };
 
 const canSubmit = computed(() => {
-    return contentChange.count > 1;
+    return shouldSaveContent.value;
 });
 const onError = (err: FormErrorEvent) => {
     toast.value.message = "表單資料不完整，請檢查表單";

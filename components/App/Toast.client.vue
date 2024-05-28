@@ -3,7 +3,7 @@
         <transition name="fadeX">
             <div
                 id="toast-success"
-                class="fixed right-5 top-24 flex items-center max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow-lg dark:text-gray-400 dark:bg-gray-800 z-50"
+                class="fixed right-5 top-24 flex items-center max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow-lg dark:text-gray-400 dark:bg-gray-800 z-[60]"
                 role="alert"
                 v-if="showToast"
             >

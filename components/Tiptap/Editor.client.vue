@@ -92,7 +92,7 @@
             >
                 <UIcon name="i-heroicons-code-bracket" />
             </button>
-            <button @click="triggerImageFileInput">
+            <button @click.prevent="triggerImageFileInput">
                 <UIcon name="i-heroicons-photo" />
             </button>
             <input
@@ -113,15 +113,15 @@
 const lowlight = TiptapcreateLowlight(Tiptapcommon);
 
 const props = defineProps({
-    editedPost: {
-        type: Object as PropType<Post>,
+    content: {
+        type: String,
         required: true,
     },
 });
 
 const localContent = useLocalStorage("editorContent", "");
 const editor = useEditor({
-    content: localContent.value || props.editedPost.content,
+    content: localContent.value || props.content,
     extensions: [
         TiptapStarterKit.configure({
             codeBlock: false,

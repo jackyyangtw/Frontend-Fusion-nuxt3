@@ -22,4 +22,7 @@ const post = ref<Post>({
     photoURL: "",
     userId: "",
 });
+useHead({
+    title: `新增文章`,
+});
 </script>

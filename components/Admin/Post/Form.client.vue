@@ -43,7 +43,8 @@
                     v-model="editedPost.tags"
                     color="primary"
                     v-for="tag in tags"
-                    :key="tag.name"
+                    :key="tag.id"
+                    :id="tag.id"
                     :value="tag.name"
                     :label="tag.name"
                 />
@@ -51,22 +52,45 @@
         </UFormGroup>
 
         <TiptapEditor
-            :editedPost="post"
+            :content="editedPost.content"
             @saveContent="handleSaveContent"
             @addImage="handlerAddImage"
         />
-        <UButton type="submit" :disabled="errors.length > 0"> Submit </UButton>
+        <div class="flex gap-3">
+            <AppButton btnStyle="main" type="submit"> 儲存 </AppButton>
+            <AppButton btnStyle="danger" type="button" @click="openDeleteModal">
+                刪除
+            </AppButton>
+            <!-- <UButton type="submit" :disabled="errors.length > 0">
+                Submit
+            </UButton>
+            <UButton> 刪除 </UButton> -->
+        </div>
     </UForm>
-    <AppModal title="尚有未儲存內容!!" danger>
+    <AppModal :title="modalContent.title" danger>
         <template #body>
-            <p class="font-semibold"> 確定要離開嗎?離開後會遺失編輯的內容 </p>
+            <p class="font-semibold"> {{ modalContent.body }} </p>
         </template>
         <template #footer>
             <div class="flex justify-end gap-3">
-                <AppButton btnStyle="danger" @click="leavePage">
+                <AppButton
+                    btnStyle="danger"
+                    @click="
+                        modalContent.mode === 'leave' ? leavePage() : onDelete()
+                    "
+                >
                     確定
                 </AppButton>
-                <AppButton btnStyle="main" @click="stayPage"> 取消 </AppButton>
+                <AppButton
+                    btnStyle="main"
+                    @click="
+                        modalContent.mode === 'leave'
+                            ? stayPage()
+                            : closeModal()
+                    "
+                >
+                    取消
+                </AppButton>
             </div>
         </template>
     </AppModal>
@@ -74,7 +98,7 @@
 
 <script setup lang="ts">
 import { object, string, array, type InferType } from "yup";
-import type { FormSubmitEvent, FormError, FormErrorEvent } from "#ui/types";
+import type { FormSubmitEvent, FormErrorEvent } from "#ui/types";
 import {
     ref as storageRef,
     uploadBytes,
@@ -82,7 +106,7 @@ import {
     listAll,
     deleteObject,
 } from "firebase/storage";
-import { ref as dbRef, update, push, set } from "firebase/database";
+import { ref as dbRef, update, push, set, remove } from "firebase/database";
 const props = defineProps({
     post: {
         type: Object as PropType<Post>,
@@ -110,10 +134,10 @@ const editedPost = reactive({
     previewImgUrl:
         props.post.previewImgUrl || "/images/post-preview-picture.png",
 });
-// 監聽 props.post 的變化，並更新 editedPost
 watch(
     () => props.post,
     (newPost) => {
+        if (props.newPost) return;
         Object.assign(editedPost, newPost); // 保持響應性
     },
     { immediate: true, deep: true }
@@ -122,8 +146,14 @@ watch(
 // 判斷是否有未儲存的內容
 const uiStore = useUIStore();
 const { toast, isModalOpen } = storeToRefs(uiStore);
+
 const shouldSaveContent = ref(false);
 const localContent = useLocalStorage("editorContent", "");
+const modalContent = reactive({
+    title: "",
+    body: "",
+    mode: "",
+});
 let nextRoute: any = null;
 const leavePage = () => {
     if (nextRoute) {
@@ -139,6 +169,9 @@ const stayPage = () => {
 };
 onBeforeRouteLeave((to, from, next) => {
     if (shouldSaveContent.value) {
+        modalContent.mode = "leave";
+        modalContent.title = "尚有未儲存內容!!";
+        modalContent.body = "確定要離開嗎?離開後會遺失編輯的內容";
         isModalOpen.value = true;
         nextRoute = next;
     } else {
@@ -149,8 +182,19 @@ onBeforeRouteLeave((to, from, next) => {
     }
 });
 
+// 點選delete開啟Modal
+const openDeleteModal = () => {
+    modalContent.mode = "delete";
+    modalContent.title = "確定要刪除文章嗎?";
+    modalContent.body = "刪除後將無法復原!!";
+    isModalOpen.value = true;
+};
+const closeModal = () => {
+    isModalOpen.value = false;
+};
+
 // emit handler
-const updatedFile = ref<File | null>(null);
+const updatedPriewImage = ref<File | null>(null);
 const handleFileChange = (files: FileList) => {
     if (files && files[0]) {
         const file = files[0];
@@ -161,7 +205,7 @@ const handleFileChange = (files: FileList) => {
         };
 
         reader.readAsDataURL(file);
-        updatedFile.value = file;
+        updatedPriewImage.value = file;
     }
 };
 const handleSaveContent = (content: string) => {
@@ -185,47 +229,24 @@ const schema = object({
 });
 
 type Schema = InferType<typeof schema>;
-// const validate = (state: any): FormError[] => {
-//     const errors = [];
-//     if (!state.author) {
-//         errors.push({
-//             path: "author",
-//             message: "作者名稱不能為空",
-//         });
-//     }
-//     if (!state.title) {
-//         errors.push({
-//             path: "title",
-//             message: "文章標題不能為空",
-//         });
-//     }
-//     if (!state.previewText) {
-//         errors.push({
-//             path: "previewText",
-//             message: "預覽文字不能為空",
-//         });
-//     }
-//     if (state.tags.length === 0) {
-//         errors.push({
-//             path: "tags",
-//             message: "至少要有一個標籤",
-//         });
-//     }
-//     return errors;
-// };
+
 const shouldTransformImageUrl = computed(() => {
     return uploadedImages.value.length > 0;
 });
 const { $storage, $db } = useNuxtApp();
-const contentChange = ref(false);
+const contentChange = reactive({
+    value: false,
+    count: 0,
+});
 watch(editedPost, (newval) => {
     if (!newval) return;
+    contentChange.count++;
     contentChange.value = true;
 });
-const postId = props.post.id;
-const updateImages = async () => {
+// const postId = props.post.id;
+const updateImages = async (postId: string) => {
     if (editedPost.previewImgUrl !== props.post.previewImgUrl) {
-        if (updatedFile.value) {
+        if (updatedPriewImage.value) {
             const storagePath = `/images/posts/${postId}/previewImg`;
             const storageReference = storageRef($storage, storagePath);
             toast.value.message = props.newPost
@@ -234,7 +255,7 @@ const updateImages = async () => {
             toast.value.showToast = true;
             toast.value.messageType = "loading";
             try {
-                await uploadBytes(storageReference, updatedFile.value);
+                await uploadBytes(storageReference, updatedPriewImage.value);
                 const downloadUrl = await getDownloadURL(storageReference);
                 editedPost.previewImgUrl = downloadUrl;
             } catch (error: any) {
@@ -309,6 +330,7 @@ const updateImages = async () => {
 
 const postsStore = usePostsStore();
 const { loadedPosts } = storeToRefs(postsStore);
+const router = useRouter();
 const createPost = async () => {
     try {
         // 1. 生成新的文章 ID
@@ -319,7 +341,7 @@ const createPost = async () => {
         editedPost.id = newPostId;
 
         // 3. 更新圖片
-        await updateImages();
+        await updateImages(newPostId);
 
         // 4. 新增文章至 Firebase Realtime Database
         const newPost = {
@@ -337,6 +359,9 @@ const createPost = async () => {
 
         // 5. 清空表單
         resetForm();
+        setTimeout(() => {
+            router.push("/admin");
+        }, 2000);
     } catch (error: any) {
         toast.value.message = error.message;
         toast.value.showToast = true;
@@ -350,14 +375,15 @@ const resetForm = () => {
     editedPost.previewImgUrl = "/images/post-preview-picture.png";
     editedPost.tags = [];
     editedPost.content = "";
-    updatedFile.value = null;
+    updatedPriewImage.value = null;
     uploadedImages.value = [];
     contentChange.value = false;
+    contentChange.count = 0;
     shouldSaveContent.value = false;
 };
-
 const updatePost = async () => {
-    await updateImages();
+    const postId = props.post.id;
+    await updateImages(postId);
     const postRef = dbRef($db, `posts/${postId}`);
     try {
         toast.value.message = "正在更新文章內容...";
@@ -386,9 +412,9 @@ const updatePost = async () => {
         toast.value.messageType = "error";
     }
 };
-const errors = ref<FormError[]>([]);
+
 const canSubmit = computed(() => {
-    return contentChange.value;
+    return contentChange.count > 1;
 });
 const onError = (err: FormErrorEvent) => {
     toast.value.message = "有錯誤發生，請檢查表單";
@@ -396,6 +422,7 @@ const onError = (err: FormErrorEvent) => {
     toast.value.messageType = "error";
 };
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
+    console.log("onSubmit");
     if (!canSubmit.value) {
         toast.value.message = "內容沒有任何變更";
         toast.value.showToast = true;
@@ -409,5 +436,83 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
         await updatePost();
     }
     localContent.value = editedPost.content;
+};
+// const onDelete = async () => {
+//     // 1. 刪除文章預覽圖片
+//     // 2. 刪除文章內容圖片
+//     // 3. 刪除文章
+//     // 4. 重置localStorage
+//     // 5. 刪除store 的文章
+//     // 6. 回 /admin
+// };
+
+const onDelete = async () => {
+    const postId = props.post.id;
+    if (!postId) {
+        toast.value.message = "找不到文章 ID";
+        toast.value.showToast = true;
+        toast.value.messageType = "error";
+        return;
+    }
+
+    try {
+        // 刪除文章預覽圖片
+        if (
+            editedPost.previewImgUrl &&
+            editedPost.previewImgUrl !== "/images/post-preview-picture.png"
+        ) {
+            toast.value.message = "正在刪除文章預覽圖片...";
+            toast.value.showToast = true;
+            toast.value.messageType = "loading";
+            const previewImgRef = storageRef(
+                $storage,
+                `/images/posts/${postId}/previewImg`
+            );
+            await deleteObject(previewImgRef);
+        }
+
+        // 刪除文章內容圖片
+        toast.value.message = "正在刪除所有文章圖片...";
+        toast.value.showToast = true;
+        toast.value.messageType = "loading";
+        const storageListRef = storageRef(
+            $storage,
+            `/images/posts/${postId}/content`
+        );
+        const storageList = await listAll(storageListRef);
+        for (const item of storageList.items) {
+            await deleteObject(item);
+        }
+
+        // 刪除文章資料
+        toast.value.message = "正在刪除文章...";
+        toast.value.showToast = true;
+        toast.value.messageType = "loading";
+        const postRef = dbRef($db, `posts/${postId}`);
+        await remove(postRef);
+
+        // 重置 localStorage
+        localContent.value = "";
+
+        // 刪除 store 中的文章
+        loadedPosts.value = loadedPosts.value.filter(
+            (post) => post.id !== postId
+        );
+
+        // 顯示刪除成功訊息
+        toast.value.message = "文章已成功刪除!";
+        toast.value.showToast = true;
+        toast.value.messageType = "success";
+
+        // 重置表單
+        isModalOpen.value = false;
+        resetForm();
+        // 導回管理頁面
+        router.replace("/admin");
+    } catch (error: any) {
+        toast.value.message = `刪除文章時發生錯誤: ${error.message}`;
+        toast.value.showToast = true;
+        toast.value.messageType = "error";
+    }
 };
 </script>

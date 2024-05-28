@@ -1,8 +1,10 @@
 # ISSUE
 
--   新增 Post 的時候 author 不會自動帶入
+-   ~~上傳文章圖片後會直接觸發 onsubmit (preventDefault)~~
+-   ~~UCheckbox v-for id 全部指向同一個~~
+-   ~~刪除 post 功能~~
+-   ~~新增 POST~~
 -   會員資料修改
--   新增 POST
 -   post-preview transition
 
 ## VSCODE shortcut

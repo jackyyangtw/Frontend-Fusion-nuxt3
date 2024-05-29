@@ -1,18 +1,9 @@
-// import { config } from "firebase-functions/lib/v1";
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     ssr: true,
     devtools: { enabled: true },
-    // nitro: {
-    //     devProxy: {
-    //         "/auth": "http://localhost:3000",
-    //         "/admin": "http://localhost:3000",
-    //     },
-    // },
     modules: [
-        "@pinia/nuxt", // "@nuxtjs/tailwindcss",
-        // "@nuxtjs/color-mode",
+        "@pinia/nuxt",
         "@vueuse/nuxt",
         "nuxt-schema-org",
         "nuxt-vuefire",
@@ -23,7 +14,7 @@ export default defineNuxtConfig({
         prefix: "Tiptap", //prefix for Tiptap imports, composables not included
         lowlight: {
             // list https://github.com/modbender/nuxt-tiptap-editor/blob/7dfbe1c213af472f8f7a50b0e3dd5a7dd8552ce9/src/types.d.ts#L3
-            theme: "monokai-sublime",
+            theme: "github-dark",
         },
     },
     vuefire: {
@@ -93,8 +84,16 @@ export default defineNuxtConfig({
         autoImport: true,
     },
     ui: {
-        // global: true,
-        // safelistColors: ["sky"],
         icons: ["la"],
+        safelistColors: [
+            "sky",
+            "cyan",
+            "green",
+            "gray",
+            "blue",
+            "yellow",
+            "violet",
+            "amber",
+        ],
     },
 });

@@ -5,9 +5,9 @@ export interface Post {
     thumbnail: string;
     tags: string[];
     previewImgUrl: string;
-    updatedDate: string;
+    updatedDate: Date;
     photoURL: string;
-    author: string | undefined;
+    author: string;
     content: string;
     userId: string;
 }

@@ -3,7 +3,7 @@
         class="mx-2 block my-4 group w-full md:w-[calc(50%-16px)] 2xl:w-[calc(33.333%-24px)] ease-in duration-300 transition relative z-0"
     >
         <transition name="vagueIn">
-            <nuxt-link v-if="isMounted" :to="postLink">
+            <nuxt-link v-show="isMounted" :to="postLink">
                 <div
                     class="rounded overflow-hidden shadow-lg bg-white dark:bg-gray-800 dark:border-gray-700 mx-auto"
                     @mouseenter.self="setShowButtons"
@@ -102,8 +102,9 @@ const props = defineProps<{
 }>();
 const isMounted = ref(false);
 const showButtons = ref(false);
-isMounted.value = true;
-
+onMounted(() => {
+    isMounted.value = true;
+});
 const setShowButtons = () => {
     showButtons.value = !showButtons.value;
 };
@@ -170,5 +171,15 @@ const maxTitleText = computed(() => {
 
 .badge-style {
     @apply text-xs font-medium mr-2 px-2.5 py-0.5 rounded;
+}
+.vagueIn-enter,
+.vagueIn-leave-to {
+    filter: blur(20px);
+    opacity: 0.5;
+}
+
+.vagueIn-enter-active,
+.vagueIn-leave-active {
+    transition: 0.3s;
 }
 </style>

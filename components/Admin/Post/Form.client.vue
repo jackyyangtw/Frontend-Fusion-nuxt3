@@ -58,7 +58,12 @@
         />
         <div class="flex gap-3">
             <AppButton btnStyle="main" type="submit"> 儲存 </AppButton>
-            <AppButton btnStyle="danger" type="button" @click="openDeleteModal">
+            <AppButton
+                btnStyle="danger"
+                type="button"
+                @click="openDeleteModal"
+                v-if="atEditedPage"
+            >
                 刪除
             </AppButton>
         </div>
@@ -139,6 +144,11 @@ watch(
     },
     { immediate: true, deep: true }
 );
+
+const route = useRoute();
+const atEditedPage = computed(() => {
+    return route.name === "admin-postId";
+});
 
 // 判斷是否有未儲存的內容
 const uiStore = useUIStore();

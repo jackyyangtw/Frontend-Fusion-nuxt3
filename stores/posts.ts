@@ -1,3 +1,4 @@
+import { ref as dbRef, onValue } from "firebase/database";
 export const usePostsStore = defineStore("posts", () => {
     const loadedPosts = ref<Post[]>([]);
     const setPosts = (posts: Post[]) => {
@@ -9,18 +10,34 @@ export const usePostsStore = defineStore("posts", () => {
         isLoadingPosts.value = isLoading;
     };
 
+    const { $db } = useNuxtApp();
     const getAllPosts = async () => {
-        const data = await $fetch<{ [key: string]: Post }>(
-            "/api/realTime/posts",
-            {
-                method: "GET",
+        const postRef = dbRef($db, "posts");
+        onValue(postRef, (snapshot) => {
+            const data = snapshot.val();
+            const postArr = [];
+            for (const key in data) {
+                postArr.push({ ...data[key], id: key });
             }
-        );
-        const postArr = [];
-        for (const key in data) {
-            postArr.push({ ...data[key], id: key });
-        }
-        loadedPosts.value = postArr;
+            postArr.sort(
+                (a, b) =>
+                    new Date(b.updatedDate).getTime() -
+                    new Date(a.updatedDate).getTime()
+            );
+            loadedPosts.value = postArr;
+            setIsLoadingPosts(false);
+        });
+        // const data = await $fetch<{ [key: string]: Post }>(
+        //     "/api/realTime/posts",
+        //     {
+        //         method: "GET",
+        //     }
+        // );
+        // const postArr = [];
+        // for (const key in data) {
+        //     postArr.push({ ...data[key], id: key });
+        // }
+        // loadedPosts.value = postArr;
     };
 
     return {

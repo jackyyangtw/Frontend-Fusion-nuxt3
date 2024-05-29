@@ -11,15 +11,10 @@ module.exports = {
     ],
     darkMode: "class",
     plugins: [],
-    // theme: {
-    //     colors: {
-    //         danger: colors.red,
-    //     },
-    // },
     safelist: [
         // 為每個 color 提供樣式範圍
         {
-            pattern: /(bg|ring)-(.*)-(600|700|800)/,
+            pattern: /(bg|ring)-(.*)-(100|300|600|700|800|900)/,
             variants: [
                 "dark:hover",
                 "dark:focus",

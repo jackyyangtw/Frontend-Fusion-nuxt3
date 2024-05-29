@@ -14,7 +14,7 @@ const post = ref<Post>({
     content: "",
     previewImgUrl: "",
     previewText: "",
-    author: user.value?.name,
+    author: user.value?.name ?? "",
     id: "",
     thumbnail: "",
     tags: [],

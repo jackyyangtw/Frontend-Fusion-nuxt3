@@ -4,10 +4,13 @@
 -   ~~UCheckbox v-for id 全部指向同一個~~
 -   ~~刪除 post 功能~~
 -   ~~新增 POST~~
+-   posts/[id]、admin/[postid] code block css 不同步問題
 -   會員資料修改
 -   post-preview transition
 
 ## VSCODE shortcut
+
+`
 
 -   https://ithelp.ithome.com.tw/articles/10237385
 

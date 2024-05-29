@@ -5,27 +5,27 @@
             v-if="editor"
         >
             <button
-                @click="toggleLink"
+                @click.prevent="toggleLink"
                 :class="{ 'is-active': editor.isActive('link') }"
             >
                 <UIcon name="i-heroicons-link" />
             </button>
             <button
-                @click="editor.chain().focus().toggleBold().run()"
+                @click.prevent="editor.chain().focus().toggleBold().run()"
                 :disabled="!editor.can().chain().focus().toggleBold().run()"
                 :class="{ 'is-active': editor.isActive('bold') }"
             >
                 <UIcon name="i-heroicons-bold" />
             </button>
             <button
-                @click="editor.chain().focus().toggleItalic().run()"
+                @click.prevent="editor.chain().focus().toggleItalic().run()"
                 :disabled="!editor.can().chain().focus().toggleItalic().run()"
                 :class="{ 'is-active': editor.isActive('italic') }"
             >
                 <UIcon name="i-heroicons-italic" />
             </button>
             <button
-                @click="
+                @click.prevent="
                     editor.chain().focus().toggleHeading({ level: 2 }).run()
                 "
                 :class="{
@@ -35,7 +35,7 @@
                 h2
             </button>
             <button
-                @click="
+                @click.prevent="
                     editor.chain().focus().toggleHeading({ level: 3 }).run()
                 "
                 :class="{
@@ -45,7 +45,7 @@
                 h3
             </button>
             <button
-                @click="
+                @click.prevent="
                     editor.chain().focus().toggleHeading({ level: 4 }).run()
                 "
                 :class="{
@@ -55,7 +55,7 @@
                 h4
             </button>
             <button
-                @click="
+                @click.prevent="
                     editor.chain().focus().toggleHeading({ level: 5 }).run()
                 "
                 :class="{
@@ -65,7 +65,7 @@
                 h5
             </button>
             <button
-                @click="
+                @click.prevent="
                     editor.chain().focus().toggleHeading({ level: 6 }).run()
                 "
                 :class="{
@@ -75,19 +75,21 @@
                 h6
             </button>
             <button
-                @click="editor.chain().focus().toggleBulletList().run()"
+                @click.prevent="editor.chain().focus().toggleBulletList().run()"
                 :class="{ 'is-active': editor.isActive('bulletList') }"
             >
                 <UIcon name="i-heroicons-list-bullet" />
             </button>
             <button
-                @click="editor.chain().focus().toggleOrderedList().run()"
+                @click.prevent="
+                    editor.chain().focus().toggleOrderedList().run()
+                "
                 :class="{ 'is-active': editor.isActive('orderedList') }"
             >
                 <UIcon name="i-la-list-ol" />
             </button>
             <button
-                @click="editor.chain().focus().toggleCodeBlock().run()"
+                @click.prevent="editor.chain().focus().toggleCodeBlock().run()"
                 :class="{ 'is-active': editor.isActive('codeBlock') }"
             >
                 <UIcon name="i-heroicons-code-bracket" />
@@ -254,13 +256,32 @@ button.is-active {
     list-style: decimal;
     padding-left: 1rem;
 }
+.tiptap p {
+    min-height: 24px;
+}
 .tiptap h2,
 h3,
 h4,
 h5,
 h6 {
-    @apply text-primary-500;
+    @apply text-primary-500 font-bold;
 }
+.tiptap h2 {
+    @apply text-2xl;
+}
+.tiptap h3 {
+    @apply text-xl;
+}
+.tiptap h4 {
+    @apply text-lg;
+}
+.tiptap h5 {
+    @apply text-base;
+}
+.tiptap h6 {
+    @apply text-sm;
+}
+
 .hljs-property {
     @apply text-white;
 }

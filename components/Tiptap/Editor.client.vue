@@ -105,7 +105,9 @@
                 name="photo"
             />
         </div>
-        <div class="bg-slate-200 dark:bg-slate-950/[0.8] rounded-md">
+        <div
+            class="editor-container bg-slate-200 dark:bg-slate-900/[0.8] rounded-md"
+        >
             <TiptapEditorContent :editor="editor" />
         </div>
     </div>
@@ -125,9 +127,10 @@ const localContent = useLocalStorage("editorContent", "");
 const editor = useEditor({
     content: localContent.value || props.content,
     extensions: [
-        TiptapStarterKit.configure({
-            codeBlock: false,
-        }),
+        // TiptapStarterKit.configure({
+        //     codeBlock: false,
+        // }),
+        TiptapStarterKit,
         TiptapCodeBlockLowlight.configure({
             lowlight,
             HTMLAttributes: { class: "editor-code-block" },
@@ -239,11 +242,16 @@ button.is-active {
 </style>
 
 <style>
+.tiptap-editor .editor-container {
+    max-height: 600px; /* 設定最大高度 */
+    overflow-y: auto; /* 超過最大高度時顯示滾動條 */
+}
 .tiptap .editor-link {
     @apply text-blue-500;
 }
 .tiptap .editor-code-block {
-    @apply p-5 rounded bg-gray-900;
+    background-color: #0d1117;
+    @apply p-5 rounded;
 }
 .tiptap {
     @apply p-5;

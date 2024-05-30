@@ -4,9 +4,9 @@ export const useUIStore = defineStore("ui", () => {
         headerHeight.value = height;
     };
 
-    const loading = ref(false);
-    const setLoading = (value: boolean) => {
-        loading.value = value;
+    const pageLoading = ref(false);
+    const setPageLoading = (value: boolean) => {
+        pageLoading.value = value;
     };
 
     const toast = ref({
@@ -20,8 +20,8 @@ export const useUIStore = defineStore("ui", () => {
     return {
         headerHeight,
         setHeaderHeight,
-        loading,
-        setLoading,
+        pageLoading,
+        setPageLoading,
         toast,
         isModalOpen,
     };

@@ -7,6 +7,7 @@
             :message="toast.message"
             @closeToast="closeToast"
         />
+        <UILoading />
     </NuxtLayout>
 </template>
 

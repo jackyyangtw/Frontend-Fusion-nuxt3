@@ -75,14 +75,6 @@
         <template #footer>
             <div class="flex justify-end gap-3">
                 <AppButton
-                    btnStyle="danger"
-                    @click="
-                        modalContent.mode === 'leave' ? leavePage() : onDelete()
-                    "
-                >
-                    確定
-                </AppButton>
-                <AppButton
                     btnStyle="main"
                     @click="
                         modalContent.mode === 'leave'
@@ -91,6 +83,14 @@
                     "
                 >
                     取消
+                </AppButton>
+                <AppButton
+                    btnStyle="danger"
+                    @click="
+                        modalContent.mode === 'leave' ? leavePage() : onDelete()
+                    "
+                >
+                    確定
                 </AppButton>
             </div>
         </template>

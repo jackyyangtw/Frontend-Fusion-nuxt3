@@ -38,7 +38,6 @@
 </template>
 
 <script setup lang="ts">
-const localSearchText = ref("");
 const isFocus = ref(false);
 
 const router = useRouter();
@@ -47,19 +46,27 @@ const searchStore = useSearchStore();
 const { setSearchText } = searchStore;
 const { searchText } = storeToRefs(searchStore);
 const uiStore = useUIStore();
+const shouldSearch = ref(false);
+watch(searchText, (newVal, oldVal) => {
+    if (newVal !== oldVal) {
+        shouldSearch.value = true;
+    } else {
+        shouldSearch.value = false;
+    }
+});
 const search = () => {
-    if (!localSearchText.value || localSearchText.value === searchText.value)
-        return;
-    uiStore.setLoading(true);
+    uiStore.setPageLoading(true);
     setTimeout(() => {
-        if (localSearchText.value === searchText.value) {
-            setSearchText(searchText.value);
-            router.push({
-                name: "search",
-                params: { searchText: searchText.value },
-            });
-            searchInput.value?.blur();
+        if (!shouldSearch.value) {
+            uiStore.setPageLoading(false);
+            return;
         }
+        setSearchText(searchText.value);
+        router.push({
+            name: "search",
+            query: { search_query: searchText.value },
+        });
+        searchInput.value?.blur();
     }, 1000);
 };
 

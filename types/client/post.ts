@@ -5,7 +5,7 @@ export interface Post {
     thumbnail: string;
     tags: string[];
     previewImgUrl: string;
-    updatedDate: Date;
+    updatedDate: string;
     photoURL: string;
     author: string;
     content: string;

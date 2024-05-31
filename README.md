@@ -5,7 +5,8 @@
 -   ~~刪除 post 功能~~
 -   ~~新增 POST~~
 -   ~~posts/[id]、admin/[postid] code block css 不同步問題~~
--   search route: /results?search_query=望春風+長榮
+-   ~~search route: /results?search_query=望春風+長榮~~
+-   ~~editor code block 的白色文字在 light-mode 會變成黑色，跟背景色一樣~~
 -   會員資料修改
 -   post-preview transition
 
@@ -29,3 +30,8 @@
 
 -   dark glass: https://www.figma.com/design/8Cc64d4jyEkeomprBwFcK5/UI-Design-a-Dark-Mode-NFT-app-(Community)?node-id=60-545&t=XWfNDoToSHAfX5g3-0
 -   dark & light: https://www.figma.com/design/t4oMD1FkqSi1pUyjLXj2aA/Glassmorphism-Components-(Community)?node-id=0-1&t=X3y5aZvZ0vS81GkT-0
+
+## ICON
+
+-   https://ui.nuxt.com/components/icon
+-   https://icones.js.org/collection/heroicons

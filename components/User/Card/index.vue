@@ -12,7 +12,7 @@
                             <img
                                 class="w-24 h-24 mb-3 rounded-full"
                                 :src="
-                                    userData.photoURL ||
+                                    user?.photoURL ||
                                     '/images/no-user-image.gif'
                                 "
                                 alt="user photo"
@@ -39,10 +39,10 @@
                 <h5
                     class="mb-1 text-xl font-medium text-gray-900 dark:text-white"
                 >
-                    {{ userData.name }}
+                    {{ user?.name }}
                 </h5>
                 <span class="text-sm text-gray-500 dark:text-gray-400">
-                    @{{ userData.email ? userData.email.split("@")[0] : "" }}
+                    @{{ user?.email ? user?.email.split("@")[0] : "" }}
                 </span>
                 <div class="flex mt-4 space-x-3 md:mt-6">
                     <AppButton
@@ -50,7 +50,7 @@
                         @click="$router.push('/admin/new-post')"
                         >新增文章</AppButton
                     >
-                    <div v-show="isManager">
+                    <div v-show="user?.isManager">
                         <AppButton
                             btnStyle="secondary"
                             @click="$router.push('/admin/manage-tags')"
@@ -68,22 +68,39 @@
 
 <script setup lang="ts">
 defineProps<{
-    userData: User;
-    isManager: boolean | undefined;
     loadingCard: boolean;
 }>();
 
 const userStore = useUserStore();
 const { googleSignout } = userStore;
+const { user } = storeToRefs(userStore);
 const onLogout = async () => {
     await googleSignout();
 };
-const emit = defineEmits(["showToast"]);
+
+const uiStore = useUIStore();
+const { toast } = storeToRefs(uiStore);
 const onPhotoChange = (e: Event) => {
-    emit("showToast", {
-        showToast: true,
-        messageType: "loading",
-    });
+    toast.value.showToast = true;
+    toast.value.message = "正在更新頭像...";
+    toast.value.messageType = "loading";
+
+    const target = e.target as HTMLInputElement;
+    const file = target.files?.[0];
+    if (!file) return;
+
+    // const reader = new FileReader();
+    // reader.readAsDataURL(file);
+    // reader.onload = async () => {
+    //     if (typeof reader.result !== "string") return;
+    //     const result = reader.result;
+    //     const Toast: Toast = {
+    //         showToast: true,
+    //         messageType: "loading",
+    //     };
+    //     updatePhoto(Toast);
+    //     await userStore.updatePhoto(result);
+    // };
 };
 </script>
 

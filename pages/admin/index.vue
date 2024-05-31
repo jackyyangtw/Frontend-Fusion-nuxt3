@@ -1,12 +1,6 @@
 <template>
     <div class="admin-page container mx-auto">
-        <UserCard
-            v-if="user"
-            @showToast="updatePhoto"
-            :userData="user"
-            :isManager="isManager"
-            :loadingCard="loadingCard"
-        />
+        <UserCard v-if="user" :loadingCard="loadingCard" />
 
         <section class="pt-8">
             <h2
@@ -14,9 +8,6 @@
             >
                 {{ userPosts.length > 0 ? "現有的文章" : "目前沒有文章" }}
             </h2>
-            <!-- <div class="max-w-[200px] pl-6" v-if="userPosts.length > 2">
-                <AppSelect :options="selectOptions" @select="handleSelect" />
-            </div> -->
             <post-list
                 isAdmin
                 :posts="userPosts"

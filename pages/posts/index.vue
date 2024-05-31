@@ -16,14 +16,7 @@
 
 <script setup lang="ts">
 useHead({
-    title: "Posts",
-    meta: [
-        {
-            hid: "description",
-            name: "description",
-            content: "Posts",
-        },
-    ],
+    title: "文章列表",
 });
 
 const selectedTag = ref<string>("全部類型");

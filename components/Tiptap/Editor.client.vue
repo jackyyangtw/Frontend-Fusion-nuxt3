@@ -251,6 +251,7 @@ button.is-active {
 }
 .tiptap .editor-code-block {
     background-color: #0d1117;
+    color: white;
     @apply p-5 rounded;
 }
 .tiptap {

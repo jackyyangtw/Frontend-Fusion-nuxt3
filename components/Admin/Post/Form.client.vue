@@ -59,13 +59,29 @@
         <div class="flex gap-3">
             <AppButton btnStyle="main" type="submit"> 儲存 </AppButton>
             <AppButton
+                v-if="atEditedPage"
                 btnStyle="danger"
                 type="button"
                 @click="openDeleteModal"
-                v-if="atEditedPage"
             >
                 刪除
             </AppButton>
+            <AppButton
+                v-if="atEditedPage"
+                btnStyle="secondary"
+                isRouterLink
+                :to="`/posts/${post.id}`"
+            >
+                預覽
+            </AppButton>
+            <!-- <nuxt-link @click="goBack" to="">取消</nuxt-link> -->
+            <UButton
+                class="px-5 py-2.5 font-medium text-base rounded-lg"
+                color="white"
+                variant="solid"
+                @click="goBack"
+                >取消</UButton
+            >
         </div>
     </UForm>
     <AppModal :title="modalContent.title" danger>
@@ -145,6 +161,10 @@ watch(
     { immediate: true, deep: true }
 );
 
+const router = useRouter();
+const goBack = () => {
+    router.go(-1);
+};
 const route = useRoute();
 const atEditedPage = computed(() => {
     return route.name === "admin-postId";
@@ -341,7 +361,6 @@ const resetForm = () => {
 
 const postsStore = usePostsStore();
 const { loadedPosts } = storeToRefs(postsStore);
-const router = useRouter();
 const createPost = async () => {
     try {
         // 1. 生成新的文章 ID

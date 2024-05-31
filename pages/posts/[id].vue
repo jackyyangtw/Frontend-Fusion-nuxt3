@@ -25,7 +25,7 @@
                     <div
                         class="bg-gradient-to-r from-purple-500/20 to-primary-500/20 dark:from-purple-500/30 dark:to-primary-500/30 p-5 rounded-xl mb-5"
                     >
-                        <div class="flex justify-between">
+                        <div class="flex justify-between pb-3">
                             <h1
                                 class="post-title text-primary-500 dark:text-primary-400 text-2xl md:text-4xl font-bold pb-2 m-0"
                                 v-if="loadedPost"
@@ -40,13 +40,11 @@
                                 >
                                     <label
                                         for="photo"
-                                        class="cursor-pointer w-10 h-10 p-2 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-slate-300"
+                                        class="cursor-pointer w-12 h-12 bg-black/20 rounded-full shadow-md flex items-center justify-center hover:bg-black/30"
                                     >
-                                        <img
-                                            src="
-                                            /images/edit-pen-icon.svg
-                                        "
-                                            alt=""
+                                        <UIcon
+                                            name="i-heroicons-pencil"
+                                            class="w-5 h-5 text-white"
                                         />
                                     </label>
                                 </nuxt-link>

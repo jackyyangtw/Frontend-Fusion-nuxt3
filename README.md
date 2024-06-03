@@ -7,7 +7,7 @@
 -   ~~posts/[id]、admin/[postid] code block css 不同步問題~~
 -   ~~search route: /results?search_query=望春風+長榮~~
 -   ~~editor code block 的白色文字在 light-mode 會變成黑色，跟背景色一樣~~
--   會員資料修改
+-   ~~會員資料修改~~
 -   post-preview transition
 
 ## VSCODE shortcut

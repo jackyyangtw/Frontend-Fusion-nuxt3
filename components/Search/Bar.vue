@@ -40,28 +40,22 @@
 <script setup lang="ts">
 const isFocus = ref(false);
 
-const router = useRouter();
 const searchInput = ref<HTMLInputElement | null>(null);
 const searchStore = useSearchStore();
-const { setSearchText } = searchStore;
 const { searchText } = storeToRefs(searchStore);
 const uiStore = useUIStore();
-const shouldSearch = ref(false);
-watch(searchText, (newVal, oldVal) => {
-    if (newVal !== oldVal) {
-        shouldSearch.value = true;
-    } else {
-        shouldSearch.value = false;
-    }
-});
+const router = useRouter();
+
+const route = useRoute();
+const searchQuery = computed(() => route.query.search_query as string);
+
 const search = () => {
+    if (searchQuery.value === searchText.value) {
+        uiStore.setPageLoading(false);
+        return;
+    }
     uiStore.setPageLoading(true);
     setTimeout(() => {
-        if (!shouldSearch.value) {
-            uiStore.setPageLoading(false);
-            return;
-        }
-        setSearchText(searchText.value);
         router.push({
             name: "search",
             query: { search_query: searchText.value },

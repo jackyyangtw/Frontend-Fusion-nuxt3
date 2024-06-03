@@ -25,7 +25,7 @@
                     <div
                         class="bg-gradient-to-r from-purple-500/20 to-primary-500/20 dark:from-purple-500/30 dark:to-primary-500/30 p-5 rounded-xl mb-5"
                     >
-                        <div class="flex justify-between pb-3">
+                        <div class="flex justify-between pb-3 gap-3">
                             <h1
                                 class="post-title text-primary-500 dark:text-primary-400 text-2xl md:text-4xl font-bold pb-2 m-0"
                                 v-if="loadedPost"

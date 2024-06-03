@@ -127,10 +127,9 @@ const localContent = useLocalStorage("editorContent", "");
 const editor = useEditor({
     content: localContent.value || props.content,
     extensions: [
-        // TiptapStarterKit.configure({
-        //     codeBlock: false,
-        // }),
-        TiptapStarterKit,
+        TiptapStarterKit.configure({
+            codeBlock: false,
+        }),
         TiptapCodeBlockLowlight.configure({
             lowlight,
             HTMLAttributes: { class: "editor-code-block" },

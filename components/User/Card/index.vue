@@ -2,7 +2,7 @@
     <UserCardSkeleton v-if="loadingCard" />
     <transition name="vagueIn">
         <div
-            v-if="!loadingCard"
+            v-if="!loadingCard && user"
             class="w-full mt-5 max-w-lg mx-auto bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
         >
             <div class="flex flex-col items-center py-10">
@@ -23,8 +23,11 @@
                     <form class="absolute right-[-15px] top-[-15px]">
                         <label
                             for="photo"
-                            class="cursor-pointer w-10 h-10 p-2 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-slate-300"
-                            ><img src="/images/edit-pen-icon.svg" alt=""
+                            class="cursor-pointer w-12 h-12 bg-black/50 rounded-full shadow-md flex items-center justify-center hover:bg-black/60"
+                        >
+                            <UIcon
+                                name="i-heroicons-pencil"
+                                class="w-5 h-5 text-white"
                         /></label>
                         <input
                             id="photo"
@@ -67,6 +70,12 @@
 </template>
 
 <script setup lang="ts">
+import { ref as dbRef, set } from "firebase/database";
+import {
+    ref as storageRef,
+    getDownloadURL,
+    uploadString,
+} from "firebase/storage";
 defineProps<{
     loadingCard: boolean;
 }>();
@@ -80,7 +89,11 @@ const onLogout = async () => {
 
 const uiStore = useUIStore();
 const { toast } = storeToRefs(uiStore);
-const onPhotoChange = (e: Event) => {
+const { $storage, $db } = useNuxtApp();
+
+const postsStore = usePostsStore();
+const { loadedPosts } = storeToRefs(postsStore);
+const onPhotoChange = async (e: Event) => {
     toast.value.showToast = true;
     toast.value.message = "正在更新頭像...";
     toast.value.messageType = "loading";
@@ -89,18 +102,51 @@ const onPhotoChange = (e: Event) => {
     const file = target.files?.[0];
     if (!file) return;
 
-    // const reader = new FileReader();
-    // reader.readAsDataURL(file);
-    // reader.onload = async () => {
-    //     if (typeof reader.result !== "string") return;
-    //     const result = reader.result;
-    //     const Toast: Toast = {
-    //         showToast: true,
-    //         messageType: "loading",
-    //     };
-    //     updatePhoto(Toast);
-    //     await userStore.updatePhoto(result);
-    // };
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = async () => {
+        if (typeof reader.result !== "string") return;
+        const result = reader.result;
+
+        try {
+            // Step 1: 將照片上傳到 Firebase Storage
+            const storageReference = storageRef(
+                $storage,
+                `user-sticker/${user.value?.id}`
+            );
+            await uploadString(storageReference, result, "data_url");
+
+            // Step 2: 從 Firebase Storage 獲取下載 URL
+            const downloadURL = await getDownloadURL(storageReference);
+
+            // Step 3: 更新 Firebase Realtime Database 中的 photoURL
+            const userRef = dbRef($db, `users/${user.value?.id}/photoURL`);
+            await set(userRef, downloadURL);
+
+            toast.value.showToast = true;
+            toast.value.message = "正在更新文章頭像...";
+            toast.value.messageType = "loadging";
+            loadedPosts.value.forEach((post) => {
+                if (post.userId === user.value?.id) {
+                    post.photoURL = downloadURL;
+                }
+            });
+
+            // 更新本地 user store 的 photoURL
+            if (user.value) {
+                user.value.photoURL = downloadURL;
+            }
+
+            toast.value.showToast = true;
+            toast.value.message = "頭像更新成功！";
+            toast.value.messageType = "success";
+        } catch (error) {
+            console.error(error);
+            toast.value.showToast = true;
+            toast.value.message = "頭像更新失敗，請重試。";
+            toast.value.messageType = "error";
+        }
+    };
 };
 </script>
 

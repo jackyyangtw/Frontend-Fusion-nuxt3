@@ -4,40 +4,35 @@
             class="text-center text-2xl font-bold text-primary-700 dark:text-primary-300"
         >
             <span v-if="searchedPosts.length > 0"
-                >關鍵字: {{ searchText }} ({{ searchedPosts.length }})</span
+                >關鍵字: {{ searchQuery }} ({{ searchedPosts.length }})</span
             >
             <span v-else>沒有符合的結果</span>
         </h3>
-        <PostList
-            :posts="searchedPosts"
-            :isAdmin="false"
-            :loadingPosts="isLoadingPosts"
-        ></PostList>
+        <PostList :posts="searchedPosts" :isAdmin="false"></PostList>
     </div>
 </template>
 
 <script setup lang="ts">
 const postsStore = usePostsStore();
 const { loadedPosts } = storeToRefs(postsStore);
-const isLoadingPosts = ref(false);
 
 const route = useRoute();
-const searchText = computed(() => route.query.search_query as string);
+const searchQuery = computed(() => route.query.search_query as string);
 
 const uiStore = useUIStore();
 const { pageLoading } = storeToRefs(uiStore);
 watchEffect(() => {
     useHead({
-        title: searchText.value ?? "Search",
+        title: searchQuery.value ?? "Search",
     });
-    if (searchText.value) {
+    if (searchQuery.value) {
         pageLoading.value = false;
     }
 });
 const searchedPosts = computed(() => {
-    if (!searchText.value) return loadedPosts.value;
+    if (!searchQuery.value) return loadedPosts.value;
 
-    const searchWords = searchText.value.toLowerCase().split(" ");
+    const searchWords = searchQuery.value.toLowerCase().split(" ");
 
     return loadedPosts.value.filter((post) => {
         const lowerTitle = post.title.toLowerCase();
@@ -52,6 +47,12 @@ const searchedPosts = computed(() => {
                 lowerTags.includes(word)
         );
     });
+});
+
+const searchStore = useSearchStore();
+const { searchText } = storeToRefs(searchStore);
+onBeforeRouteLeave(() => {
+    searchText.value = "";
 });
 </script>
 

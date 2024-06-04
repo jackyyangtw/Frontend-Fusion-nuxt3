@@ -23,7 +23,7 @@ const closeToast = () => {
 const localContent = useLocalStorage("editorContent", "");
 localContent.value = "";
 try {
-    await postsStore.getAllPosts();
+    // await postsStore.getAllPosts();
     await tagsStore.getAllTags();
     const firebaseUserData = await getCurrentUser();
     if (firebaseUserData) {

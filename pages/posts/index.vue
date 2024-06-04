@@ -6,11 +6,7 @@
             :selectedTag="selectedTag"
             @setFilter="setFilter"
         />
-        <PostList
-            :posts="filteredPosts"
-            :isAdmin="false"
-            :loadingPosts="false"
-        />
+        <PostList :posts="filteredPosts" :isAdmin="false" />
     </div>
 </template>
 

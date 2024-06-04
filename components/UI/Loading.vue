@@ -2,7 +2,7 @@
     <teleport to="body">
         <div
             v-if="pageLoading"
-            class="loader-container w-full h-full bg-black/70 fixed flex justify-center items-center z-[70]"
+            class="loader-container w-full h-full bg-black/80 fixed flex justify-center items-center z-[70]"
         >
             <div class="loader"></div>
         </div>

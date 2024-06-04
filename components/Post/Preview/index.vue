@@ -115,10 +115,6 @@ const thisTags = computed(() => {
     return tags.value.filter((tag) => props.tags.includes(tag.name));
 });
 
-const handleLoad = (src: string) => {
-    // $store.dispatch("image/cacheImage", src);
-};
-
 const route = useRoute();
 const onAdminRoute = computed(() => {
     return route.path.includes("/admin");
@@ -141,8 +137,6 @@ const previewImg = computed(() => {
     );
 });
 
-// const imagesStore = useImagesStore();
-// const { cachedImages } = storeToRefs(imagesStore);
 const cachedPreviewImg = computed(() => {
     return previewImg.value;
 });

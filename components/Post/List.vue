@@ -3,12 +3,12 @@
         class="w-full pt-0 lg:pt-6 p-6 flex flex-wrap items-center justify-start container mx-auto relative z-10"
     >
         <PostPreviewSkeleton
-            v-for="i in posts.length"
+            v-for="i in skeletonCount"
             :key="i"
-            v-show="loadingPosts"
+            v-show="isLoadingPosts"
         />
         <post-preview
-            v-show="!loadingPosts"
+            v-show="!isLoadingPosts"
             v-for="(post, index) in posts"
             :is-admin="isAdmin"
             :key="post.id"
@@ -31,11 +31,9 @@
 defineProps<{
     isAdmin: boolean;
     posts: Post[];
-    loadingPosts?: boolean;
+    skeletonCount: number;
 }>();
-// const route = useRoute();
-// const isPostsPage = computed(() => route.name === "posts");
 
-// const uiStore = useUIStore();
-// const { headerHeight } = storeToRefs(uiStore);
+const postsStore = usePostsStore();
+const { isLoadingPosts } = storeToRefs(postsStore);
 </script>

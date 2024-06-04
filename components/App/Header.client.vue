@@ -38,10 +38,6 @@
 </template>
 
 <script setup lang="ts">
-// const route = useRoute();
-// const isPostsPage = computed(() => route.path === "/posts");
-// const isDark
-
 const navStore = useNavigationStore();
 const { filteredNavLinks } = storeToRefs(navStore);
 </script>

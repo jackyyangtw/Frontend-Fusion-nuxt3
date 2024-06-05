@@ -30,6 +30,7 @@ export const usePostsStore = defineStore("posts", () => {
         );
     });
 
+    // utils
     const fetchPosts = (
         postRef: Query | DatabaseReference,
         targetArray: Ref<Post[]>,
@@ -73,6 +74,7 @@ export const usePostsStore = defineStore("posts", () => {
         }
     };
 
+    // methods
     const getAllPosts = async () => {
         isLoadingPosts.value = true;
         const postRef = dbRef($db, "posts");

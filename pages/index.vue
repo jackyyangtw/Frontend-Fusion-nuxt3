@@ -1,5 +1,5 @@
 <template>
-    <div class="home-page w-full">
+    <div class="home-page w-full relative">
         <section
             class="banner relative intro bg-slate-100/[0.8] dark:bg-slate-950/[0.4]"
         >
@@ -24,6 +24,7 @@
         <div class="container mx-auto">
             <PostList :posts="loadedPosts" :isAdmin="false"></PostList>
         </div>
+        <UILoadingPostsDot :isLoading="isLoadingPosts" />
     </div>
 </template>
 
@@ -96,6 +97,7 @@ const getPosts = async () => {
     } catch (error) {
         console.error("Failed to load posts:", error);
     }
+    isLoadingPosts.value = false;
 };
 const handleScroll = async (event: Event) => {
     const bottomOfWindow =

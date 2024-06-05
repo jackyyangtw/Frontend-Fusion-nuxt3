@@ -19,14 +19,15 @@ const selectedTag = ref<string>("全部類型");
 
 const postsStore = usePostsStore();
 const { loadedPosts } = storeToRefs(postsStore);
-
-const filteredPosts = computed(() => {
+const filteredPosts = shallowRef(loadedPosts.value);
+watch([loadedPosts, selectedTag], () => {
     if (selectedTag.value === "全部類型") {
-        return loadedPosts.value;
+        filteredPosts.value = loadedPosts.value;
+    } else {
+        filteredPosts.value = loadedPosts.value.filter((post) =>
+            post.tags.includes(selectedTag.value)
+        );
     }
-    return loadedPosts.value.filter((post) =>
-        post.tags.includes(selectedTag.value)
-    );
 });
 
 const setFilter = (tag: string) => {
@@ -34,6 +35,13 @@ const setFilter = (tag: string) => {
         selectedTag.value = tag;
     }
 };
-</script>
 
-<style scoped></style>
+const allPostsLoaded = computed(() => {
+    return postsStore.allPostsLoaded;
+});
+
+await postsStore.getAllPostsCount();
+if (!allPostsLoaded.value) {
+    await postsStore.getAllPosts();
+}
+</script>

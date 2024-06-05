@@ -1,13 +1,12 @@
 <template>
     <div
-        class="mx-2 block my-4 group w-full md:w-[calc(50%-16px)] 2xl:w-[calc(33.333%-24px)] ease-in duration-300 transition relative z-0"
+        class="relative mx-2 block my-4 group w-full md:w-[calc(50%-16px)] 2xl:w-[calc(33.333%-24px)] ease-in duration-300 transition z-0"
     >
+        <PostPreviewSkeleton v-if="isLoadingPost" />
         <transition name="vagueIn">
-            <nuxt-link v-show="isMounted" :to="postLink">
+            <nuxt-link v-show="isPostLoaded" :to="postLink">
                 <div
                     class="rounded overflow-hidden shadow-lg bg-white dark:bg-gray-800 dark:border-gray-700 mx-auto"
-                    @mouseenter.self="setShowButtons"
-                    @mouseleave.self="setShowButtons"
                 >
                     <figure
                         class="post-thumbnail relative h-[200px] xl:h-[250px]"
@@ -15,7 +14,7 @@
                         <img
                             class="object-cover absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
                             :src="cachedPreviewImg"
-                            :key="id"
+                            :key="post.id"
                             width="1792"
                             height="1024"
                             alt=""
@@ -29,14 +28,15 @@
                                 <img
                                     class="w-8 h-8 mr-3 rounded-full"
                                     :src="
-                                        photoURL || '/images/no-user-image.gif'
+                                        post.photoURL ||
+                                        '/images/no-user-image.gif'
                                     "
                                     alt="user icon"
                                 />
                                 <p
                                     class="text-sm text-gray-700 dark:text-white"
                                 >
-                                    {{ author }} •
+                                    {{ post.author }} •
                                     {{ dateString }}
                                 </p>
                             </div>
@@ -71,13 +71,13 @@
                 @mouseleave.self="setShowButtons"
             >
                 <nuxt-link
-                    :to="`/admin/${id}`"
+                    :to="`/admin/${post.id}`"
                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3"
                 >
                     編輯
                 </nuxt-link>
                 <nuxt-link
-                    :to="`/posts/${id}`"
+                    :to="`/posts/${post.id}`"
                     class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                 >
                     前往預覽
@@ -88,22 +88,35 @@
 </template>
 <script setup lang="ts">
 const props = defineProps<{
-    id: string;
-    title: string;
-    previewText: string;
-    thumbnail: string;
-    tags: string[];
+    post: Post;
     isAdmin: boolean;
-    previewImgUrl?: string;
     index: number;
-    updatedDate: string | Date;
-    photoURL?: string;
-    author: string;
 }>();
-const isMounted = ref(false);
 const showButtons = ref(false);
-onMounted(() => {
-    isMounted.value = true;
+const isLoadingPost = ref(true);
+
+const postsStore = usePostsStore();
+const { loadedPosts, userPosts } = storeToRefs(postsStore);
+const route = useRoute();
+const onAdminRoute = computed(() => {
+    return route.path.includes("/admin");
+});
+const isPostLoaded = computed(() => {
+    if (onAdminRoute.value) {
+        return userPosts.value.some(
+            (loadedPost) => loadedPost.id === props.post.id
+        );
+    } else {
+        return loadedPosts.value.some(
+            (loadedPost) => loadedPost.id === props.post.id
+        );
+    }
+});
+watchEffect(() => {
+    if (!isPostLoaded.value) return;
+    setTimeout(() => {
+        isLoadingPost.value = false;
+    }, 500);
 });
 const setShowButtons = () => {
     showButtons.value = !showButtons.value;
@@ -112,27 +125,25 @@ const setShowButtons = () => {
 const tagStore = useTagsStore();
 const { tags } = storeToRefs(tagStore);
 const thisTags = computed(() => {
-    return tags.value.filter((tag) => props.tags.includes(tag.name));
+    return tags.value.filter((tag) => props.post.tags.includes(tag.name));
 });
 
-const route = useRoute();
-const onAdminRoute = computed(() => {
-    return route.path.includes("/admin");
-});
 const dateString = computed(() => {
-    return new Date(props.updatedDate).toLocaleString("zh-TW", {
+    return new Date(props.post.updatedDate).toLocaleString("zh-TW", {
         month: "short",
         day: "numeric",
         year: "numeric",
     });
 });
 const postLink = computed(() => {
-    return props.isAdmin ? "/admin/" + props.id : "/posts/" + props.id;
+    return props.isAdmin
+        ? "/admin/" + props.post.id
+        : "/posts/" + props.post.id;
 });
 const previewImg = computed(() => {
     return (
-        props.previewImgUrl ||
-        props.thumbnail ||
+        props.post.previewImgUrl ||
+        props.post.thumbnail ||
         "/images/post-preview-picture.png"
     );
 });
@@ -142,17 +153,17 @@ const cachedPreviewImg = computed(() => {
 });
 const maxPreviewText = computed(() => {
     const maxNum = 55;
-    if (props.previewText.length >= maxNum) {
-        return props.previewText.slice(0, maxNum) + "...";
+    if (props.post.previewText.length >= maxNum) {
+        return props.post.previewText.slice(0, maxNum) + "...";
     }
-    return props.previewText;
+    return props.post.previewText;
 });
 const maxTitleText = computed(() => {
     const maxNum = 50;
-    if (props.title.length >= maxNum) {
-        return props.title.slice(0, maxNum) + "...";
+    if (props.post.title.length >= maxNum) {
+        return props.post.title.slice(0, maxNum) + "...";
     }
-    return props.title;
+    return props.post.title;
 });
 </script>
 

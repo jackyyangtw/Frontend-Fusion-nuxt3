@@ -2,72 +2,126 @@ import {
     ref as dbRef,
     onValue,
     query,
-    limitToFirst,
-    startAfter,
+    orderByChild,
+    equalTo,
     get,
+    type DatabaseReference,
+    type Query,
 } from "firebase/database";
+
 export const usePostsStore = defineStore("posts", () => {
     const loadedPosts = ref<Post[]>([]);
-
     const isLoadingPosts = ref(true);
+    const allPostCount = ref(0);
+    const userPosts = ref<Post[]>([]);
+    const allUserPostsCount = ref(0);
 
     const { $db } = useNuxtApp();
-    const getAllPosts = async () => {
-        isLoadingPosts.value = true;
-        const postRef = dbRef($db, "posts");
+    const user = useCurrentUser();
+
+    const allPostsLoaded = computed(() => {
+        return loadedPosts.value.length === allPostCount.value;
+    });
+
+    const allUserPostsLoaded = computed(() => {
+        return (
+            userPosts.value.length === allUserPostsCount.value &&
+            allUserPostsCount.value > 0
+        );
+    });
+
+    const fetchPosts = (
+        postRef: Query | DatabaseReference,
+        targetArray: Ref<Post[]>,
+        existingArray: Ref<Post[]>
+    ) => {
         onValue(postRef, (snapshot) => {
             const data = snapshot.val();
-            const postArr = [];
+            const postArr: Post[] = [];
             for (const key in data) {
-                postArr.push({ ...data[key], id: key });
+                if (
+                    existingArray.value.findIndex((post) => post.id === key) ===
+                    -1
+                ) {
+                    postArr.push({ ...data[key], id: key });
+                }
             }
             postArr.sort(
                 (a, b) =>
                     new Date(b.updatedDate).getTime() -
                     new Date(a.updatedDate).getTime()
             );
-            loadedPosts.value = postArr;
+            targetArray.value = postArr;
         });
     };
 
-    const lastPostKey = ref<string | null>(null);
-    const postsPerPage = 6; // 每次載入 6 筆資料
-    const getPosts = async () => {
-        if (!isLoadingPosts.value) {
-            isLoadingPosts.value = true;
-
-            let postQuery = query(
-                dbRef($db, "posts"),
-                limitToFirst(postsPerPage)
-            );
-            if (lastPostKey.value) {
-                postQuery = query(
-                    dbRef($db, "posts"),
-                    startAfter(lastPostKey.value),
-                    limitToFirst(postsPerPage)
-                );
+    const fetchPostCount = async (
+        postsRef: Query | DatabaseReference,
+        countRef: Ref<number>
+    ) => {
+        try {
+            const snapshot = await get(postsRef);
+            if (snapshot.exists()) {
+                const postsData = snapshot.val();
+                countRef.value = Object.keys(postsData).length;
+            } else {
+                countRef.value = 0;
             }
-
-            const snapshot = await get(postQuery);
-            const data = snapshot.val();
-            const postArr = [];
-            for (const key in data) {
-                postArr.push({ ...data[key], id: key });
-            }
-
-            if (postArr.length > 0) {
-                lastPostKey.value = postArr[postArr.length - 1].id;
-                loadedPosts.value = [...loadedPosts.value, ...postArr];
-            }
-
-            isLoadingPosts.value = false;
+        } catch (error) {
+            console.error("Error fetching post count:", error);
+            countRef.value = 0;
         }
+    };
+
+    const getAllPosts = async () => {
+        isLoadingPosts.value = true;
+        const postRef = dbRef($db, "posts");
+        fetchPosts(postRef, loadedPosts, loadedPosts);
+    };
+
+    const getAllPostsCount = async () => {
+        const postsRef = dbRef($db, "posts");
+        await fetchPostCount(postsRef, allPostCount);
+    };
+
+    const getUserPosts = async () => {
+        const userId = user.value?.uid;
+        if (!userId) return;
+
+        isLoadingPosts.value = true;
+        const postRef = dbRef($db, "posts");
+        const userPostsQuery = query(
+            postRef,
+            orderByChild("userId"),
+            equalTo(userId)
+        );
+        fetchPosts(userPostsQuery, userPosts, userPosts);
+    };
+
+    const getAllUserPostsCount = async () => {
+        const userId = user.value?.uid;
+        if (!userId) {
+            allUserPostsCount.value = 0;
+            return;
+        }
+        const userPostsQuery = query(
+            dbRef($db, "posts"),
+            orderByChild("userId"),
+            equalTo(userId)
+        );
+        await fetchPostCount(userPostsQuery, allUserPostsCount);
     };
 
     return {
         loadedPosts,
         isLoadingPosts,
+        allPostCount,
+        allPostsLoaded,
+        userPosts,
+        allUserPostsLoaded,
         getAllPosts,
-        getPosts,
+        getAllPostsCount,
+        getUserPosts,
+        getAllUserPostsCount,
     };
 });

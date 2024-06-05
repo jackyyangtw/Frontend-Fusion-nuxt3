@@ -22,11 +22,7 @@
             </div>
         </section>
         <div class="container mx-auto">
-            <PostList
-                :posts="loadedPosts"
-                :isAdmin="false"
-                :skeletonCount="skeletonCount"
-            ></PostList>
+            <PostList :posts="loadedPosts" :isAdmin="false"></PostList>
         </div>
     </div>
 </template>
@@ -52,24 +48,14 @@ useHead({
 });
 const postsStore = usePostsStore();
 const { loadedPosts, isLoadingPosts } = storeToRefs(postsStore);
-
+const allPostsLoaded = computed(() => {
+    return postsStore.allPostsLoaded;
+});
 const maxPerPage = 6;
 const { $db } = useNuxtApp();
-const totalPostsCount = ref(0);
-const allPostsLoaded = ref(false);
-const skeletonCount = ref(maxPerPage);
-const getTotalPostsCount = async () => {
-    const postsRef = dbRef($db, "posts");
-    const snapshot = await get(postsRef);
-    const posts = snapshot.val();
-    if (posts) {
-        totalPostsCount.value = Object.keys(posts).length;
-    }
-};
 const getPosts = async () => {
-    if (isLoadingPosts.value && loadedPosts.value.length > 0) return; // 初次加載時允許進行加載，但後續需判斷
     if (allPostsLoaded.value) return; // 如果已載入所有文章，則返回
-
+    console.log("getPosts");
     isLoadingPosts.value = true;
 
     try {
@@ -93,31 +79,22 @@ const getPosts = async () => {
             );
         }
 
-        // 設定 skeletonCount 為正在載入的文章數量
-        skeletonCount.value = maxPerPage;
-
         const snapshot = await get(postsQuery);
         const posts = snapshot.val();
 
-        if (posts) {
+        const hasSamePosts = Object.keys(posts).some((key) =>
+            loadedPosts.value.some((post) => post.id === key)
+        );
+        if (posts && !hasSamePosts) {
+            // 檢查loadedPosts是否已有此文章，避免重複載入
             const postsArray = Object.keys(posts).map((key) => ({
                 id: key,
                 ...posts[key],
             }));
-
             loadedPosts.value = [...loadedPosts.value, ...postsArray];
-
-            if (loadedPosts.value.length >= totalPostsCount.value) {
-                allPostsLoaded.value = true;
-            }
-        } else {
-            allPostsLoaded.value = true;
         }
     } catch (error) {
         console.error("Failed to load posts:", error);
-    } finally {
-        isLoadingPosts.value = false; // 加載完成後設置為 false
-        skeletonCount.value = 0; // 加載完成後設置 skeletonCount 為 0
     }
 };
 const handleScroll = async (event: Event) => {
@@ -126,13 +103,12 @@ const handleScroll = async (event: Event) => {
         document.documentElement.offsetHeight - 10;
 
     if (bottomOfWindow && !allPostsLoaded.value) {
-        console.log("Scrolled to bottom, loading more posts...");
         await getPosts(); // 滾動到底部時載入更多文章
     }
 };
 
 onMounted(async () => {
-    await getTotalPostsCount();
+    await postsStore.getAllPostsCount();
     await getPosts(); // 初次加載文章
     window.addEventListener("scroll", handleScroll); // 綁定滾動事件
 });

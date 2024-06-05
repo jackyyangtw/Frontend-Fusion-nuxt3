@@ -8,7 +8,11 @@
             >
                 {{ userPosts.length > 0 ? "現有的文章" : "目前沒有文章" }}
             </h2>
-            <PostList isAdmin :posts="userPosts"></PostList>
+            <PostList
+                v-if="userPosts.length > 0"
+                isAdmin
+                :posts="userPosts"
+            ></PostList>
         </section>
     </div>
 </template>
@@ -26,20 +30,16 @@ useHead({
 const loadingCard = ref(false);
 
 const userStore = useUserStore();
-await userStore.getUserData();
-const { user, firebaseUser } = storeToRefs(userStore);
-const postsStore = usePostsStore();
-const { loadedPosts, isLoadingPosts } = storeToRefs(postsStore);
-const userPosts = computed(() => {
-    return loadedPosts.value.filter(
-        (post: Post) => post.userId === firebaseUser.value?.uid
-    );
-});
-onMounted(() => {
-    if (loadedPosts.value.length > 0) {
-        isLoadingPosts.value = false;
-    }
-});
-</script>
+const { user } = storeToRefs(userStore);
+const { getUserData } = userStore;
+await getUserData();
 
-<style scoped></style>
+const postsStore = usePostsStore();
+const { userPosts } = storeToRefs(postsStore);
+const { getAllUserPostsCount, getUserPosts } = postsStore;
+const allUserPostsLoaded = computed(() => postsStore.allUserPostsLoaded);
+if (!allUserPostsLoaded.value) {
+    await getAllUserPostsCount();
+    await getUserPosts();
+}
+</script>

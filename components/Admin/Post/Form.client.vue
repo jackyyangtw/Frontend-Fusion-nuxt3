@@ -360,51 +360,7 @@ const resetForm = () => {
 };
 
 const postsStore = usePostsStore();
-const { loadedPosts, userPosts, allUserPostsCount, allPostCount } =
-    storeToRefs(postsStore);
-// const createPost = async () => {
-//     try {
-//         // 1. 生成新的文章 ID
-//         const newPostRef = push(dbRef($db, "posts"));
-//         const newPostId = newPostRef.key as string;
-
-//         // 2. 設置新的文章 ID
-//         editedPost.id = newPostId;
-
-//         // 3. 更新圖片
-//         await updateImages(newPostId);
-
-//         // 4. 新增文章至 Firebase Realtime Database
-//         const newPost = {
-//             ...editedPost,
-//             updatedDate: new Date().toISOString(),
-//             photoURL: user.value?.photoURL as string,
-//             userId: user.value?.id as string,
-//         };
-//         await set(newPostRef, newPost);
-//         // loadedPosts.value.push(newPost);
-//         // userPosts.value.push(newPost);
-//         // allUserPostsCount.value++;
-//         // allPostCount.value++;
-//         await postsStore.getUserPosts();
-//         await postsStore.getAllUserPostsCount();
-
-//         toast.value.message = "文章新增成功!";
-//         toast.value.showToast = true;
-//         toast.value.messageType = "success";
-//         // 5. 清空表單
-//         resetForm();
-//         localContent.value = "";
-
-//         setTimeout(() => {
-//             router.push("/admin");
-//         }, 2000);
-//     } catch (error: any) {
-//         toast.value.message = error.message;
-//         toast.value.showToast = true;
-//         toast.value.messageType = "error";
-//     }
-// };
+const { loadedPosts, userPosts } = storeToRefs(postsStore);
 const createPost = async () => {
     try {
         const newPostRef = push(dbRef($db, "posts"));

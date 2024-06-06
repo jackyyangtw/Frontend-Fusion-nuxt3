@@ -11,6 +11,8 @@
 -   ~~infinite scroll loading (需要改善 list 被重新掛載的問題)~~
 -   ~~user posts 應是 user 的 posts，而不是 filter all posts~~
 -   ~~createPost 後，admin 沒有新增 post~~
+-   tag manage page
+-   進入 search page 應要載入全部文章，否則會有文章搜尋不到的問題
 -   調整首頁 postlist 樣式，為條列式，小張圖片
 -   post-preview transition
 
@@ -39,3 +41,7 @@
 
 -   https://ui.nuxt.com/components/icon
 -   https://icones.js.org/collection/heroicons
+
+## deploy to firebase
+
+-   https://marcusn.dev/articles/2023-02/how-to-deploy-nuxt-3-app-with-firebase

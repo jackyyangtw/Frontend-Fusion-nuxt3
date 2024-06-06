@@ -356,6 +356,7 @@ const resetForm = () => {
     previewImgFile.value = null;
     uploadedImages.value = [];
     shouldSaveContent.value = false;
+    localContent.value = "";
 };
 
 const postsStore = usePostsStore();
@@ -430,7 +431,6 @@ const createPost = async () => {
         toast.value.messageType = "success";
 
         resetForm();
-        localContent.value = "";
 
         setTimeout(() => {
             router.push("/admin");

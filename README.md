@@ -10,7 +10,7 @@
 -   ~~會員資料修改~~
 -   ~~infinite scroll loading (需要改善 list 被重新掛載的問題)~~
 -   ~~user posts 應是 user 的 posts，而不是 filter all posts~~
--   createPost 後，admin 沒有新增 post
+-   ~~createPost 後，admin 沒有新增 post~~
 -   調整首頁 postlist 樣式，為條列式，小張圖片
 -   post-preview transition
 

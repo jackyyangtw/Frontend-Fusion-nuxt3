@@ -32,7 +32,11 @@ const loadingCard = ref(false);
 const userStore = useUserStore();
 const { user } = storeToRefs(userStore);
 const { getUserData } = userStore;
-await getUserData();
+if (!user.value) {
+    loadingCard.value = true;
+    await getUserData();
+    loadingCard.value = false;
+}
 
 const postsStore = usePostsStore();
 const { userPosts } = storeToRefs(postsStore);

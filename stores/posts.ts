@@ -30,15 +30,31 @@ export const usePostsStore = defineStore("posts", () => {
         );
     });
 
-    const loadedPostsByDate = computed(() => {
-        return loadedPosts.value.sort(
-            (a, b) =>
-                new Date(b.updatedDate).getTime() -
-                new Date(a.updatedDate).getTime()
-        );
-    });
-
     // utils
+    // const fetchPosts = (
+    //     postRef: Query | DatabaseReference,
+    //     targetArray: Ref<Post[]>,
+    //     existingArray: Ref<Post[]>
+    // ) => {
+    //     onValue(postRef, (snapshot) => {
+    //         const data = snapshot.val();
+    //         const postArr: Post[] = [];
+    //         for (const key in data) {
+    //             if (
+    //                 existingArray.value.findIndex((post) => post.id === key) ===
+    //                 -1
+    //             ) {
+    //                 postArr.push({ ...data[key], id: key });
+    //             }
+    //         }
+    //         postArr.sort(
+    //             (a, b) =>
+    //                 new Date(b.updatedDate).getTime() -
+    //                 new Date(a.updatedDate).getTime()
+    //         );
+    //         targetArray.value = postArr;
+    //     });
+    // };
     const fetchPosts = (
         postRef: Query | DatabaseReference,
         targetArray: Ref<Post[]>,
@@ -48,11 +64,17 @@ export const usePostsStore = defineStore("posts", () => {
             const data = snapshot.val();
             const postArr: Post[] = [];
             for (const key in data) {
-                if (
-                    existingArray.value.findIndex((post) => post.id === key) ===
-                    -1
-                ) {
+                const existingIndex = existingArray.value.findIndex(
+                    (post) => post.id === key
+                );
+                if (existingIndex === -1) {
                     postArr.push({ ...data[key], id: key });
+                } else {
+                    // 更新現有的文章
+                    existingArray.value[existingIndex] = {
+                        ...data[key],
+                        id: key,
+                    };
                 }
             }
             postArr.sort(
@@ -60,7 +82,7 @@ export const usePostsStore = defineStore("posts", () => {
                     new Date(b.updatedDate).getTime() -
                     new Date(a.updatedDate).getTime()
             );
-            targetArray.value = postArr;
+            targetArray.value = [...existingArray.value, ...postArr];
         });
     };
 
@@ -97,6 +119,7 @@ export const usePostsStore = defineStore("posts", () => {
     const getUserPosts = async () => {
         const userId = user.value?.uid;
         if (!userId) return;
+        console.log("Getting user posts");
 
         isLoadingPosts.value = true;
         const postRef = dbRef($db, "posts");
@@ -129,7 +152,7 @@ export const usePostsStore = defineStore("posts", () => {
         allPostsLoaded,
         userPosts,
         allUserPostsLoaded,
-        loadedPostsByDate,
+        allUserPostsCount,
         getAllPosts,
         getAllPostsCount,
         getUserPosts,

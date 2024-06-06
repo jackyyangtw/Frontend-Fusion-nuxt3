@@ -10,9 +10,8 @@
 import { ref as dbRef } from "firebase/database";
 const { $db } = useNuxtApp();
 const route = useRoute();
-const { data: loadedPost } = useDatabaseObject<Post>(
-    dbRef($db, `posts/${route.params.postId}`)
-);
+const userPostsRef = dbRef($db, `posts/${route.params.postId}`);
+const { data: loadedPost } = useDatabaseObject<Post>(userPostsRef);
 watch(
     loadedPost,
     (newVal) => {

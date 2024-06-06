@@ -115,12 +115,11 @@ html.dark .glass.active {
 
 .nav-item a {
     text-decoration: none;
-    /* color: white; */
 }
 
 .nav-item a:hover,
 .nav-item a:active,
-.nav-item a.nuxt-link-active {
+.nav-item a.router-link-active {
     @apply font-bold text-primary-600 dark:text-primary-400;
 }
 </style>

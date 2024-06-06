@@ -119,7 +119,7 @@ const handleScroll = async (event: Event) => {
 onMounted(async () => {
     await postsStore.getAllPostsCount();
     await getPosts(); // 初次加載文章
-    window.addEventListener("scroll", handleScroll); // 綁定滾動事件
+    window.addEventListener("scroll", handleScroll, { passive: true }); // 綁定滾動事件
 });
 
 onBeforeUnmount(() => {

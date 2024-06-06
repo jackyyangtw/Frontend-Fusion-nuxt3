@@ -74,7 +74,6 @@
             >
                 預覽
             </AppButton>
-            <!-- <nuxt-link @click="goBack" to="">取消</nuxt-link> -->
             <UButton
                 class="px-5 py-2.5 font-medium text-base rounded-lg"
                 color="white"
@@ -360,20 +359,60 @@ const resetForm = () => {
 };
 
 const postsStore = usePostsStore();
-const { loadedPosts } = storeToRefs(postsStore);
+const { loadedPosts, userPosts, allUserPostsCount, allPostCount } =
+    storeToRefs(postsStore);
+// const createPost = async () => {
+//     try {
+//         // 1. 生成新的文章 ID
+//         const newPostRef = push(dbRef($db, "posts"));
+//         const newPostId = newPostRef.key as string;
+
+//         // 2. 設置新的文章 ID
+//         editedPost.id = newPostId;
+
+//         // 3. 更新圖片
+//         await updateImages(newPostId);
+
+//         // 4. 新增文章至 Firebase Realtime Database
+//         const newPost = {
+//             ...editedPost,
+//             updatedDate: new Date().toISOString(),
+//             photoURL: user.value?.photoURL as string,
+//             userId: user.value?.id as string,
+//         };
+//         await set(newPostRef, newPost);
+//         // loadedPosts.value.push(newPost);
+//         // userPosts.value.push(newPost);
+//         // allUserPostsCount.value++;
+//         // allPostCount.value++;
+//         await postsStore.getUserPosts();
+//         await postsStore.getAllUserPostsCount();
+
+//         toast.value.message = "文章新增成功!";
+//         toast.value.showToast = true;
+//         toast.value.messageType = "success";
+//         // 5. 清空表單
+//         resetForm();
+//         localContent.value = "";
+
+//         setTimeout(() => {
+//             router.push("/admin");
+//         }, 2000);
+//     } catch (error: any) {
+//         toast.value.message = error.message;
+//         toast.value.showToast = true;
+//         toast.value.messageType = "error";
+//     }
+// };
 const createPost = async () => {
     try {
-        // 1. 生成新的文章 ID
         const newPostRef = push(dbRef($db, "posts"));
         const newPostId = newPostRef.key as string;
 
-        // 2. 設置新的文章 ID
         editedPost.id = newPostId;
 
-        // 3. 更新圖片
         await updateImages(newPostId);
 
-        // 4. 新增文章至 Firebase Realtime Database
         const newPost = {
             ...editedPost,
             updatedDate: new Date().toISOString(),
@@ -381,14 +420,18 @@ const createPost = async () => {
             userId: user.value?.id as string,
         };
         await set(newPostRef, newPost);
-        loadedPosts.value.push(newPost);
+
+        // userPosts.value.push(newPost); // 添加新文章到用戶文章列表
+        await postsStore.getUserPosts();
+        await postsStore.getAllUserPostsCount();
 
         toast.value.message = "文章新增成功!";
         toast.value.showToast = true;
         toast.value.messageType = "success";
 
-        // 5. 清空表單
         resetForm();
+        localContent.value = "";
+
         setTimeout(() => {
             router.push("/admin");
         }, 2000);
@@ -398,6 +441,7 @@ const createPost = async () => {
         toast.value.messageType = "error";
     }
 };
+
 const updatePost = async () => {
     const postId = props.post.id;
     await updateImages(postId);
@@ -414,6 +458,12 @@ const updatePost = async () => {
         };
         await update(postRef, updatedPost);
         loadedPosts.value = loadedPosts.value.map((post) => {
+            if (post.id === postId) {
+                return updatedPost;
+            }
+            return post;
+        });
+        userPosts.value = userPosts.value.map((post) => {
             if (post.id === postId) {
                 return updatedPost;
             }
@@ -497,6 +547,10 @@ const onDelete = async () => {
         toast.value.messageType = "loading";
         const postRef = dbRef($db, `posts/${postId}`);
         await remove(postRef);
+        userPosts.value = userPosts.value.filter((post) => post.id !== postId);
+        loadedPosts.value = loadedPosts.value.filter(
+            (post) => post.id !== postId
+        );
 
         // 重置 localStorage
         localContent.value = "";

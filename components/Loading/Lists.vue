@@ -1,11 +1,15 @@
 <template>
-    <transition name="fadeUp" v-if="isLoading">
-        <div
-            class="loader-container fixed left-[50%] bottom-[10%] translate-x-[-50%] z-20"
-        >
-            <div class="loader"></div>
-        </div>
-    </transition>
+    <Teleport to="body">
+        <Transition v-show="isLoading">
+            <div
+                class="fixed flex items-center justify-center w-full h-[120px] left-0 bottom-0 z-20 bg-gradient-to-t from-black/40 to-black/0"
+            >
+                <div class="loader-container">
+                    <div class="loader"></div>
+                </div>
+            </div>
+        </Transition>
+    </Teleport>
 </template>
 
 <script setup lang="ts">
@@ -19,8 +23,8 @@ const props = defineProps<{
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 80px; /* 根據你的需求調整寬度 */
-    height: 80px; /* 根據你的需求調整高度 */
+    width: 75px; /* 根據你的需求調整寬度 */
+    height: 75px; /* 根據你的需求調整高度 */
     border-radius: 50%;
     z-index: 15; /* 確保在 loader 後面 */
     @apply bg-slate-900;
@@ -44,5 +48,16 @@ const props = defineProps<{
     100% {
         box-shadow: 19px 0 0 0, 38px 0 0 3px, 57px 0 0 7px;
     }
+}
+
+.v-enter-active,
+.v-leave-active {
+    transition: 0.5s;
+}
+
+.v-enter-from,
+.v-leave-to {
+    opacity: 0;
+    transform: translateY(50px);
 }
 </style>

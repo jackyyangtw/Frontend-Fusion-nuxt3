@@ -30,6 +30,14 @@ export const usePostsStore = defineStore("posts", () => {
         );
     });
 
+    const loadedPostsByDate = computed(() => {
+        return loadedPosts.value.sort(
+            (a, b) =>
+                new Date(b.updatedDate).getTime() -
+                new Date(a.updatedDate).getTime()
+        );
+    });
+
     // utils
     const fetchPosts = (
         postRef: Query | DatabaseReference,
@@ -121,6 +129,7 @@ export const usePostsStore = defineStore("posts", () => {
         allPostsLoaded,
         userPosts,
         allUserPostsLoaded,
+        loadedPostsByDate,
         getAllPosts,
         getAllPostsCount,
         getUserPosts,

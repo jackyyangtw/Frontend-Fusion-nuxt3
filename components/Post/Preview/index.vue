@@ -1,10 +1,12 @@
 <template>
     <div
         class="relative mx-2 block my-4 group w-full md:w-[calc(50%-16px)] 2xl:w-[calc(33.333%-24px)] ease-in duration-300 transition z-0"
+        @mouseenter.self="setShowButtons"
+        @mouseleave.self="setShowButtons"
     >
-        <PostPreviewSkeleton v-if="isLoadingPost" />
+        <PostPreviewSkeleton class="z-0" v-show="isLoadingPost" />
         <transition name="vagueIn">
-            <nuxt-link v-show="isPostLoaded" :to="postLink">
+            <nuxt-link class="z-10" v-show="isPostLoaded" :to="postLink">
                 <div
                     class="rounded overflow-hidden shadow-lg bg-white dark:bg-gray-800 dark:border-gray-700 mx-auto"
                 >
@@ -65,10 +67,8 @@
         </transition>
         <transition name="fade">
             <div
-                class="buttons absolute inset-0 left-0 top-0 flex justify-center items-center bg-black/[0.5] dark:bg-black/[0.7]"
+                class="buttons absolute inset-0 left-0 top-0 flex justify-center items-center bg-black/[0.5] dark:bg-black/[0.7] z-20"
                 v-show="onAdminRoute && showButtons"
-                @mouseenter.self="setShowButtons"
-                @mouseleave.self="setShowButtons"
             >
                 <nuxt-link
                     :to="`/admin/${post.id}`"
@@ -177,7 +177,7 @@ const maxTitleText = computed(() => {
 .badge-style {
     @apply text-xs font-medium mr-2 px-2.5 py-0.5 rounded;
 }
-.vagueIn-enter,
+.vagueIn-enter-from,
 .vagueIn-leave-to {
     filter: blur(20px);
     opacity: 0.5;

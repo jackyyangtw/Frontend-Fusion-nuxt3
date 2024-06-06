@@ -7,7 +7,7 @@
             :message="toast.message"
             @closeToast="closeToast"
         />
-        <UILoading />
+        <LoadingPage />
     </NuxtLayout>
 </template>
 
@@ -54,12 +54,12 @@ body {
     transition: opacity 0.5s;
 }
 
-.fade-enter,
+.fade-enter-from,
 .fade-leave-to {
     opacity: 0;
 }
 
-.vagueIn-enter,
+.vagueIn-enter-from,
 .vagueIn-leave-to {
     filter: blur(20px);
     opacity: 0.5;

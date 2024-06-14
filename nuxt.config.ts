@@ -97,10 +97,10 @@ export default defineNuxtConfig({
             "red",
         ],
     },
-    // nitro: {
-    //     preset: "firebase",
-    //     firebase: {
-    //         gen: 2,
-    //     },
-    // },
+    nitro: {
+        preset: "firebase",
+        // firebase: {
+        //     gen: 2,
+        // },
+    },
 });

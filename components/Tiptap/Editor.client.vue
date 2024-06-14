@@ -272,10 +272,16 @@ h3,
 h4,
 h5,
 h6 {
-    @apply text-primary-500 font-bold;
+    @apply font-bold;
+}
+.tiptap h3,
+h4,
+h5,
+h6 {
+    @apply text-green-500 dark:text-green-400;
 }
 .tiptap h2 {
-    @apply text-2xl;
+    @apply text-primary-500 text-2xl;
 }
 .tiptap h3 {
     @apply text-xl;
@@ -289,7 +295,9 @@ h6 {
 .tiptap h6 {
     @apply text-sm;
 }
-
+.tiptap strong {
+    @apply text-orange-500 dark:text-orange-400;
+}
 .hljs-property {
     @apply text-white;
 }

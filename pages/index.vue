@@ -60,7 +60,6 @@ const maxPerPage = 6;
 const { $db } = useNuxtApp();
 const getPosts = async () => {
     if (allPostsLoaded.value) return; // 如果已載入所有文章，則返回
-    console.log("getPosts");
     isLoadingPosts.value = true;
 
     try {

@@ -21,7 +21,7 @@
                         />
                     </transition>
                 </div>
-                <div class="px-5 py-5 lg:px-10">
+                <div class="p-5 lg:p-10">
                     <div
                         class="bg-gradient-to-r from-purple-500/20 to-primary-500/20 dark:from-purple-500/30 dark:to-primary-500/30 p-5 rounded-xl mb-5"
                     >

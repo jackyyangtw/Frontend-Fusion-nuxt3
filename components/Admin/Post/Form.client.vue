@@ -114,7 +114,7 @@
 
 <script setup lang="ts">
 import { object, string, array, type InferType } from "yup";
-import type { FormSubmitEvent, FormErrorEvent } from "#ui/types";
+import type { FormSubmitEvent, FormErrorEvent, FormError } from "#ui/types";
 import {
     ref as storageRef,
     uploadBytes,
@@ -357,7 +357,6 @@ const resetForm = () => {
     uploadedImages.value = [];
     shouldSaveContent.value = false;
     localContent.value = "";
-    console.log("resetForm");
 };
 
 const postsStore = usePostsStore();
@@ -440,18 +439,22 @@ const updatePost = async () => {
 const canSubmit = computed(() => {
     return shouldSaveContent.value;
 });
+// const errors = ref<FormError>([]);
 const onError = (err: FormErrorEvent) => {
+    console.log(err);
     toast.value.message = "表單資料不完整，請檢查表單";
     toast.value.showToast = true;
     toast.value.messageType = "error";
+    // errors.value.push(err);
 };
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-    if (!canSubmit.value) {
-        toast.value.message = "內容沒有任何變更";
-        toast.value.showToast = true;
-        toast.value.messageType = "info";
-        return;
-    }
+    // console.log(event);
+    // if (!canSubmit.value) {
+    //     toast.value.message = "內容沒有任何變更";
+    //     toast.value.showToast = true;
+    //     toast.value.messageType = "info";
+    //     return;
+    // }
 
     if (props.newPost) {
         await createPost();
@@ -459,7 +462,6 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
         await updatePost();
     }
     localContent.value = editedPost.content;
-    console.log("onSubmit");
 };
 const onDelete = async () => {
     const postId = props.post.id;
@@ -506,11 +508,6 @@ const onDelete = async () => {
         const postRef = dbRef($db, `posts/${postId}`);
         await remove(postRef);
         userPosts.value = userPosts.value.filter((post) => post.id !== postId);
-        loadedPosts.value = loadedPosts.value.filter(
-            (post) => post.id !== postId
-        );
-
-        // 刪除 store 中的文章
         loadedPosts.value = loadedPosts.value.filter(
             (post) => post.id !== postId
         );

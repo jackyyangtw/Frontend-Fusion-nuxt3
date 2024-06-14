@@ -95,7 +95,6 @@ export const usePostsStore = defineStore("posts", () => {
     const getUserPosts = async () => {
         const userId = user.value?.uid;
         if (!userId) return;
-        console.log("Getting user posts");
 
         isLoadingPosts.value = true;
         const postRef = dbRef($db, "posts");

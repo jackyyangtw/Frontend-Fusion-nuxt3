@@ -23,7 +23,7 @@ const filteredPosts = shallowRef(loadedPosts.value);
 watch([loadedPosts, selectedTag], () => {
     if (selectedTag.value === "全部類型") {
         filteredPosts.value = loadedPosts.value;
-    } else {
+    } else {        
         filteredPosts.value = loadedPosts.value.filter((post) =>
             post.tags.includes(selectedTag.value)
         );

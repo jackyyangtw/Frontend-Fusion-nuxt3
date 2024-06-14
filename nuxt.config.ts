@@ -94,9 +94,13 @@ export default defineNuxtConfig({
             "yellow",
             "violet",
             "amber",
+            "red",
         ],
     },
-    nitro: {
-        preset: "firebase",
-    },
+    // nitro: {
+    //     preset: "firebase",
+    //     firebase: {
+    //         gen: 2,
+    //     },
+    // },
 });

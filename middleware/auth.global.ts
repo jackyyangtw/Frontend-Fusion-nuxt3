@@ -5,7 +5,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     if (!process.client) {
         return;
     }
-    if (to.path === "/admin" && !user) {
+    if (to.path.includes("/admin") && !user) {
         toast.value.showToast = true;
         toast.value.messageType = "error";
         toast.value.message = "請先登入!";

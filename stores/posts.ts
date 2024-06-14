@@ -31,30 +31,6 @@ export const usePostsStore = defineStore("posts", () => {
     });
 
     // utils
-    // const fetchPosts = (
-    //     postRef: Query | DatabaseReference,
-    //     targetArray: Ref<Post[]>,
-    //     existingArray: Ref<Post[]>
-    // ) => {
-    //     onValue(postRef, (snapshot) => {
-    //         const data = snapshot.val();
-    //         const postArr: Post[] = [];
-    //         for (const key in data) {
-    //             if (
-    //                 existingArray.value.findIndex((post) => post.id === key) ===
-    //                 -1
-    //             ) {
-    //                 postArr.push({ ...data[key], id: key });
-    //             }
-    //         }
-    //         postArr.sort(
-    //             (a, b) =>
-    //                 new Date(b.updatedDate).getTime() -
-    //                 new Date(a.updatedDate).getTime()
-    //         );
-    //         targetArray.value = postArr;
-    //     });
-    // };
     const fetchPosts = (
         postRef: Query | DatabaseReference,
         targetArray: Ref<Post[]>,
@@ -105,7 +81,7 @@ export const usePostsStore = defineStore("posts", () => {
     };
 
     // methods
-    const getAllPosts = async () => {
+    const getAllPosts = () => {
         isLoadingPosts.value = true;
         const postRef = dbRef($db, "posts");
         fetchPosts(postRef, loadedPosts, loadedPosts);

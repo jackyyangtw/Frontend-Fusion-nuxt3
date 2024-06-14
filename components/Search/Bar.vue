@@ -50,7 +50,7 @@ const route = useRoute();
 const searchQuery = computed(() => route.query.search_query as string);
 
 const search = () => {
-    if (searchQuery.value === searchText.value) {
+    if (searchQuery.value === searchText.value || !searchText.value) {
         uiStore.setPageLoading(false);
         return;
     }

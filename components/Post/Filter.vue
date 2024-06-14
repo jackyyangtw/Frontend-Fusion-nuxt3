@@ -1,5 +1,6 @@
 <template>
     <div class="relative z-[2]">
+        <!-- Mobile -->
         <button
             @click="toggleSidebar"
             data-drawer-target="default-sidebar"
@@ -26,7 +27,7 @@
             </svg>
             <p>篩選</p>
         </button>
-        <!-- backdrop -->
+        <!-- Mobile backdrop -->
         <div
             @click="toggleSidebar"
             data-drawer-target="default-sidebar"
@@ -38,6 +39,7 @@
                 hidden: !isSidebarOpen,
             }"
         ></div>
+        <!-- PC -->
         <aside
             id="default-sidebar"
             ref="sidebar"
@@ -83,7 +85,7 @@
                         <a
                             @click.prevent
                             href="#"
-                            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                            class="filter-style"
                             :class="{
                                 'bg-gray-100 dark:bg-gray-700':
                                     selectedTag === tag.name,
@@ -111,6 +113,7 @@ const props = defineProps<{
     posts: Post[];
     selectedTag: string;
 }>();
+
 const getPostCount = (tag: string) =>
     props.posts.filter((post) => post.tags.includes(tag)).length;
 
@@ -130,4 +133,8 @@ const tagsStore = useTagsStore();
 const { tags } = storeToRefs(tagsStore);
 </script>
 
-<style scoped></style>
+<style scoped>
+.filter-style {
+    @apply flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700
+}
+</style>

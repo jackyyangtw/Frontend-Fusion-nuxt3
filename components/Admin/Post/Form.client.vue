@@ -101,7 +101,7 @@
                 </AppButton>
                 <AppButton
                     btnStyle="danger"
-                    @click="
+                    @click.prevent="
                         modalContent.mode === 'leave' ? leavePage() : onDelete()
                     "
                 >
@@ -357,6 +357,7 @@ const resetForm = () => {
     uploadedImages.value = [];
     shouldSaveContent.value = false;
     localContent.value = "";
+    console.log("resetForm");
 };
 
 const postsStore = usePostsStore();
@@ -458,6 +459,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
         await updatePost();
     }
     localContent.value = editedPost.content;
+    console.log("onSubmit");
 };
 const onDelete = async () => {
     const postId = props.post.id;
@@ -507,9 +509,6 @@ const onDelete = async () => {
         loadedPosts.value = loadedPosts.value.filter(
             (post) => post.id !== postId
         );
-
-        // 重置 localStorage
-        localContent.value = "";
 
         // 刪除 store 中的文章
         loadedPosts.value = loadedPosts.value.filter(

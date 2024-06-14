@@ -54,6 +54,11 @@ const { searchText } = storeToRefs(searchStore);
 onBeforeRouteLeave(() => {
     searchText.value = "";
 });
+onMounted(() => {
+    if (!loadedPosts.value.length) {
+        postsStore.getAllPosts();
+    }
+});
 </script>
 
 <style scoped></style>

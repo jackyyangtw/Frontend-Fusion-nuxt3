@@ -11,7 +11,8 @@
 -   ~~infinite scroll loading (需要改善 list 被重新掛載的問題)~~
 -   ~~user posts 應是 user 的 posts，而不是 filter all posts~~
 -   ~~createPost 後，admin 沒有新增 post~~
--   tag manage page
+-   ~~tag manage page~~
+-   刪除 post 後，再回去新增 post，editor content 會顯示刪除 post 的內容
 -   進入 search page 應要載入全部文章，否則會有文章搜尋不到的問題
 -   調整首頁 postlist 樣式，為條列式，小張圖片
 -   post-preview transition
@@ -44,4 +45,11 @@
 
 ## deploy to firebase
 
--   https://marcusn.dev/articles/2023-02/how-to-deploy-nuxt-3-app-with-firebase
+-   firebase logout: `firebase logout`
+-   firebase login: `firebase login`
+-   偏方:https://marcusn.dev/articles/2023-02/how-to-deploy-nuxt-3-app-with-firebase (碰到 oauth2.0 問題)
+-   github 討論: https://github.com/vuejs/vuefire/issues/1408
+-   vuefire deploy: https://vuefire.vuejs.org/nuxt/deployment.html (碰到 oauth2.0 問題)
+-   nuxt deploy: https://nuxt.com/deploy/firebase (碰到 oauth2.0 問題)
+-   firebase.json example: https://github.com/posva/vuefire-nuxt-example/blob/main/firebase.json
+-   碰到問題: https://chatgpt.com/share/b0f7d923-80a7-4ea9-9b5a-c3d303f33780

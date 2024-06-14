@@ -21,6 +21,7 @@
 # prod issue
 
 -   deploy 後載入 posts 動畫有問題
+-   commit 後會失敗，後台 trigger deploy 才有用
 
 ## VSCODE shortcut
 

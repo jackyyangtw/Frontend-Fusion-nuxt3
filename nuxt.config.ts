@@ -98,9 +98,6 @@ export default defineNuxtConfig({
         ],
     },
     nitro: {
-        preset: "firebase",
-        // firebase: {
-        //     gen: 2,
-        // },
+        preset: process.env.NODE_ENV === "development" ? "firebase" : "netlify",
     },
 });

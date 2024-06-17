@@ -1,7 +1,7 @@
 <template>
     <div class="admin-post-new-page">
         <section class="update-form">
-            <AdminPostForm :post="post" newPost></AdminPostForm>
+            <LazyAdminPostForm :post="post" newPost></LazyAdminPostForm>
         </section>
     </div>
 </template>

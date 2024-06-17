@@ -1,6 +1,6 @@
 <template>
     <div class="admin-page container mx-auto">
-        <UserCard v-if="user" :loadingCard="loadingCard" />
+        <LazyUserCard v-if="user" :loadingCard="loadingCard" />
 
         <section class="pt-8">
             <h2
@@ -8,11 +8,11 @@
             >
                 {{ userPosts.length > 0 ? "現有的文章" : "目前沒有文章" }}
             </h2>
-            <PostList
+            <LazyPostList
                 v-if="userPosts.length > 0"
                 isAdmin
                 :posts="userPosts"
-            ></PostList>
+            ></LazyPostList>
         </section>
     </div>
 </template>

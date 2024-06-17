@@ -1,12 +1,12 @@
 <template>
     <div class="xl:flex items-start ml-[8rem]">
         <div class="sidebar-placeholder w-32 hidden xl:block h:10" ref=""></div>
-        <PostFilter
+        <LazyPostFilter
             :posts="loadedPosts"
             :selectedTag="selectedTag"
             @setFilter="setFilter"
         />
-        <PostList :posts="filteredPosts" :isAdmin="false" />
+        <LazyPostList :posts="filteredPosts" :isAdmin="false" />
     </div>
 </template>
 
@@ -23,7 +23,7 @@ const filteredPosts = shallowRef(loadedPosts.value);
 watch([loadedPosts, selectedTag], () => {
     if (selectedTag.value === "全部類型") {
         filteredPosts.value = loadedPosts.value;
-    } else {        
+    } else {
         filteredPosts.value = loadedPosts.value.filter((post) =>
             post.tags.includes(selectedTag.value)
         );

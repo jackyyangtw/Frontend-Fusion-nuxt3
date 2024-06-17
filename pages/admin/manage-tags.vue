@@ -28,7 +28,7 @@
                 </div>
                 <div class="form w-full md:w-1/2">
                     <h2 class="title">新增tag</h2>
-                    <UForm
+                    <LazyUForm
                         :schema="schema"
                         :state="editedTag"
                         class="space-y-4"
@@ -42,7 +42,7 @@
                         </UFormGroup>
 
                         <UButton type="submit"> Submit </UButton>
-                    </UForm>
+                    </LazyUForm>
                 </div>
             </div>
         </div>

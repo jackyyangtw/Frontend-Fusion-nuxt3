@@ -26,7 +26,7 @@
             </section>
         </client-only>
         <div class="container mx-auto">
-            <PostList :posts="loadedPosts" :isAdmin="false"></PostList>
+            <LazyPostList :posts="loadedPosts" :isAdmin="false"></LazyPostList>
         </div>
         <LoadingLists :isLoading="isLoadingPosts" />
     </div>

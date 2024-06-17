@@ -8,7 +8,7 @@
             >
             <span v-else>沒有符合的結果</span>
         </h3>
-        <PostList :posts="searchedPosts" :isAdmin="false"></PostList>
+        <LazyPostList :posts="searchedPosts" :isAdmin="false"></LazyPostList>
     </div>
 </template>
 

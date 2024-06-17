@@ -1,7 +1,7 @@
 <template>
     <div class="admin-post-page">
         <section class="update-form" v-if="loadedPost">
-            <AdminPostForm :post="loadedPost"></AdminPostForm>
+            <LazyAdminPostForm :post="loadedPost"></LazyAdminPostForm>
         </section>
     </div>
 </template>

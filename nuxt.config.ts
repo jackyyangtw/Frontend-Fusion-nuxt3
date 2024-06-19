@@ -97,6 +97,7 @@ export default defineNuxtConfig({
             "red",
         ],
     },
+    css: ["~/assets/css/tiptap.css"],
     nitro: {
         preset: process.env.NODE_ENV === "development" ? "firebase" : "netlify",
     },

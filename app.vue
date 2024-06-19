@@ -12,7 +12,6 @@
 </template>
 
 <script setup lang="ts">
-const postsStore = usePostsStore();
 const tagsStore = useTagsStore();
 const userStore = useUserStore();
 const uiStore = useUIStore();

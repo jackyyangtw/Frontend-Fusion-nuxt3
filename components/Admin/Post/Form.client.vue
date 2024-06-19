@@ -436,25 +436,20 @@ const updatePost = async () => {
     }
 };
 
-const canSubmit = computed(() => {
-    return shouldSaveContent.value;
-});
-// const errors = ref<FormError>([]);
 const onError = (err: FormErrorEvent) => {
-    console.log(err);
+    const { errors } = err;
     toast.value.message = "表單資料不完整，請檢查表單";
     toast.value.showToast = true;
     toast.value.messageType = "error";
-    // errors.value.push(err);
 };
+
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-    // console.log(event);
-    // if (!canSubmit.value) {
-    //     toast.value.message = "內容沒有任何變更";
-    //     toast.value.showToast = true;
-    //     toast.value.messageType = "info";
-    //     return;
-    // }
+    if (!editedPost.content) {
+        toast.value.message = "請檢察表單資料是否完整";
+        toast.value.showToast = true;
+        toast.value.messageType = "error";
+        return;
+    }
 
     if (props.newPost) {
         await createPost();

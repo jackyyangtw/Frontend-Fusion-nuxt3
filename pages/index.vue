@@ -28,7 +28,7 @@
         <div class="container mx-auto">
             <LazyPostList :posts="loadedPosts" :isAdmin="false"></LazyPostList>
         </div>
-        <LoadingLists :isLoading="isLoadingPosts" />
+        <LazyLoadingLists :isLoading="isLoadingPosts" />
     </div>
 </template>
 

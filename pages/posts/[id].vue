@@ -2,11 +2,11 @@
     <div class="single-post-page container mx-auto z-10 relative">
         <div
             v-if="loadedPost"
-            class="w-full xl:w-[900px] mx-auto bg-slate-200 dark:bg-slate-900/[0.8] rounded overflow-hidden"
+            class="w-full xl:w-[900px] mx-auto bg-slate-100 dark:bg-slate-900/80 rounded overflow-hidden"
         >
             <section class="post">
                 <div class="mb-5 rel lg:min-h-[514px]">
-                    <PostBannerSkeleton
+                    <LazyPostBannerSkeleton
                         v-if="isLoadingBanner"
                         class="w-full h-[300px] md:h-[400px] lg:h-[500px]"
                     />

@@ -107,7 +107,7 @@ const getPosts = async () => {
 const handleScroll = async (event: Event) => {
     const bottomOfWindow =
         window.innerHeight + window.scrollY >=
-        document.documentElement.offsetHeight - 10;
+        document.documentElement.offsetHeight - 5;
 
     if (bottomOfWindow && !allPostsLoaded.value) {
         await getPosts(); // 滾動到底部時載入更多文章

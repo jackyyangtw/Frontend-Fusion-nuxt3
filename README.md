@@ -14,6 +14,7 @@
 -   ~~tag manage page~~
 -   ~~進入 search page 應要載入全部文章，否則會有文章搜尋不到的問題~~
 -   post-preview transition
+-   需要安裝 Google Cloud SDK 才能更改 firebase storage CORS
 
 # prod issue
 

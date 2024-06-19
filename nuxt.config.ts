@@ -11,6 +11,9 @@ export default defineNuxtConfig({
         "nuxt-tiptap-editor",
         "@nuxt/image",
     ],
+    // image: {
+    //     domains: ["firebasestorage.googleapis.com"],
+    // },
     tiptap: {
         prefix: "Tiptap", //prefix for Tiptap imports, composables not included
         lowlight: {

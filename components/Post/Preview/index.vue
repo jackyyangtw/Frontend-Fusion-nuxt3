@@ -1,8 +1,8 @@
 <template>
     <div
         class="relative mx-2 block my-4 group w-full md:w-[calc(50%-16px)] 2xl:w-[calc(33.333%-24px)] ease-in duration-300 transition z-0"
-        @mouseenter.self="setShowButtons"
-        @mouseleave.self="setShowButtons"
+        @mouseenter.self="toggleShowButtons"
+        @mouseleave.self="toggleShowButtons"
     >
         <PostPreviewSkeleton class="z-0" v-show="isLoadingPost" />
         <transition name="vagueIn">
@@ -13,7 +13,7 @@
                     <figure
                         class="post-thumbnail relative h-[200px] xl:h-[250px]"
                     >
-                        <NuxtImg
+                        <img
                             class="object-cover absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
                             :src="previewImg"
                             :key="post.id"
@@ -30,32 +30,29 @@
                             <div class="flex items-center pb-1">
                                 <img
                                     class="w-8 h-8 mr-3 rounded-full"
-                                    :src="
-                                        post.photoURL ||
-                                        '/images/no-user-image.gif'
-                                    "
+                                    :src="userPhotoUrl"
                                     alt="user icon"
                                 />
                                 <p
                                     class="text-sm text-gray-700 dark:text-white"
                                 >
                                     {{ post.author }} •
-                                    {{ dateString }}
+                                    {{ formattedDate }}
                                 </p>
                             </div>
                             <h2
                                 class="font-bold text-xl mb-2 text-black dark:text-white line-clamp-2"
                             >
-                                {{ maxTitleText }}
+                                {{ truncatedTitle }}
                             </h2>
                             <p
                                 class="text-base pb-1 text-gray-700 dark:text-white line-clamp-2"
                             >
-                                {{ maxPreviewText }}
+                                {{ truncatedPreviewText }}
                             </p>
                             <div class="mt-2">
                                 <PostBadge
-                                    v-for="tag in thisTags"
+                                    v-for="tag in filteredTags"
                                     :key="tag.id"
                                     :badgeName="tag.name"
                                     :classes="tag.style"
@@ -99,67 +96,53 @@ const isLoadingPost = ref(true);
 const postsStore = usePostsStore();
 const { loadedPosts, userPosts } = storeToRefs(postsStore);
 const route = useRoute();
-const onAdminRoute = computed(() => {
-    return route.path.includes("/admin");
-});
+const onAdminRoute = computed(() => route.path.includes("/admin"));
 const isPostLoaded = computed(() => {
-    if (onAdminRoute.value) {
-        return userPosts.value.some(
-            (loadedPost) => loadedPost.id === props.post.id
-        );
-    } else {
-        return loadedPosts.value.some(
-            (loadedPost) => loadedPost.id === props.post.id
-        );
-    }
+    return onAdminRoute.value
+        ? userPosts.value.some((post) => post.id === props.post.id)
+        : loadedPosts.value.some((post) => post.id === props.post.id);
 });
 watchEffect(() => {
-    if (!isPostLoaded.value) return;
-    setTimeout(() => {
-        isLoadingPost.value = false;
-    }, 500);
+    if (isPostLoaded.value) {
+        setTimeout(() => (isLoadingPost.value = false), 500);
+    }
 });
-const setShowButtons = () => {
+const toggleShowButtons = () => {
     showButtons.value = !showButtons.value;
 };
 
 const tagStore = useTagsStore();
 const { tags } = storeToRefs(tagStore);
-const thisTags = computed(() => {
-    return tags.value.filter((tag) => props.post.tags.includes(tag.name));
-});
+const filteredTags = computed(() =>
+    tags.value.filter((tag) => props.post.tags.includes(tag.name))
+);
 
-const dateString = computed(() => {
-    return new Date(props.post.updatedDate).toLocaleString("zh-TW", {
+const formattedDate = computed(() =>
+    new Date(props.post.updatedDate).toLocaleDateString("zh-TW", {
         month: "short",
         day: "numeric",
         year: "numeric",
-    });
-});
-const postLink = computed(() => {
-    return props.isAdmin
-        ? "/admin/" + props.post.id
-        : "/posts/" + props.post.id;
-});
-
-const previewImg = computed(() => {
-    return props.post.previewImgUrl || "/images/post-preview-picture.png";
-});
-
-const maxPreviewText = computed(() => {
-    const maxNum = 55;
-    if (props.post.previewText.length >= maxNum) {
-        return props.post.previewText.slice(0, maxNum) + "...";
-    }
-    return props.post.previewText;
-});
-const maxTitleText = computed(() => {
-    const maxNum = 50;
-    if (props.post.title.length >= maxNum) {
-        return props.post.title.slice(0, maxNum) + "...";
-    }
-    return props.post.title;
-});
+    })
+);
+const postLink = computed(() =>
+    props.isAdmin ? `/admin/${props.post.id}` : `/posts/${props.post.id}`
+);
+const userPhotoUrl = computed(
+    () => props.post.photoURL || "/images/no-user-image.gif"
+);
+const previewImg = computed(
+    () => props.post.previewImgUrl || "/images/post-preview-picture.png"
+);
+const truncatedPreviewText = computed(() =>
+    props.post.previewText.length > 55
+        ? `${props.post.previewText.slice(0, 55)}...`
+        : props.post.previewText
+);
+const truncatedTitle = computed(() =>
+    props.post.title.length > 50
+        ? `${props.post.title.slice(0, 50)}...`
+        : props.post.title
+);
 </script>
 
 <style scoped>

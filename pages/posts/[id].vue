@@ -11,7 +11,7 @@
                         class="w-full h-[300px] md:h-[400px] lg:h-[500px]"
                     />
                     <transition v-else name="fade">
-                        <NuxtImg
+                        <img
                             class="object-cover"
                             alt=""
                             :src="previewImg"

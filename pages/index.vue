@@ -104,7 +104,6 @@ const getPosts = async () => {
         isLoadingPosts.value = false;
     }, 1000);
 };
-
 const handleScroll = async (event: Event) => {
     const bottomOfWindow =
         window.innerHeight + window.scrollY >=
@@ -138,7 +137,7 @@ watchEffect(() => {
     position: relative;
     padding: 30px;
     box-sizing: border-box;
-    background-position: bottom;
+    background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
     display: flex;

@@ -20,6 +20,7 @@
                             width="1792"
                             height="1024"
                             alt=""
+                            :preload="index < 3"
                         />
                     </figure>
                     <div
@@ -141,8 +142,6 @@ const postLink = computed(() => {
         : "/posts/" + props.post.id;
 });
 
-const storageDomain =
-    "https://firebasestorage.googleapis.com/v0/b/bedtimeapp-stories/o/";
 const previewImg = computed(() => {
     return props.post.previewImgUrl || "/images/post-preview-picture.png";
 });

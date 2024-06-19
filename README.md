@@ -13,9 +13,6 @@
 -   ~~createPost 後，admin 沒有新增 post~~
 -   ~~tag manage page~~
 -   ~~進入 search page 應要載入全部文章，否則會有文章搜尋不到的問題~~
--   如果 form content 沒有變更就不能更新
--   刪除 post 後，再回去新增 post，editor content 會顯示刪除 post 的內容
--   調整首頁 postlist 樣式，為條列式，小張圖片
 -   post-preview transition
 
 # prod issue

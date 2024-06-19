@@ -13,9 +13,9 @@
                     <figure
                         class="post-thumbnail relative h-[200px] xl:h-[250px]"
                     >
-                        <img
+                        <NuxtImg
                             class="object-cover absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
-                            :src="cachedPreviewImg"
+                            :src="previewImg"
                             :key="post.id"
                             width="1792"
                             height="1024"
@@ -140,17 +140,13 @@ const postLink = computed(() => {
         ? "/admin/" + props.post.id
         : "/posts/" + props.post.id;
 });
+
+const storageDomain =
+    "https://firebasestorage.googleapis.com/v0/b/bedtimeapp-stories/o/";
 const previewImg = computed(() => {
-    return (
-        props.post.previewImgUrl ||
-        props.post.thumbnail ||
-        "/images/post-preview-picture.png"
-    );
+    return props.post.previewImgUrl || "/images/post-preview-picture.png";
 });
 
-const cachedPreviewImg = computed(() => {
-    return previewImg.value;
-});
 const maxPreviewText = computed(() => {
     const maxNum = 55;
     if (props.post.previewText.length >= maxNum) {

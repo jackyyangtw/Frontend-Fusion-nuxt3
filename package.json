@@ -12,6 +12,7 @@
     "dependencies": {
         "@firebase/app-types": "^0.9.1",
         "@iconify-json/la": "^1.1.8",
+        "@nuxt/image": "^1.7.0",
         "@nuxt/ui": "^2.16.0",
         "@pinia/nuxt": "^0.5.1",
         "@vueuse/core": "^10.9.0",

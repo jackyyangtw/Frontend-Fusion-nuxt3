@@ -3,7 +3,7 @@
         <div class="w-6 h-6 cursor-pointer" @click="toggleTheme">
             <!-- moon -->
             <svg
-                v-show="colorMode.preference === 'dark'"
+                v-show="colorMode.value === 'dark'"
                 fill="white"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -17,7 +17,7 @@
             </svg>
             <!-- sun -->
             <svg
-                v-show="colorMode.preference === 'light'"
+                v-show="colorMode.value === 'light'"
                 fill="none"
                 stroke="currentColor"
                 stroke-width="1.5"

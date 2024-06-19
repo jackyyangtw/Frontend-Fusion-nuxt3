@@ -9,6 +9,7 @@ export default defineNuxtConfig({
         "nuxt-vuefire",
         "@nuxt/ui",
         "nuxt-tiptap-editor",
+        "@nuxt/image",
     ],
     tiptap: {
         prefix: "Tiptap", //prefix for Tiptap imports, composables not included

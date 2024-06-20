@@ -21,6 +21,15 @@
 -   deploy 後載入 posts 動畫有問題
 -   commit 後會失敗，後台 trigger deploy 才有用
 
+## cursor editor
+
+-   https://www.cursor.com/features
+
+## 優化
+
+-   component cache :https://nuxt-multi-cache.dulnan.net/overview/introduction
+-   PWA
+
 ## VSCODE shortcut
 
 -   https://ithelp.ithome.com.tw/articles/10237385

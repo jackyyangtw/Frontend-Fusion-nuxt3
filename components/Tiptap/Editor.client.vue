@@ -123,9 +123,8 @@ const props = defineProps({
     },
 });
 
-const localContent = useLocalStorage("editorContent", "");
 const editor = useEditor({
-    content: localContent.value || props.content,
+    content: props.content,
     extensions: [
         TiptapStarterKit.configure({
             codeBlock: false,
@@ -153,7 +152,6 @@ watch(
     () => editor.value?.getHTML(),
     (newValue) => {
         contentChangeCount.value++;
-        localContent.value = newValue;
         if (contentChangeCount.value > 1) {
             emit("saveContent", newValue);
         }

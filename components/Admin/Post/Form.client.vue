@@ -239,6 +239,7 @@ const handleFileChange = (files: FileList) => {
 const handleSaveContent = (content: string) => {
     editedPost.content = content;
     shouldSaveContent.value = true;
+    localContent.value = content;
 };
 
 // handle add image

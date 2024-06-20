@@ -2,7 +2,7 @@
     <Teleport to="body">
         <Transition v-show="isLoading">
             <div
-                class="fixed flex items-center justify-center w-full h-[120px] left-0 bottom-0 z-20 bg-gradient-to-t from-black/40 to-black/0"
+                class="fixed flex items-center justify-center w-full h-[120px] left-0 bottom-0 z-20 bg-gradient-to-t from-black/10 dark:from-black/40 to-black/0"
             >
                 <div class="loader-container">
                     <div class="loader"></div>

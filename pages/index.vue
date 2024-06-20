@@ -152,20 +152,23 @@ watchEffect(() => {
 }
 
 h1 {
-    background-image: -webkit-linear-gradient(92deg, #f35626, #feab3a);
+    background-color: #0093e9;
+    background-image: -webkit-linear-gradient(160deg, #0093e9 0%, #80d0c7 100%);
+    background-image: -moz-linear-gradient(160deg, #0093e9 0%, #80d0c7 100%);
+    background-image: -o-linear-gradient(160deg, #0093e9 0%, #80d0c7 100%);
+    background-image: linear-gradient(160deg, #0093e9 0%, #80d0c7 100%);
+
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: hue 10s infinite linear;
+    animation: hue 5s infinite linear;
 }
 @keyframes hue {
     from {
-        -webkit-filter: hue-rotate(0deg);
         background-position: 0% 50%;
     }
     to {
-        -webkit-filter: hue-rotate(-360deg);
-        background-position: 100% 50%;
+        background-position: 200% 50%;
     }
 }
 </style>

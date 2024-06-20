@@ -10,7 +10,17 @@ export default defineNuxtConfig({
         "@nuxt/ui",
         "nuxt-tiptap-editor",
         "@nuxt/image",
+        "nuxt-multi-cache",
     ],
+    multiCache: {
+        component: {
+            enabled: true,
+            maxAge: 1000 * 60 * 15,
+        },
+        data: {
+            enabled: true,
+        },
+    },
     // image: {
     //     domains: ["firebasestorage.googleapis.com"],
     // },
@@ -34,7 +44,6 @@ export default defineNuxtConfig({
         auth: {
             enabled: true,
             persistence: ["indexedDBLocal"],
-            // popupRedirectResolver: false,
         },
     },
     app: {

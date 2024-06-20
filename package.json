@@ -21,6 +21,7 @@
         "firebase-admin": "^12.1.0",
         "firebase-functions": "^5.0.1",
         "nuxt": "^3.11.2",
+        "nuxt-multi-cache": "^3.1.1",
         "nuxt-tiptap-editor": "^1.1.2",
         "nuxt-vuefire": "^1.0.2",
         "pinia": "^2.1.7",

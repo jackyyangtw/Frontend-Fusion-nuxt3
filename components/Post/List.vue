@@ -1,5 +1,5 @@
 <template>
-    <section
+    <RenderCacheable
         class="w-full pt-0 lg:pt-6 p-6 flex flex-wrap items-center justify-start container mx-auto relative z-10"
     >
         <post-preview
@@ -10,7 +10,7 @@
             :index="index"
         >
         </post-preview>
-    </section>
+    </RenderCacheable>
 </template>
 
 <script setup lang="ts">

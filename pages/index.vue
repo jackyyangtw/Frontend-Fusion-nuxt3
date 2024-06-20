@@ -26,7 +26,12 @@
             </section>
         </client-only>
         <div class="container mx-auto">
-            <LazyPostList :posts="loadedPosts" :isAdmin="false"></LazyPostList>
+            <RenderCacheable>
+                <LazyPostList
+                    :posts="loadedPosts"
+                    :isAdmin="false"
+                ></LazyPostList>
+            </RenderCacheable>
         </div>
         <LazyLoadingLists :isLoading="isLoadingPosts" />
     </div>

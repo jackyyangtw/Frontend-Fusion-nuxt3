@@ -8,11 +8,13 @@
             >
                 {{ userPosts.length > 0 ? "現有的文章" : "目前沒有文章" }}
             </h2>
-            <LazyPostList
-                v-if="userPosts.length > 0"
-                isAdmin
-                :posts="userPosts"
-            ></LazyPostList>
+            <RenderCacheable>
+                <LazyPostList
+                    v-if="userPosts.length > 0"
+                    isAdmin
+                    :posts="userPosts"
+                ></LazyPostList>
+            </RenderCacheable>
         </section>
     </div>
 </template>

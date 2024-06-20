@@ -10,6 +10,9 @@
     color: white;
     @apply p-5 rounded;
 }
+.tiptap .editor-image {
+    @apply mx-auto cursor-zoom-in;
+}
 .tiptap {
     @apply p-5;
 }

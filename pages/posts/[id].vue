@@ -84,6 +84,15 @@
                 </div>
             </section>
         </div>
+        <AppModal :isImage="true">
+            <template #image>
+                <img
+                    class="mx-auto w-full max-w-[1300px]"
+                    :src="openedImage"
+                    alt=""
+                />
+            </template>
+        </AppModal>
     </div>
 </template>
 
@@ -131,9 +140,22 @@ useHead({
 });
 
 const isLoadingBanner = ref(true);
+const uiStore = useUIStore();
+const { isModalOpen } = storeToRefs(uiStore);
+const openedImage = ref("");
 onMounted(() => {
     isLoadingBanner.value = false;
     hljs.highlightAll();
+    // isModalOpen.value = true;
+    const contentImages = document.querySelectorAll(
+        ".editor-image"
+    ) as NodeListOf<HTMLImageElement>;
+    contentImages.forEach((image) => {
+        image.addEventListener("click", () => {
+            openedImage.value = image.src;
+            isModalOpen.value = true;
+        });
+    });
 });
 
 const userEmailMain = computed(() => {

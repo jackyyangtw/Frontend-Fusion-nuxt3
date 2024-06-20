@@ -13,13 +13,12 @@
 -   ~~createPost 後，admin 沒有新增 post~~
 -   ~~tag manage page~~
 -   ~~進入 search page 應要載入全部文章，否則會有文章搜尋不到的問題~~
--   post-preview transition、
 -   需要安裝 Google Cloud SDK 才能更改 firebase storage CORS
 
 # prod issue
 
--   deploy 後載入 posts 動畫有問題
--   commit 後會失敗，後台 trigger deploy 才有用
+-   ~~deploy 後載入 posts 動畫有問題~~
+-   ~~commit 後會失敗，後台 trigger deploy 才有用~~
 
 ## cursor editor
 
@@ -27,6 +26,8 @@
 
 ## 優化
 
+-   ~~增加 click 文章圖片後，出現文章圖片的 modal~~
+-   post-preview transition
 -   component cache :https://nuxt-multi-cache.dulnan.net/overview/introduction
 -   PWA
 

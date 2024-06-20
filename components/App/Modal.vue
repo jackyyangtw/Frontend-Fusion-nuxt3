@@ -1,6 +1,6 @@
 <template>
     <teleport to="body">
-        <UModal v-model="isModalOpen" prevent-close>
+        <UModal v-if="!isImage" v-model="isModalOpen" prvent-close>
             <UCard
                 :ui="{
                     ring: '',
@@ -32,6 +32,27 @@
                 </template>
             </UCard>
         </UModal>
+        <UModal v-else v-model="isModalOpen" fullscreen>
+            <UCard
+                :ui="{
+                    base: 'h-full flex flex-col',
+                    rounded: '',
+                    body: {
+                        base: 'grow',
+                    },
+                }"
+            >
+                <div class="text-right mb-5">
+                    <UButton
+                        color="gray"
+                        variant="ghost"
+                        icon="i-heroicons-x-mark-20-solid"
+                        @click="isModalOpen = false"
+                    />
+                </div>
+                <slot name="image" v-if="isImage" />
+            </UCard>
+        </UModal>
     </teleport>
 </template>
 
@@ -39,9 +60,13 @@
 defineProps({
     title: {
         type: String,
-        required: true,
+        default: "",
     },
     danger: {
+        type: Boolean,
+        default: false,
+    },
+    isImage: {
         type: Boolean,
         default: false,
     },

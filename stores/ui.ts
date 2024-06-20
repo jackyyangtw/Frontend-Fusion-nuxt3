@@ -9,6 +9,8 @@ export const useUIStore = defineStore("ui", () => {
         pageLoading.value = value;
     };
 
+    const appLoading = ref(true);
+
     const toast = ref({
         showToast: false,
         message: "",
@@ -19,10 +21,11 @@ export const useUIStore = defineStore("ui", () => {
 
     return {
         headerHeight,
-        setHeaderHeight,
         pageLoading,
+        setHeaderHeight,
         setPageLoading,
         toast,
         isModalOpen,
+        appLoading,
     };
 });

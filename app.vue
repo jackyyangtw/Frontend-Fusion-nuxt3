@@ -8,6 +8,7 @@
             @closeToast="closeToast"
         />
         <LoadingPage />
+        <LoadingApp />
     </NuxtLayout>
 </template>
 
@@ -15,7 +16,7 @@
 const tagsStore = useTagsStore();
 const userStore = useUserStore();
 const uiStore = useUIStore();
-const { toast } = storeToRefs(uiStore);
+const { toast, appLoading } = storeToRefs(uiStore);
 const closeToast = () => {
     toast.value.showToast = false;
 };
@@ -32,6 +33,9 @@ try {
 } catch (error) {
     console.error("Failed to fetch posts:", error);
 }
+onMounted(() => {
+    appLoading.value = false;
+});
 </script>
 
 <style>

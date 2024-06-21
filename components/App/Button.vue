@@ -39,6 +39,6 @@ const btnStyle = computed(() => {
 });
 
 const componentType = computed(() => {
-    return props.isRouterLink ? resolveComponent("nuxt-link") : "button";
+    return props.isRouterLink ? resolveComponent("NuxtLink") : "button";
 });
 </script>

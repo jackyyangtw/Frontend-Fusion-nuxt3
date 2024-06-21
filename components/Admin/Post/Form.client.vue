@@ -2,7 +2,7 @@
     <UForm
         :schema="schema"
         :state="editedPost"
-        class="bg-slate-50 dark:bg-slate-950/[0.5] rounded p-5 max-w-[900px] mx-auto flex flex-col gap-5 shadow-md"
+        class="bg-slate-50 dark:bg-slate-950/[0.5] rounded p-5 my-10 max-w-[900px] mx-auto flex flex-col gap-5 shadow-md"
         id="post-form"
         @submit="onSubmit"
         @error="onError"

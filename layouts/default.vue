@@ -11,6 +11,7 @@
         <slot
     /></div>
     <UIAuroraBg />
+    <AppFooter />
 </template>
 
 <script setup lang="ts">

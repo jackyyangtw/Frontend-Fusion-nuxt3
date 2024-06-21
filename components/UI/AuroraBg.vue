@@ -1,6 +1,6 @@
 <template>
     <div class="canvas-wrapper z-0">
-        <div class="glass"></div>
+        <div class="glass fixed-glass"></div>
         <div class="circle circle-0"></div>
         <div class="circle circle-1"></div>
         <div class="circle circle-2"></div>
@@ -67,7 +67,7 @@
     overflow: hidden;
     /* backdrop-filter: blur(10px); */
 }
-.glass {
+/* .glass {
     background: transparent;
     backdrop-filter: blur(10px);
     position: fixed;
@@ -77,7 +77,7 @@
     bottom: 0;
     z-index: 0;
     border-bottom: solid 1px rgba(255, 255, 255, 0.1);
-}
+} */
 .canvas-wrapper .aurora-wrapper {
     width: 100%;
     height: 100%;

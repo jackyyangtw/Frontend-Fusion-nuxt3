@@ -2,7 +2,7 @@
     <div
         class="h-[60px] fixed z-30 w-full bg-slate-100/[0.8] dark:bg-slate-950/[0.4]"
     >
-        <div class="glass" ref="glassRef"></div>
+        <div class="glass fixed-glass" ref="glassRef"></div>
         <header class="the-header" ref="theHeader">
             <TheSideNavToggle @toggle="$emit('sidenavToggle')" />
             <nuxt-link
@@ -43,7 +43,7 @@ const { filteredNavLinks } = storeToRefs(navStore);
 </script>
 
 <style scoped>
-.glass {
+/* .glass {
     background: transparent;
     backdrop-filter: blur(10px);
     position: absolute;
@@ -63,7 +63,7 @@ html .glass.active {
 
 html.dark .glass.active {
     background: rgba(2, 6, 23, 0.8);
-}
+} */
 
 .header-container {
     height: 60px;

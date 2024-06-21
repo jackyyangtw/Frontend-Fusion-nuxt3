@@ -22,6 +22,7 @@
                             <PostBadge
                                 :classes="tag.style"
                                 :badgeName="tag.name"
+                                :key="tag.id"
                             ></PostBadge>
                         </div>
                     </div>

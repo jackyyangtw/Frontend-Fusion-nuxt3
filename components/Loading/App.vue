@@ -1,6 +1,6 @@
 <template>
     <teleport to="body">
-        <transition name="fade">
+        <Transition name="fade">
             <div
                 v-if="appLoading"
                 class="fixed inset-0 flex items-center justify-center bg-black/90 z-50"
@@ -14,7 +14,7 @@
                     <div></div>
                 </div>
             </div>
-        </transition>
+        </Transition>
     </teleport>
 </template>
 

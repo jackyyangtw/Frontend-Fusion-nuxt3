@@ -75,9 +75,14 @@ export default defineNuxtConfig({
                     type: "image/svg+xml",
                     href: "/images/site-icon.svg",
                 },
+                // {
+                //     rel: "stylesheet",
+                //     href: "https://fonts.googleapis.com/css?family=Open+Sans",
+                // },
                 {
-                    rel: "stylesheet",
+                    rel: "preload",
                     href: "https://fonts.googleapis.com/css?family=Open+Sans",
+                    as: "style",
                 },
             ],
             htmlAttrs: {
@@ -118,4 +123,13 @@ export default defineNuxtConfig({
     nitro: {
         preset: process.env.NODE_ENV === "development" ? "firebase" : "netlify",
     },
+    // router: {
+    //     extendRoutes(routes, resolve) {
+    //         routes.push({
+    //             name: "posts-id",
+    //             path: "/posts/:id",
+    //             component: resolve(__dirname, "pages/posts/[id].vue"),
+    //         });
+    //     },
+    // },
 });

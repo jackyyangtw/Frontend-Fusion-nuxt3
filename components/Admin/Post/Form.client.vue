@@ -83,7 +83,7 @@
             >
         </div>
     </UForm>
-    <AppModal :title="modalContent.title" danger>
+    <LazyAppModal :title="modalContent.title" danger>
         <template #body>
             <p class="font-semibold"> {{ modalContent.body }} </p>
         </template>
@@ -109,7 +109,7 @@
                 </AppButton>
             </div>
         </template>
-    </AppModal>
+    </LazyAppModal>
 </template>
 
 <script setup lang="ts">

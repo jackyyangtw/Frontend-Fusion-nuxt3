@@ -109,11 +109,11 @@
         <section class="related-posts-list glass active">
             <div class="container mx-auto">
                 <div class="w-full xl:w-[900px] mx-auto">
-                    <PostRelatedList :relatedPosts="relatedPosts" />
+                    <LazyPostRelatedList :relatedPosts="relatedPosts" />
                 </div>
             </div>
         </section>
-        <AppModal :isImage="true">
+        <LazyAppModal :isImage="true">
             <template #image>
                 <img
                     class="mx-auto w-full max-w-[1300px]"
@@ -121,7 +121,7 @@
                     alt=""
                 />
             </template>
-        </AppModal>
+        </LazyAppModal>
     </div>
 </template>
 

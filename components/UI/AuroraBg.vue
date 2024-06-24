@@ -63,24 +63,11 @@
     bottom: 0;
     opacity: 0.4;
     overflow: hidden;
-    width: 100%;
-    height: 100%;
-}
-.canvas-wrapper .aurora-wrapper {
-    width: 100%;
-    height: 100%;
-    background: rgba(194, 194, 194, 0.131);
-    backdrop-filter: blur(50px);
-    -webkit-backdrop-filter: blur(50px);
-    position: absolute;
-    z-index: 1;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    width: 100vw;
+    height: 100vh;
 }
 
 .canvas-wrapper .circle {
-    width: 150%;
     aspect-ratio: 0.8;
     margin: 0px auto;
     position: absolute;
@@ -88,7 +75,7 @@
     top: 50%;
     transform: translate(-50%, -50%);
     will-change: transform;
-    /* width: 150vw; */
+    width: 150vw;
     height: 120vh;
 }
 

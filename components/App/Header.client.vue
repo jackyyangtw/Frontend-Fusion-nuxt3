@@ -13,6 +13,8 @@
                     class="max-w-[30px] mr-3"
                     src="/images/site-icon.svg"
                     alt="logo"
+                    width="30"
+                    height="30"
                 />
                 Frontend Fusion
             </nuxt-link>
@@ -43,28 +45,6 @@ const { filteredNavLinks } = storeToRefs(navStore);
 </script>
 
 <style scoped>
-/* .glass {
-    background: transparent;
-    backdrop-filter: blur(10px);
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: -1;
-    border-bottom: solid 1px rgba(0, 0, 0, 0.1);
-}
-html.dark .glass {
-    border-bottom: solid 1px rgba(255, 255, 255, 0.1);
-}
-html .glass.active {
-    background: rgba(255, 255, 255, 0.8);
-}
-
-html.dark .glass.active {
-    background: rgba(2, 6, 23, 0.8);
-} */
-
 .header-container {
     height: 60px;
 }

@@ -75,14 +75,9 @@ export default defineNuxtConfig({
                     type: "image/svg+xml",
                     href: "/images/site-icon.svg",
                 },
-                // {
-                //     rel: "stylesheet",
-                //     href: "https://fonts.googleapis.com/css?family=Open+Sans",
-                // },
                 {
-                    rel: "preload",
+                    rel: "stlyesheet",
                     href: "https://fonts.googleapis.com/css?family=Open+Sans",
-                    as: "style",
                 },
             ],
             htmlAttrs: {

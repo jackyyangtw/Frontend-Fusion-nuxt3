@@ -56,15 +56,15 @@
         transform: translate(-25%, 0%);
     }
 }
-
+/* 更改前 */
 .canvas-wrapper {
     position: fixed;
     left: 0;
     bottom: 0;
     opacity: 0.4;
     overflow: hidden;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
 }
 .canvas-wrapper .aurora-wrapper {
     width: 100%;
@@ -88,7 +88,7 @@
     top: 50%;
     transform: translate(-50%, -50%);
     will-change: transform;
-    width: 150vw;
+    /* width: 150vw; */
     height: 120vh;
 }
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="relative z-[20]">
+    <div class="relative z-[20] px-6">
         <!-- Mobile -->
         <button
             @click="toggleSidebar"
@@ -7,7 +7,7 @@
             data-drawer-toggle="default-sidebar"
             aria-controls="default-sidebar"
             type="button"
-            class="inline-flex items-center mt-5 ml-5 p-2 text-sm text-gray-500 rounded-lg bg-primary-500 dark:bg-primary-600/[0.5] xl:hidden"
+            class="inline-flex items-center mt-5 p-2 text-sm text-white rounded-lg bg-primary-500 dark:bg-primary-600 xl:hidden"
         >
             <span class="sr-only">Open sidebar</span>
             <svg
@@ -120,6 +120,7 @@ const getPostCount = (tag: string) =>
 const emit = defineEmits(["setFilter"]);
 const selectTag = (tag: string) => {
     emit("setFilter", tag);
+    toggleSidebar();
 };
 
 const toggleSidebar = () => {

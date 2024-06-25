@@ -25,7 +25,7 @@
                         <li class="nav-item">
                             <nuxt-link to="/">Fronted Fusion</nuxt-link>
                         </li>
-                        <li class="nav-item" v-for="nav in navLinks">
+                        <li class="nav-item" v-for="nav in filteredNavLinks">
                             <nuxt-link :to="nav.to">{{ nav.title }}</nuxt-link>
                         </li>
                     </ul>
@@ -37,7 +37,8 @@
 
 <script setup lang="ts">
 const navStore = useNavigationStore();
-const navLinks = navStore.navLinks;
+const { filteredNavLinks } = storeToRefs(navStore);
+
 const uiStore = useUIStore();
 const { isSidenavOpen } = storeToRefs(uiStore);
 const closeSidenav = () => {

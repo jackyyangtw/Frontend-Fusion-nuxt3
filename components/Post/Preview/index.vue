@@ -1,6 +1,6 @@
 <template>
     <div
-        class="relative mx-2 block my-4 group w-full md:w-[calc(50%-16px)] 2xl:w-[calc(33.333%-24px)] ease-in duration-300 transition z-0"
+        class="relative block my-4 md:mx-2 group w-full md:w-[calc(50%-16px)] 2xl:w-[calc(33.333%-24px)] ease-in duration-300 transition z-0"
         @mouseenter.self="toggleShowButtons"
         @mouseleave.self="toggleShowButtons"
     >

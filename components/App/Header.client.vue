@@ -4,7 +4,7 @@
     >
         <div class="glass fixed-glass" ref="glassRef"></div>
         <header class="the-header" ref="theHeader">
-            <LazyTheSideNavToggle />
+            <LazyAppSideNavToggle />
             <nuxt-link
                 to="/"
                 class="logo hidden md:flex text-slate-700 dark:text-white"

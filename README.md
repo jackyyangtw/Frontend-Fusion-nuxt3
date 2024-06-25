@@ -14,7 +14,8 @@
 -   ~~tag manage page~~
 -   ~~進入 search page 應要載入全部文章，否則會有文章搜尋不到的問題~~
 -   ~~posts/[id] 加上推薦文章~~
--   mobile sidenav list item
+-   ~~mobile sidenav list item~~
+-   sidenav lazy load (可能有 CSS 問題)
 -   需要安裝 Google Cloud SDK 才能更改 firebase storage CORS
 
 # prod issue
@@ -64,6 +65,7 @@
 -   firebase logout: `firebase logout`
 -   firebase login: `firebase login`
 -   如果遇到 deploy 失敗，可以試著 logout 再 login
+-   deploy 需要 $$
 
 ## deploy to netlify
 

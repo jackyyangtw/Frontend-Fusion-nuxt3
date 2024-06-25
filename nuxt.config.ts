@@ -73,7 +73,7 @@ export default defineNuxtConfig({
                 {
                     rel: "icon",
                     type: "image/svg+xml",
-                    href: "/images/site-icon.svg",
+                    href: "/images/site-icon-v2.svg",
                 },
                 {
                     rel: "stlyesheet",

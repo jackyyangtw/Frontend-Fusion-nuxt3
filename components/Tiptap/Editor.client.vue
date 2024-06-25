@@ -107,6 +107,8 @@
         </div>
         <div
             class="editor-container bg-slate-200 dark:bg-slate-900/[0.8] rounded-md"
+            @dragover.prevent
+            @drop="onDropImage"
         >
             <TiptapEditorContent :editor="editor" />
         </div>
@@ -187,6 +189,24 @@ const onUploadImgage = async (event: Event) => {
     }
 };
 
+const onDropImage = (event: DragEvent) => {
+    event.preventDefault();
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+        const file = files[0];
+        const reader = new FileReader();
+        reader.onload = () => {
+            const imageUrl = reader.result as string;
+            const fileNameWithoutExtension = fileName(file.name);
+            editor.value?.commands.setImage({
+                src: imageUrl,
+                alt: fileNameWithoutExtension,
+            });
+            emit("addImage", file);
+        };
+        reader.readAsDataURL(file);
+    }
+};
 // links
 const toggleLink = () => {
     if (editor.value?.isActive("link")) {

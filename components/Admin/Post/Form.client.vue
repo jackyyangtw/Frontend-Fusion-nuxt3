@@ -57,7 +57,7 @@
             @addImage="handlerAddImage"
         />
         <div class="flex gap-3">
-            <AppButton btnStyle="main" type="submit"> 儲存 </AppButton>
+            <AppButton btnStyle="primary" type="submit"> 儲存 </AppButton>
             <AppButton
                 v-if="atEditedPage"
                 btnStyle="danger"
@@ -90,7 +90,7 @@
         <template #footer>
             <div class="flex justify-end gap-3">
                 <AppButton
-                    btnStyle="main"
+                    btnStyle="primary"
                     @click="
                         modalContent.mode === 'leave'
                             ? stayPage()

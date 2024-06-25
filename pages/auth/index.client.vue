@@ -46,7 +46,7 @@
                                 <AppButton
                                     class="w-1/2"
                                     type="submit"
-                                    btnStyle="main"
+                                    btnStyle="primary"
                                 >
                                     {{ isLoginMode ? "登入" : "註冊" }}
                                 </AppButton>

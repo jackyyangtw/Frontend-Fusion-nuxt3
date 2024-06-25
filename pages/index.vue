@@ -5,33 +5,24 @@
                 class="banner relative intro bg-slate-100/[0.8] dark:bg-slate-950/[0.4]"
             >
                 <div
-                    class="rounded-md p-6 min-h-[200px] mx-auto"
-                    style="z-index: 3"
+                    class="flex flex-col justify-center items-center h-[200px]"
                 >
-                    <div
-                        class="flex flex-col justify-center items-center h-[200px]"
+                    <h1
+                        class="text-center text-3xl xl:text-5xl font-bold mb-4 typing"
                     >
-                        <h1
-                            class="text-center text-3xl xl:text-5xl font-bold mb-4"
-                        >
-                            Frontend Fusion - 前端技術融合
-                        </h1>
-                        <h2
-                            class="text-lg xl:text-2xl font-medium mb-2 text-slate-950 dark:text-slate-50"
-                        >
-                            探索最新的前端技術和工具
-                        </h2>
-                    </div>
+                        {{ h1Text }}
+                    </h1>
+                    <h2
+                        ref="h2Ref"
+                        class="text-lg xl:text-2xl font-medium mb-2 text-slate-950 dark:text-slate-50 typing"
+                    >
+                        {{ h2Text }}
+                    </h2>
                 </div>
             </section>
         </client-only>
         <div class="container mx-auto">
-            <RenderCacheable>
-                <LazyPostList
-                    :posts="loadedPosts"
-                    :isAdmin="false"
-                ></LazyPostList>
-            </RenderCacheable>
+            <LazyPostList :posts="loadedPosts" :isAdmin="false"></LazyPostList>
         </div>
         <LazyLoadingLists :isLoading="isLoadingPosts" />
     </div>
@@ -119,12 +110,26 @@ const handleScroll = async (event: Event) => {
     }
 };
 
+const h1Text = ref("");
+const h2Text = ref("");
+const fullH1Text = "Frontend Fusion - 前端技術融合";
+const fullH2Text = "探索最新的前端技術和工具";
+const typeEffect = async (text: string, target: { value: string }) => {
+    const delay = 40;
+    for (let i = 0; i < text.length; i++) {
+        target.value += text[i];
+        await new Promise((resolve) => setTimeout(resolve, delay));
+    }
+};
+
 onMounted(async () => {
     await postsStore.getAllPostsCount();
     await getPosts(); // 初次加載文章
     window.addEventListener("scroll", handleScroll, { passive: true }); // 綁定滾動事件
+    // 打字效果
+    await typeEffect(fullH1Text, h1Text);
+    await typeEffect(fullH2Text, h2Text);
 });
-
 onBeforeUnmount(() => {
     window.removeEventListener("scroll", handleScroll); // 移除滾動事件
 });
@@ -138,7 +143,6 @@ watchEffect(() => {
 
 <style scoped>
 .intro {
-    height: 480px;
     position: relative;
     padding: 30px;
     box-sizing: border-box;
@@ -149,26 +153,31 @@ watchEffect(() => {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    @apply h-[300px] md:h-[480px];
 }
 
 h1 {
     background-color: #0093e9;
-    background-image: -webkit-linear-gradient(160deg, #0093e9 0%, #80d0c7 100%);
-    background-image: -moz-linear-gradient(160deg, #0093e9 0%, #80d0c7 100%);
-    background-image: -o-linear-gradient(160deg, #0093e9 0%, #80d0c7 100%);
-    background-image: linear-gradient(160deg, #0093e9 0%, #80d0c7 100%);
-
+    background-image: -webkit-linear-gradient(160deg, #0093e9 0%, #80d0c7 80%);
+    background-image: -moz-linear-gradient(160deg, #0093e9 0%, #80d0c7 80%);
+    background-image: -o-linear-gradient(160deg, #0093e9 0%, #80d0c7 80%);
+    background-image: linear-gradient(160deg, #0093e9 0%, #80d0c7 80%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: hue 5s infinite linear;
+    animation: gradient-animation 5s ease infinite; /* 加上動畫 */
+    background-size: 200% 200%; /* 增加背景大小以實現流動效果 */
 }
-@keyframes hue {
-    from {
+
+@keyframes gradient-animation {
+    0% {
         background-position: 0% 50%;
     }
-    to {
-        background-position: 200% 50%;
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
     }
 }
 </style>

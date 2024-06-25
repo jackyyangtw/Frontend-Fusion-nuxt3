@@ -19,6 +19,8 @@ export const useUIStore = defineStore("ui", () => {
 
     const isModalOpen = ref(false);
 
+    const isSidenavOpen = ref(false);
+
     return {
         headerHeight,
         pageLoading,
@@ -27,5 +29,6 @@ export const useUIStore = defineStore("ui", () => {
         toast,
         isModalOpen,
         appLoading,
+        isSidenavOpen,
     };
 });

@@ -4,14 +4,14 @@
     >
         <div class="glass fixed-glass" ref="glassRef"></div>
         <header class="the-header" ref="theHeader">
-            <TheSideNavToggle @toggle="$emit('sidenavToggle')" />
+            <LazyTheSideNavToggle />
             <nuxt-link
                 to="/"
                 class="logo hidden md:flex text-slate-700 dark:text-white"
             >
                 <img
                     class="max-w-[30px] mr-3"
-                    src="/images/site-icon.svg"
+                    src="/images/site-icon-v2.svg"
                     alt="logo"
                     width="30"
                     height="30"

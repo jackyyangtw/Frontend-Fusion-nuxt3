@@ -29,7 +29,7 @@ const getBtnStyle = (color: string) => {
 };
 
 const btnStyle = computed(() => {
-    if (props.btnStyle === "main") {
+    if (props.btnStyle === "primary") {
         return getBtnStyle("blue");
     } else if (props.btnStyle === "secondary") {
         return getBtnStyle("emerald");

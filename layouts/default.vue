@@ -1,7 +1,7 @@
 <template>
     <NuxtLoadingIndicator />
     <AppHeader />
-
+    <TheSideNav />
     <div
         class="min-h-screen w-full relative z-10"
         :style="{

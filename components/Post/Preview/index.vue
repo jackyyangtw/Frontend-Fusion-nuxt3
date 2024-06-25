@@ -68,18 +68,21 @@
                 class="buttons absolute inset-0 left-0 top-0 flex justify-center items-center bg-black/[0.5] dark:bg-black/[0.7] z-20"
                 v-show="onAdminRoute && showButtons"
             >
-                <nuxt-link
+                <AppButton
+                    class="mr-3"
+                    btnStyle="primary"
+                    isRouterLink
                     :to="`/admin/${post.id}`"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3"
                 >
                     編輯
-                </nuxt-link>
-                <nuxt-link
+                </AppButton>
+                <AppButton
+                    btnStyle="secondary"
+                    isRouterLink
                     :to="`/posts/${post.id}`"
-                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                 >
-                    前往預覽
-                </nuxt-link>
+                    預覽
+                </AppButton>
             </div>
         </transition>
     </div>

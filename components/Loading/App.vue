@@ -3,7 +3,7 @@
         <Transition name="fade">
             <div
                 v-if="appLoading"
-                class="fixed inset-0 flex items-center justify-center bg-black/90 z-50"
+                class="fixed inset-0 flex items-center justify-center bg-black/90 z-[100]"
             >
                 <div class="spinner">
                     <div></div>

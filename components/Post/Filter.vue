@@ -1,5 +1,5 @@
 <template>
-    <div class="relative z-[2]">
+    <div class="relative z-[20]">
         <!-- Mobile -->
         <button
             @click="toggleSidebar"
@@ -135,6 +135,6 @@ const { tags } = storeToRefs(tagsStore);
 
 <style scoped>
 .filter-style {
-    @apply flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700
+    @apply flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700;
 }
 </style>

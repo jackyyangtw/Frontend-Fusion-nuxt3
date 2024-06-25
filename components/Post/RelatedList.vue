@@ -1,7 +1,7 @@
 <template>
     <div class="post-related-list py-10" v-if="relatedPosts.length > 0">
         <h3 class="text-3xl font-bold text-green-500 dark:text-green-400">
-            相關文章</h3
+            相關主題</h3
         >
         <ul>
             <li

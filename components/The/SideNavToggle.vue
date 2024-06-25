@@ -1,11 +1,19 @@
 <template>
     <!-- hamberger -->
-    <div class="drawer-toggle" role="button" @click="$emit('toggle')">
+    <div class="drawer-toggle" role="button" @click="toggleSideNav">
         <div class="bar"></div>
         <div class="bar"></div>
         <div class="bar"></div>
     </div>
 </template>
+
+<script setup lang="ts">
+const uiStore = useUIStore();
+const { isSidenavOpen } = storeToRefs(uiStore);
+const toggleSideNav = () => {
+    isSidenavOpen.value = !isSidenavOpen.value;
+};
+</script>
 
 <style scoped>
 .drawer-toggle {

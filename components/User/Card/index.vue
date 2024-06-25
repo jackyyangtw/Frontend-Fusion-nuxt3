@@ -49,7 +49,7 @@
                 </span>
                 <div class="flex mt-4 space-x-3 md:mt-6">
                     <AppButton
-                        btnStyle="main"
+                        btnStyle="primary"
                         @click="$router.push('/admin/new-post')"
                         >新增文章</AppButton
                     >

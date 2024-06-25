@@ -1,5 +1,5 @@
 <template>
-    <div class="xl:flex items-start ml-[8rem]">
+    <div class="xl:flex items-start lg:ml-[8rem]">
         <div class="sidebar-placeholder w-32 hidden xl:block h:10" ref=""></div>
         <LazyPostFilter
             :posts="loadedPosts"

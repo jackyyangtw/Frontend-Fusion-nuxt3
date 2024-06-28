@@ -136,38 +136,46 @@ const { $db } = useNuxtApp();
 const userPostsRef = dbRef($db, `posts/${postId}`);
 const { data: loadedPost } = useDatabaseObject<Post>(userPostsRef);
 
-useSchemaOrg([
-    defineArticle({
-        "@type": "TechArticle",
-        datePublished: loadedPost.value?.updatedDate || "",
-        headline: loadedPost.value?.title ?? "",
-        image: loadedPost.value
-            ? loadedPost.value.previewImgUrl || loadedPost.value.thumbnail || ""
-            : "",
-        description: loadedPost.value?.previewText ?? "",
-        author: {
-            name: loadedPost.value?.author ?? "",
-        },
-    }),
-]);
+watch(
+    loadedPost,
+    async (newVal) => {
+        if (newVal) {
+            await getRelatedPosts();
+            // 其他需要在 loadedPost 加載完成後執行的函數
+            useSchemaOrg([
+                defineArticle({
+                    "@type": "TechArticle",
+                    datePublished: newVal.updatedDate || "",
+                    headline: newVal.title ?? "",
+                    image: newVal
+                        ? newVal.previewImgUrl || newVal.thumbnail || ""
+                        : "",
+                    description: newVal.previewText ?? "",
+                    author: {
+                        name: newVal.author ?? "",
+                    },
+                }),
+            ]);
 
-useHead({
-    title: loadedPost.value ? loadedPost.value.title : "Loading...",
-    meta: [
-        {
-            hid: "description",
-            name: "description",
-            content: loadedPost.value
-                ? loadedPost.value.previewText
-                : "Loading...",
-        },
-        {
-            hid: "author",
-            name: "author",
-            content: loadedPost.value ? loadedPost.value.author : "Loading...",
-        },
-    ],
-});
+            useHead({
+                title: newVal.title ?? "Loading...",
+                meta: [
+                    {
+                        hid: "description",
+                        name: "description",
+                        content: newVal.previewText ?? "Loading...",
+                    },
+                    {
+                        hid: "author",
+                        name: "author",
+                        content: newVal.author ?? "Loading...",
+                    },
+                ],
+            });
+        }
+    },
+    { immediate: true }
+);
 
 const relatedPosts = ref<Post[]>([]);
 const getRelatedPosts = async () => {
@@ -185,7 +193,6 @@ const getRelatedPosts = async () => {
         );
     }
 };
-await getRelatedPosts();
 
 const isLoadingBanner = ref(true);
 const uiStore = useUIStore();

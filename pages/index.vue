@@ -165,8 +165,8 @@ h1 {
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: gradient-animation 5s ease infinite; /* 加上動畫 */
-    background-size: 200% 200%; /* 增加背景大小以實現流動效果 */
+    animation: gradient-animation 5s ease infinite;
+    background-size: 200% 200%;
 }
 
 @keyframes gradient-animation {

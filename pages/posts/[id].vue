@@ -108,7 +108,7 @@
         </section>
         <section class="related-posts-list glass active">
             <div class="container mx-auto">
-                <div class="w-full xl:w-[900px] mx-auto">
+                <div class="w-full xl:w-[900px] mx-auto px-5">
                     <LazyPostRelatedList :relatedPosts="relatedPosts" />
                 </div>
             </div>

@@ -1,6 +1,13 @@
-import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import {
+    GoogleAuthProvider,
+    signInWithPopup,
+    signOut,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+} from "firebase/auth";
+import { ref as dbRef, set } from "firebase/database";
 export const useUserStore = defineStore("user", () => {
-    const { $auth } = useNuxtApp();
+    const { $auth, $db } = useNuxtApp();
     const config = useRuntimeConfig();
     const realTimeDbBaseUrl = config.public.firebaseRealtimeDbBaseUrl as string;
 
@@ -47,8 +54,6 @@ export const useUserStore = defineStore("user", () => {
             toast.value.showToast = true;
             toast.value.messageType = "success";
             toast.value.message = "登入成功!";
-            if (res.user) {
-            }
             const user = await getCurrentUser();
             setFirebaseUser(user);
             await getUserData();
@@ -58,6 +63,75 @@ export const useUserStore = defineStore("user", () => {
             toast.value.showToast = true;
             toast.value.messageType = "error";
             toast.value.message = "登入失敗";
+            return e;
+        }
+    };
+    const signinWithEmail = async (email: string, password: string) => {
+        if (isAuthenticated.value || !$auth) return;
+        try {
+            toast.value.showToast = true;
+            toast.value.messageType = "loading";
+            toast.value.message = "Email登入中...";
+            const res = await signInWithEmailAndPassword(
+                $auth,
+                email,
+                password
+            );
+            if (res.user) {
+                const user = await getCurrentUser();
+                setFirebaseUser(user);
+                await getUserData();
+                setToken(user.accessToken);
+            }
+            toast.value.showToast = true;
+            toast.value.messageType = "success";
+            toast.value.message = "登入成功!";
+            router.push("/admin");
+            return res;
+        } catch (e) {
+            return e;
+        }
+    };
+    const signupWithEmail = async (
+        email: string,
+        password: string,
+        userName: string
+    ) => {
+        if (isAuthenticated.value || !$auth) return;
+        try {
+            toast.value.showToast = true;
+            toast.value.messageType = "loading";
+            toast.value.message = "註冊中...";
+            const res = await createUserWithEmailAndPassword(
+                $auth,
+                email,
+                password
+            );
+            if (res.user) {
+                const user = await getCurrentUser();
+                setFirebaseUser(user);
+                await getUserData();
+                setToken(user.accessToken);
+
+                // 將資料存入realtime db
+                const userData = {
+                    email: user.email,
+                    id: user.uid,
+                    name: userName || "",
+                    photoURL: user.photoURL || "",
+                };
+                await set(dbRef($db, `users/${user.uid}`), userData);
+
+                router.push("/admin");
+                toast.value.showToast = true;
+                toast.value.messageType = "success";
+                toast.value.message = "註冊成功!";
+            }
+            return res;
+        } catch (e) {
+            toast.value.showToast = true;
+            toast.value.messageType = "error";
+            toast.value.message = "註冊失敗";
             return e;
         }
     };
@@ -85,6 +159,8 @@ export const useUserStore = defineStore("user", () => {
         setToken,
         setFirebaseUser,
         getUserData,
+        signupWithEmail,
+        signinWithEmail,
         isAuthenticated,
         user,
         firebaseUser,

@@ -8,17 +8,15 @@
             paddingTop: headerHeight + 'px',
         }"
     >
-        <slot
-    /></div>
+        <slot />
+    </div>
     <UIAuroraBg />
+    <LoadingPage />
+    <LoadingApp />
     <AppFooter />
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-
 const uiStore = useUIStore();
 const { headerHeight } = storeToRefs(uiStore);
 </script>
-
-<style scoped></style>

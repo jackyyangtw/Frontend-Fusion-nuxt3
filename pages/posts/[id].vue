@@ -132,9 +132,9 @@ import { ref as dbRef, get } from "firebase/database";
 const route = useRoute();
 const postId = route.params.id;
 
-const { data: loadedPost } = await useFetch<Post>(
-    `/api/realTime/post/${route.params.id}`
-);
+const { $db } = useNuxtApp();
+const userPostsRef = dbRef($db, `posts/${postId}`);
+const { data: loadedPost } = useDatabaseObject<Post>(userPostsRef);
 
 useSchemaOrg([
     defineArticle({
@@ -169,7 +169,6 @@ useHead({
     ],
 });
 
-const { $db } = useNuxtApp();
 const relatedPosts = ref<Post[]>([]);
 const getRelatedPosts = async () => {
     if (!loadedPost.value?.tags) return;

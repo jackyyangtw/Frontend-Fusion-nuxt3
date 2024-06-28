@@ -22,14 +22,12 @@
                             controlType="input"
                             v-model="name"
                             :placeholder="`請輸入您的名稱`"
-                            :value="name"
                             >名稱</AppControlInput
                         >
                         <AppControlInput
                             inputType="email"
                             controlType="input"
                             v-model="email"
-                            :value="email"
                             :placeholder="`請輸入您的電子郵件`"
                             >E-Mail</AppControlInput
                         >
@@ -37,7 +35,6 @@
                             inputType="password"
                             controlType="input"
                             v-model="password"
-                            :value="password"
                             :placeholder="`請輸入您的密碼`"
                             >密碼</AppControlInput
                         >
@@ -93,19 +90,19 @@ if (isAuthenticated.value) {
     router.push("/admin");
 }
 
-const uiStore = useUIStore();
-const { toast } = storeToRefs(uiStore);
+const { signinWithGoogle, signupWithEmail, signinWithEmail } = userStore;
 const onSubmit = async () => {
-    toast.value.showToast = true;
-    toast.value.messageType = "loading";
-    toast.value.message = "Email登入中...";
-    // auth
-    toast.value.showToast = false;
-    toast.value.messageType = "success";
-    toast.value.message = "登入成功";
+    try {
+        if (!isLoginMode.value) {
+            await signupWithEmail(email.value, password.value, name.value);
+        } else {
+            await signinWithEmail(email.value, password.value);
+        }
+    } catch (error) {
+        console.log(error);
+    }
 };
 
-const { signinWithGoogle } = userStore;
 const SINGINWITHGOOGLE = async () => {
     signinWithGoogle();
 };

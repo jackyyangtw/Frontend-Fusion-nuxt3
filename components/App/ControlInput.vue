@@ -9,28 +9,24 @@
             class="input-style"
             :placeholder="placeholder"
             :type="inputType"
-            v-bind="$attrs"
-            :value="value"
-            @input="$emit('input', ($event.target as HTMLInputElement).value)"
+            v-model="model"
         />
         <textarea
             v-if="controlType === 'textarea'"
             class="input-style"
             rows="10"
-            :value="value"
-            @input="$emit('input', ($event.target as HTMLInputElement).value)"
+            v-model="model"
         >
         </textarea>
     </div>
 </template>
 
 <script setup lang="ts">
+const model = defineModel();
 defineProps<{
     inputType?: string;
     controlType: "input" | "textarea";
     placeholder?: string;
-    value: string;
-    hasError?: boolean;
 }>();
 </script>
 

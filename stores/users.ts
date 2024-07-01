@@ -136,6 +136,8 @@ export const useUserStore = defineStore("user", () => {
         }
     };
 
+    const postsStore = usePostsStore();
+    const { userPosts } = storeToRefs(postsStore);
     const googleSignout = async () => {
         if (!isAuthenticated.value || !$auth) return;
         try {
@@ -146,6 +148,7 @@ export const useUserStore = defineStore("user", () => {
             user.value = null;
             firebaseUser.value = null;
             token.value = null;
+            userPosts.value = [];
             router.push("/");
             return res;
         } catch (e) {

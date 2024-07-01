@@ -135,7 +135,21 @@ const postId = route.params.id;
 const { $db } = useNuxtApp();
 const userPostsRef = dbRef($db, `posts/${postId}`);
 const { data: loadedPost } = useDatabaseObject<Post>(userPostsRef);
+const getRelatedPosts = async () => {
+    if (!loadedPost.value?.tags) return;
+    const tags = loadedPost.value.tags;
+    const relatedPostsRef = dbRef($db, "posts");
 
+    const snapshot = await get(relatedPostsRef);
+    if (snapshot.exists()) {
+        const posts = snapshot.val() as Record<string, Post>;
+        relatedPosts.value = Object.values(posts).filter(
+            (post: Post) =>
+                post.tags.some((tag: string) => tags.includes(tag)) &&
+                post.id !== loadedPost.value?.id
+        );
+    }
+};
 watch(
     loadedPost,
     async (newVal) => {
@@ -178,21 +192,6 @@ watch(
 );
 
 const relatedPosts = ref<Post[]>([]);
-const getRelatedPosts = async () => {
-    if (!loadedPost.value?.tags) return;
-    const tags = loadedPost.value.tags;
-    const relatedPostsRef = dbRef($db, "posts");
-
-    const snapshot = await get(relatedPostsRef);
-    if (snapshot.exists()) {
-        const posts = snapshot.val() as Record<string, Post>;
-        relatedPosts.value = Object.values(posts).filter(
-            (post: Post) =>
-                post.tags.some((tag: string) => tags.includes(tag)) &&
-                post.id !== loadedPost.value?.id
-        );
-    }
-};
 
 const isLoadingBanner = ref(true);
 const uiStore = useUIStore();

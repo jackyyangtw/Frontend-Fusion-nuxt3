@@ -81,10 +81,10 @@ defineProps<{
 }>();
 
 const userStore = useUserStore();
-const { googleSignout } = userStore;
+const { LOGOUT } = userStore;
 const { user } = storeToRefs(userStore);
 const onLogout = async () => {
-    await googleSignout();
+    await LOGOUT();
 };
 
 const uiStore = useUIStore();

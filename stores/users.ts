@@ -138,7 +138,7 @@ export const useUserStore = defineStore("user", () => {
 
     const postsStore = usePostsStore();
     const { userPosts } = storeToRefs(postsStore);
-    const googleSignout = async () => {
+    const LOGOUT = async () => {
         if (!isAuthenticated.value || !$auth) return;
         try {
             const res = await signOut($auth);
@@ -158,7 +158,7 @@ export const useUserStore = defineStore("user", () => {
 
     return {
         signinWithGoogle,
-        googleSignout,
+        LOGOUT,
         setToken,
         setFirebaseUser,
         getUserData,

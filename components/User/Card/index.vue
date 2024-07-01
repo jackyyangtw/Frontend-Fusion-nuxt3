@@ -53,7 +53,7 @@
                         @click="$router.push('/admin/new-post')"
                         >新增文章</AppButton
                     >
-                    <div v-show="user?.isManager">
+                    <div v-if="user?.isManager">
                         <AppButton
                             btnStyle="secondary"
                             @click="$router.push('/admin/manage-tags')"
@@ -63,6 +63,11 @@
                     <AppButton btnStyle="danger" @click.prevent="onLogout"
                         >登出</AppButton
                     >
+                    <div v-if="!user?.isManager">
+                        <AppButton btnStyle="danger" @click.prevent="DELETEUSER"
+                            >刪除帳號</AppButton
+                        >
+                    </div>
                 </div>
             </div>
         </div>
@@ -81,7 +86,7 @@ defineProps<{
 }>();
 
 const userStore = useUserStore();
-const { LOGOUT } = userStore;
+const { LOGOUT, DELETEUSER } = userStore;
 const { user } = storeToRefs(userStore);
 const onLogout = async () => {
     await LOGOUT();

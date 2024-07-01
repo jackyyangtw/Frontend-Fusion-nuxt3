@@ -16,6 +16,7 @@
 -   ~~posts/[id] 加上推薦文章~~
 -   ~~mobile sidenav list item~~
 -   ~~user email login、signup~~
+-   刪除 user 功能 (刪除 realtime db posts/[id]/userId 和 storage/user-stickers/[id])
 -   sidenav lazy load (可能有 CSS 問題)
 -   需要安裝 Google Cloud SDK 才能更改 firebase storage CORS
 

@@ -16,7 +16,9 @@
 -   ~~posts/[id] 加上推薦文章~~
 -   ~~mobile sidenav list item~~
 -   ~~user email login、signup~~
--   刪除 user 功能 (刪除 realtime db posts/[id]/userId 和 storage/user-stickers/[id])
+-   ~~刪除 user 功能 (刪除 realtime db posts/[id]/userId 和 storage/user-stickers/[id])~~
+-   頭像還沒設定的狀況下，更新後，admin page post 的圖片不會更新
+-   文章新增後，如果有上傳預覽圖片、文章圖片，預覽圖片會變成預設的預覽圖片
 -   sidenav lazy load (可能有 CSS 問題)
 -   需要安裝 Google Cloud SDK 才能更改 firebase storage CORS
 

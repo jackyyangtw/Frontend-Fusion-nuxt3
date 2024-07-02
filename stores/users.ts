@@ -7,7 +7,7 @@ import {
     deleteUser,
 } from "firebase/auth";
 import { ref as dbRef, set, get, remove } from "firebase/database";
-import { ref as storageRef, deleteObject } from "firebase/storage";
+import { ref as storageRef, deleteObject, listAll } from "firebase/storage";
 export const useUserStore = defineStore("user", () => {
     const { $auth, $db, $storage } = useNuxtApp();
     const config = useRuntimeConfig();
@@ -173,17 +173,29 @@ export const useUserStore = defineStore("user", () => {
             toast.value.messageType = "loading";
             toast.value.message = "帳號刪除中...";
 
-            // 刪除帳號
-            const res = await deleteUser(USER);
-
             // 刪除帳號在realtime db的資料
             toast.value.message = "刪除user資料中...";
             const userRef = dbRef($db, `users/${USER.uid}`);
             await remove(userRef);
+            console.log("realtime db的user資料已刪除");
 
             // 刪除帳號在realtime db posts/[postid]/userId 的資料
             const postsRef = dbRef($db, `posts`);
             const snapshot = await get(postsRef);
+            const deleteFolderContents = async (folderRef: any) => {
+                const result = await listAll(folderRef);
+                const deletePromises: Promise<void>[] = [];
+
+                result.items.forEach((fileRef) => {
+                    deletePromises.push(deleteObject(fileRef));
+                });
+
+                result.prefixes.forEach((folderRef) => {
+                    deletePromises.push(deleteFolderContents(folderRef));
+                });
+
+                await Promise.all(deletePromises);
+            };
             if (snapshot.exists()) {
                 toast.value.message = "刪除posts資料中...";
                 const deletePromises: Promise<void>[] = [];
@@ -192,24 +204,34 @@ export const useUserStore = defineStore("user", () => {
                     if (post.userId === USER.uid) {
                         // 刪除realtime db中的post資料
                         remove(child.ref);
-                        // 刪除storage中的post圖片
-                        const imageRef = storageRef(
+                        console.log("刪除post完成");
+
+                        // 刪除storage中的post圖片資料夾 images/posts/[postid]
+                        const postImagesRef = storageRef(
                             $storage,
                             `images/posts/${child.key}`
                         );
-                        deletePromises.push(deleteObject(imageRef));
+                        deletePromises.push(
+                            deleteFolderContents(postImagesRef)
+                        );
                     }
                 });
                 await Promise.all(deletePromises);
+                console.log("刪除所有post圖片完成");
             }
 
             // 刪除帳號在storage的user-stickers
             toast.value.message = "刪除user-stickers中...";
             const userPhotoRef = storageRef(
                 $storage,
-                `user-stickers/${USER.uid}`
+                `user-sticker/${USER.uid}`
             );
             await deleteObject(userPhotoRef);
+            console.log("刪除user-stickers完成");
+
+            // 刪除帳號
+            const res = await deleteUser(USER);
+            console.log("刪除帳號完成");
 
             toast.value.showToast = true;
             toast.value.messageType = "success";
@@ -220,6 +242,7 @@ export const useUserStore = defineStore("user", () => {
             toast.value.showToast = true;
             toast.value.messageType = "error";
             toast.value.message = e;
+            console.log(e);
             return e;
         }
     };

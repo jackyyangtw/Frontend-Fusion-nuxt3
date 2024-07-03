@@ -24,6 +24,7 @@ logs
 !.env.example
 
 service-account.json
+service-account-test.json
 
 # Local Netlify folder
 .netlify

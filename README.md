@@ -17,6 +17,7 @@
 -   ~~mobile sidenav list item~~
 -   ~~user email login、signup~~
 -   ~~刪除 user 功能 (刪除 realtime db posts/[id]/userId 和 storage/user-stickers/[id])~~
+-   區分 dev、prod 環境的 firebase
 -   刪除 user 功能應加上 modal 讓 user 確認
 -   頭像還沒設定的狀況下，更新後，admin page post 的圖片不會更新
 -   文章新增後，如果有上傳預覽圖片、文章圖片，預覽圖片會變成預設的預覽圖片

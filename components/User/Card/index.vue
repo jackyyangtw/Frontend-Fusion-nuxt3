@@ -75,7 +75,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref as dbRef, set } from "firebase/database";
+import { ref as dbRef, set, get } from "firebase/database";
 import {
     ref as storageRef,
     getDownloadURL,
@@ -128,9 +128,25 @@ const onPhotoChange = async (e: Event) => {
             const userRef = dbRef($db, `users/${user.value?.id}/photoURL`);
             await set(userRef, downloadURL);
 
+            // step4: 更新所有 realtime db posts 的 photoURL，realtime db 圖片路徑: posts/[postId].photoURL
+            const postRef = dbRef($db, `posts`);
+            const snapshot = await get(postRef);
+            if (snapshot.exists()) {
+                const posts = snapshot.val();
+                for (const postId in posts) {
+                    if (posts[postId].userId === user.value?.id) {
+                        const postPhotoRef = dbRef(
+                            $db,
+                            `posts/${postId}/photoURL`
+                        );
+                        await set(postPhotoRef, downloadURL);
+                    }
+                }
+            }
+
             toast.value.showToast = true;
             toast.value.message = "正在更新文章頭像...";
-            toast.value.messageType = "loadging";
+            toast.value.messageType = "loading";
             loadedPosts.value.forEach((post) => {
                 if (post.userId === user.value?.id) {
                     post.photoURL = downloadURL;

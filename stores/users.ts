@@ -10,8 +10,8 @@ import { ref as dbRef, set, get, remove } from "firebase/database";
 import { ref as storageRef, deleteObject, listAll } from "firebase/storage";
 export const useUserStore = defineStore("user", () => {
     const { $auth, $db, $storage } = useNuxtApp();
-    const config = useRuntimeConfig();
-    const realTimeDbBaseUrl = config.public.firebaseRealtimeDbBaseUrl as string;
+    // const config = useRuntimeConfig();
+    // const realTimeDbBaseUrl = config.public.firebaseRealtimeDbBaseUrl as string;
 
     const user = ref<User | null>(null);
     const firebaseUser = ref<FirebaseUser | null>(null);
@@ -20,17 +20,6 @@ export const useUserStore = defineStore("user", () => {
     };
     const getUserData = async () => {
         if (user.value) return;
-        // await $fetch(
-        //     `${realTimeDbBaseUrl}/users/${firebaseUser.value?.uid}.json`,
-        //     {
-        //         onResponse: ({ response }) => {
-        //             if (!response.ok) {
-        //                 throw new Error("Failed to fetch user data");
-        //             }
-        //             user.value = response._data;
-        //         },
-        //     }
-        // );
         const userRef = dbRef($db, `users/${firebaseUser.value?.uid}`);
         const snapshot = await get(userRef);
         if (snapshot.exists()) {
@@ -144,7 +133,7 @@ export const useUserStore = defineStore("user", () => {
     };
 
     const postsStore = usePostsStore();
-    const { userPosts } = storeToRefs(postsStore);
+    const { userPosts, loadedPosts } = storeToRefs(postsStore);
     const resetUserData = () => {
         user.value = null;
         firebaseUser.value = null;
@@ -204,6 +193,11 @@ export const useUserStore = defineStore("user", () => {
                     if (post.userId === USER.uid) {
                         // 刪除realtime db中的post資料
                         remove(child.ref);
+
+                        // 刪除 loadedPost中的post資料
+                        loadedPosts.value = loadedPosts.value.filter(
+                            (post) => post.id !== child.key
+                        );
                         console.log("刪除post完成");
 
                         // 刪除storage中的post圖片資料夾 images/posts/[postid]

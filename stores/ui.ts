@@ -11,7 +11,7 @@ export const useUIStore = defineStore("ui", () => {
 
     const appLoading = ref(true);
 
-    const toast = ref({
+    const toast = ref<Toast>({
         showToast: false,
         message: "",
         messageType: "success",

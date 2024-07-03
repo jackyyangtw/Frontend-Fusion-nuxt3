@@ -59,13 +59,14 @@
                     </form>
                     <AppButton
                         @click="SINGINWITHGOOGLE"
-                        class="mt-5 flex justify-center items-center bg-red-500 hover:bg-red-600 w-full"
+                        btnStyle="danger"
+                        class="w-full mt-5 flex justify-center items-center"
                     >
                         <img
                             class="w-[20px] h-[20px] mr-2"
                             src="/images/google-white.svg"
                         />
-                        <div>使用Google登入</div>
+                        <span>使用Google登入</span>
                     </AppButton>
                 </div>
             </div>

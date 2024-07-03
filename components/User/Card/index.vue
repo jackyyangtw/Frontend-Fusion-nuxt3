@@ -64,7 +64,7 @@
                         >登出</AppButton
                     >
                     <div v-if="!user?.isManager">
-                        <AppButton btnStyle="danger" @click.prevent="DELETEUSER"
+                        <AppButton btnStyle="danger" @click.prevent="openModal"
                             >刪除帳號</AppButton
                         >
                     </div>
@@ -72,6 +72,25 @@
             </div>
         </div>
     </transition>
+    <AppModal v-if="isModalOpen" danger title="確認要刪除帳號嗎?">
+        <template #body>
+            <div>
+                <p>帳號刪除後，所有文章也會一併刪除，請確認是否要刪除!</p>
+            </div>
+        </template>
+        <template #footer>
+            <div class="flex justify-end gap-3">
+                <AppButton
+                    btnStyle="danger"
+                    @click.prevent="DELETEUSER(), closeModal()"
+                    >確認</AppButton
+                >
+                <AppButton btnStyle="primary" @click="isModalOpen = false"
+                    >取消</AppButton
+                >
+            </div>
+        </template>
+    </AppModal>
 </template>
 
 <script setup lang="ts">
@@ -93,8 +112,14 @@ const onLogout = async () => {
 };
 
 const uiStore = useUIStore();
-const { toast } = storeToRefs(uiStore);
+const { toast, isModalOpen } = storeToRefs(uiStore);
 const { $storage, $db } = useNuxtApp();
+const openModal = () => {
+    isModalOpen.value = true;
+};
+const closeModal = () => {
+    isModalOpen.value = false;
+};
 
 const postsStore = usePostsStore();
 const { loadedPosts } = storeToRefs(postsStore);

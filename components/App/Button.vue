@@ -2,7 +2,7 @@
     <component
         :is="componentType"
         class="text-white text-base font-medium rounded-lg px-5 py-2.5 focus:ring-4 focus:outline-none"
-        :class="btnStyle"
+        :class="[btnStyle, customStyle]"
         :to="isRouterLink ? to : undefined"
     >
         <slot />
@@ -19,6 +19,10 @@ const props = defineProps({
         default: false,
     },
     to: {
+        type: String,
+        default: "",
+    },
+    customStyle: {
         type: String,
         default: "",
     },

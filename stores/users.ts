@@ -215,13 +215,15 @@ export const useUserStore = defineStore("user", () => {
             }
 
             // 刪除帳號在storage的user-stickers
-            toast.value.message = "刪除user-stickers中...";
-            const userPhotoRef = storageRef(
-                $storage,
-                `user-sticker/${USER.uid}`
-            );
-            await deleteObject(userPhotoRef);
-            console.log("刪除user-stickers完成");
+            if (USER.photoURL && USER.photoURL !== "") {
+                toast.value.message = "刪除user-stickers中...";
+                const userPhotoRef = storageRef(
+                    $storage,
+                    `user-sticker/${USER.uid}`
+                );
+                await deleteObject(userPhotoRef);
+                console.log("刪除user-stickers完成");
+            }
 
             // 刪除帳號
             const res = await deleteUser(USER);

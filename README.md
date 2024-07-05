@@ -25,8 +25,6 @@
 -   文章新增後，如果有上傳預覽圖片、文章圖片，預覽圖片會變成預設的預覽圖片
 -   sidenav lazy load (可能有 CSS 問題)
 -   需要安裝 Google Cloud SDK 才能更改 firebase storage CORS
--   test readme
--   tesetset
 
 # prod issue
 

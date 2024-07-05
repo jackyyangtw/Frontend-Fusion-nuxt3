@@ -79,3 +79,11 @@
 
 -   如要讀取環境變數必須在後台設定
 -   如有敏感資訊，例如 service account key，可以透過 netlify 的 env 變數設定
+
+## main 不合併 README.md，但其他檔案可以
+
+-   main/ git merge test-readme --no-commit
+-   main/ git checkout HEAD Readme.md
+-   main/ git add .
+-   main/ git commit -m "..."
+-   main/ git push

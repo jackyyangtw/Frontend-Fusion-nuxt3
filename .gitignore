@@ -28,3 +28,6 @@ service-account-test.json
 
 # Local Netlify folder
 .netlify
+
+# README.md
+README.md

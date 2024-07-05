@@ -11,7 +11,7 @@
     @apply p-5 rounded;
 }
 .tiptap .editor-image {
-    @apply mx-auto cursor-zoom-in;
+    @apply mx-auto cursor-zoom-in transition-all hover:scale-105;
 }
 .tiptap {
     @apply p-5;

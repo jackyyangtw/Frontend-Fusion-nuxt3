@@ -12,6 +12,13 @@ const { $db } = useNuxtApp();
 const route = useRoute();
 const userPostsRef = dbRef($db, `posts/${route.params.postId}`);
 const { data: loadedPost } = useDatabaseObject<Post>(userPostsRef);
+const localContent = useLocalStorage("editorContent", "") as Ref<string>;
+onMounted(() => {
+    if (loadedPost.value && localContent.value) {
+        loadedPost.value.content = localContent.value ?? "";
+    }
+});
+
 watch(
     loadedPost,
     (newVal) => {

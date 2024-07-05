@@ -139,22 +139,26 @@ const { tags } = storeToRefs(tagsStore);
 
 const userStore = useUserStore();
 const { user } = storeToRefs(userStore);
+const localContent = useLocalStorage("editorContent", props.post.content);
 const editedPost = reactive({
     author: user.value?.name || "",
     title: props.post.title || "",
     thumbnail: props.post.thumbnail || "",
-    content: props.post.content || "",
+    content: props.post.content ?? "",
     previewText: props.post.previewText || "",
     tags: props.post.tags || [],
     id: props.post.id || "",
     previewImgUrl:
         props.post.previewImgUrl || "/images/post-preview-picture.png",
 });
+
 // 保持props.post 跟 editedPost 的響應式
 watch(
     () => props.post,
-    (newPost) => {
-        if (props.newPost) return;
+    (newPost, oldPost) => {
+        // if (props.newPost) return;
+        console.log("newPost", newPost.content);
+        console.log("oldPost", oldPost?.content as string);
         Object.assign(editedPost, newPost); // editedPost = newPost 會導致編輯內容不響應式
     },
     { immediate: true, deep: true }
@@ -174,18 +178,30 @@ const uiStore = useUIStore();
 const { toast, isModalOpen } = storeToRefs(uiStore);
 
 const shouldSaveContent = ref(false);
-const localContent = useLocalStorage("editorContent", "");
+
 const modalContent = reactive({
     title: "",
     body: "",
     mode: "",
 });
+
+const resetForm = () => {
+    editedPost.title = "";
+    editedPost.previewText = "";
+    editedPost.previewImgUrl = "";
+    editedPost.tags = [];
+    editedPost.content = "";
+    previewImgFile.value = null;
+    uploadedImages.value = [];
+    shouldSaveContent.value = false;
+    localContent.value = "";
+    isModalOpen.value = false;
+};
+
 let nextRoute: any = null;
 const leavePage = () => {
+    resetForm();
     if (nextRoute) {
-        isModalOpen.value = false;
-        shouldSaveContent.value = false;
-        localContent.value = "";
         nextRoute();
     }
 };
@@ -201,10 +217,8 @@ onBeforeRouteLeave((to, from, next) => {
         isModalOpen.value = true;
         nextRoute = next;
     } else {
-        isModalOpen.value = false;
-        shouldSaveContent.value = false;
-        localContent.value = "";
         next();
+        leavePage();
     }
 });
 
@@ -348,18 +362,6 @@ const updateImages = async (postId: string) => {
     }
 };
 
-const resetForm = () => {
-    editedPost.title = "";
-    editedPost.previewText = "";
-    editedPost.previewImgUrl = "/images/post-preview-picture.png";
-    editedPost.tags = [];
-    editedPost.content = "";
-    previewImgFile.value = null;
-    uploadedImages.value = [];
-    shouldSaveContent.value = false;
-    localContent.value = "";
-};
-
 const postsStore = usePostsStore();
 const { loadedPosts, userPosts } = storeToRefs(postsStore);
 const createPost = async () => {
@@ -438,7 +440,6 @@ const updatePost = async () => {
 };
 
 const onError = (err: FormErrorEvent) => {
-    const { errors } = err;
     toast.value.message = "表單資料不完整，請檢查表單";
     toast.value.showToast = true;
     toast.value.messageType = "error";
@@ -457,7 +458,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
     } else {
         await updatePost();
     }
-    localContent.value = editedPost.content;
+    localContent.value = "";
 };
 const onDelete = async () => {
     const postId = props.post.id;

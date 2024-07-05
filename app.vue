@@ -18,8 +18,8 @@ const { toast, appLoading } = storeToRefs(uiStore);
 const closeToast = () => {
     toast.value.showToast = false;
 };
-const localContent = useLocalStorage("editorContent", "");
-localContent.value = "";
+// const localContent = useLocalStorage("editorContent", "");
+// localContent.value = "";
 try {
     await tagsStore.getAllTags();
     const firebaseUserData = await getCurrentUser();

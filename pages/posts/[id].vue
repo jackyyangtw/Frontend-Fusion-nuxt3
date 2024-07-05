@@ -115,11 +115,9 @@
         </section>
         <LazyAppModal :isImage="true">
             <template #image>
-                <img
-                    class="mx-auto w-full max-w-[1300px]"
-                    :src="openedImage"
-                    alt=""
-                />
+                <figure class="max-w-[1300px] mx-auto">
+                    <img class="mx-auto" :src="openedImage" alt="" />
+                </figure>
             </template>
         </LazyAppModal>
     </div>
@@ -211,7 +209,6 @@ onMounted(() => {
         });
     });
 });
-
 const userEmailMain = computed(() => {
     return loadedPost.value ? loadedPost.value.author : "";
 });

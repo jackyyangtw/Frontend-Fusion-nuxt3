@@ -22,9 +22,18 @@
 -   ~~刪除 user 功能應加上 modal 讓 user 確認~~
 -   ~~google login button 如果刪除帳號回到 auth 頁面樣式會消失~~
 -   ~~第一次使用網頁須點選一次 mode switcher 才能切換 theme 模式~~
--   文章新增後，如果有上傳預覽圖片、文章圖片，預覽圖片會變成預設的預覽圖片
+-   form content 問題 (如有編輯表單，重整後表單內容雖然在，但不會出現警示視窗)
+-   標題、副標題也應加入 localstorage
 -   sidenav lazy load (可能有 CSS 問題)
 -   需要安裝 Google Cloud SDK 才能更改 firebase storage CORS
+
+## 優化
+
+-   ~~增加 click 文章圖片後，出現文章圖片的 modal~~
+-   ~~component cache :https://nuxt-multi-cache.dulnan.net/overview/introduction~~
+-   posts/[id] 圖片加上 hover 效果
+-   post-preview transition
+-   PWA
 
 # prod issue
 
@@ -34,13 +43,6 @@
 ## cursor editor
 
 -   https://www.cursor.com/features
-
-## 優化
-
--   ~~增加 click 文章圖片後，出現文章圖片的 modal~~
--   ~~component cache :https://nuxt-multi-cache.dulnan.net/overview/introduction~~
--   post-preview transition
--   PWA
 
 ## VSCODE shortcut
 

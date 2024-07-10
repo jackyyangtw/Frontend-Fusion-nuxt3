@@ -39,6 +39,7 @@ import {
 } from "firebase/database";
 useHead({
     title: "Frontend Fusion",
+    // titleTemplate: () => "Frontend Fusion",
     meta: [
         {
             hid: "description",

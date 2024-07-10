@@ -13,25 +13,14 @@ const route = useRoute();
 const userPostsRef = dbRef($db, `posts/${route.params.postId}`);
 const { data: loadedPost } = useDatabaseObject<Post>(userPostsRef);
 const localContent = useLocalStorage("editorContent", "") as Ref<string>;
+useHead({
+    title: loadedPost.value?.title ?? "無標題",
+    titleTemplate: (title) => `管理文章 - ${title}`,
+});
 onMounted(() => {
     if (loadedPost.value && localContent.value) {
         loadedPost.value.content = localContent.value ?? "";
     }
 });
 
-watch(
-    loadedPost,
-    (newVal) => {
-        if (newVal) {
-            useHead({
-                title: `編輯文章 - ${newVal.title || "無標題"}`,
-            });
-        } else {
-            useHead({
-                title: "載入中...",
-            });
-        }
-    },
-    { immediate: true }
-);
 </script>

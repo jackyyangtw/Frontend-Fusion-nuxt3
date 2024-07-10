@@ -48,4 +48,5 @@ if (!allUserPostsLoaded.value) {
     await getAllUserPostsCount();
     await getUserPosts();
 }
+
 </script>

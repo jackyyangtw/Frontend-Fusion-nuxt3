@@ -148,6 +148,8 @@ const getRelatedPosts = async () => {
         );
     }
 };
+
+
 watch(
     loadedPost,
     async (newVal) => {

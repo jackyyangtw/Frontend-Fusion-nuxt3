@@ -37,14 +37,15 @@ import {
     limitToFirst,
     get,
 } from "firebase/database";
+const { public: { siteName }} = useRuntimeConfig();
 useHead({
-    title: "Frontend Fusion",
+    title: siteName,
     // titleTemplate: () => "Frontend Fusion",
     meta: [
         {
             hid: "description",
             name: "description",
-            content: "Frontend Fusion",
+            content: "探索最新的前端技術和工具",
         },
     ],
 });

@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 const isDev = process.env.NODE_ENV === "development";
+const siteName = "Frontend Fusion";
 export default defineNuxtConfig({
     ssr: true,
     devtools: { enabled: true },
@@ -63,7 +64,7 @@ export default defineNuxtConfig({
     },
     app: {
         head: {
-            title: "Frontend Fusion", // 從你的 package.json 中替換
+            title: siteName, // 從你的 package.json 中替換
             meta: [
                 { charset: "utf-8" },
                 {
@@ -105,6 +106,7 @@ export default defineNuxtConfig({
         public: {
             firebaseRealtimeDbBaseUrl: process.env.FIREBASE_REALTIME_BASE_URL,
             firebaseApiKey: process.env.FIREBASE_API_KEY,
+            siteName,
         },
     },
     imports: {

@@ -11,6 +11,12 @@
 </template>
 
 <script setup lang="ts">
+const { public: { siteName }} = useRuntimeConfig();
+useSchemaOrg([
+    defineWebSite({
+        name: siteName,
+    })
+])
 const tagsStore = useTagsStore();
 const userStore = useUserStore();
 const uiStore = useUIStore();

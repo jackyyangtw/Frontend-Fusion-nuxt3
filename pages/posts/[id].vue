@@ -133,6 +133,9 @@ const postId = route.params.id;
 const { $db } = useNuxtApp();
 const userPostsRef = dbRef($db, `posts/${postId}`);
 const { data: loadedPost } = useDatabaseObject<Post>(userPostsRef);
+
+// related posts
+const relatedPosts = ref<Post[]>([]);
 const getRelatedPosts = async () => {
     if (!loadedPost.value?.tags) return;
     const tags = loadedPost.value.tags;
@@ -148,21 +151,33 @@ const getRelatedPosts = async () => {
         );
     }
 };
+watch(
+    loadedPost,
+    async (newVal) => {
+        if (newVal) {
+            await getRelatedPosts();
+        }
+    },
+    { immediate: true }
+);
+
+
+// SEO
+useSchemaOrg([
+    defineArticle({
+        "@type": "TechArticle",
+        datePublished: loadedPost.value?.updatedDate || "",
+        headline: loadedPost.value?.title ?? "",
+        image: loadedPost.value
+            ? loadedPost.value.previewImgUrl || loadedPost.value.thumbnail || ""
+            : "",
+        description: loadedPost.value?.previewText ?? "",
+        author: {
+            name: loadedPost.value?.author ?? "",
+        },
+    }),
+]);
 watchEffect(() => {
-    useSchemaOrg([
-        defineArticle({
-            "@type": "TechArticle",
-            datePublished: loadedPost.value?.updatedDate || "",
-            headline: loadedPost.value?.title ?? "",
-            image: loadedPost.value
-                ? loadedPost.value.previewImgUrl || loadedPost.value.thumbnail || ""
-                : "",
-            description: loadedPost.value?.previewText ?? "",
-            author: {
-                name: loadedPost.value?.author ?? "",
-            },
-        }),
-    ]);
     useHead({
         title: loadedPost.value?.title ?? "Loading...",
         meta: [
@@ -180,48 +195,6 @@ watchEffect(() => {
     });
 });
 
-watch(
-    loadedPost,
-    async (newVal) => {
-        if (newVal) {
-            await getRelatedPosts();
-            // 其他需要在 loadedPost 加載完成後執行的函數
-            // useSchemaOrg([
-            //     defineArticle({
-            //         "@type": "TechArticle",
-            //         datePublished: newVal.updatedDate || "",
-            //         headline: newVal.title ?? "",
-            //         image: newVal
-            //             ? newVal.previewImgUrl || newVal.thumbnail || ""
-            //             : "",
-            //         description: newVal.previewText ?? "",
-            //         author: {
-            //             name: newVal.author ?? "",
-            //         },
-            //     }),
-            // ]);
-
-            // useHead({
-            //     title: newVal.title ?? "Loading...",
-            //     meta: [
-            //         {
-            //             hid: "description",
-            //             name: "description",
-            //             content: newVal.previewText ?? "Loading...",
-            //         },
-            //         {
-            //             hid: "author",
-            //             name: "author",
-            //             content: newVal.author ?? "Loading...",
-            //         },
-            //     ],
-            // });
-        }
-    },
-    { immediate: true }
-);
-
-const relatedPosts = ref<Post[]>([]);
 
 const isLoadingBanner = ref(true);
 const uiStore = useUIStore();

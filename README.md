@@ -22,8 +22,7 @@
 -   ~~刪除 user 功能應加上 modal 讓 user 確認~~
 -   ~~google login button 如果刪除帳號回到 auth 頁面樣式會消失~~
 -   ~~第一次使用網頁須點選一次 mode switcher 才能切換 theme 模式~~
--   form content 問題 (如有編輯表單，重整後表單內容雖然在，但不會出現警示視窗)
--   標題、副標題也應加入 localstorage
+-   文章的SEO結構性資料，只要載入後就會出現在每個頁面上，應該要在每個頁面上都有不同的SEO結構性資料
 -   sidenav lazy load (可能有 CSS 問題)
 -   需要安裝 Google Cloud SDK 才能更改 firebase storage CORS
 
@@ -31,6 +30,9 @@
 
 -   ~~增加 click 文章圖片後，出現文章圖片的 modal~~
 -   ~~component cache :https://nuxt-multi-cache.dulnan.net/overview/introduction~~
+-   標題、副標題也應加入 localstorage
+-   form content 問題 (如有編輯表單，重整後表單內容雖然在，但不會出現警示視窗)
+-   加入 error page
 -   posts/[id] 圖片加上 hover 效果
 -   post-preview transition
 -   PWA

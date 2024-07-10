@@ -21,10 +21,24 @@ const searchQuery = computed(() => route.query.search_query as string);
 
 const uiStore = useUIStore();
 const { pageLoading } = storeToRefs(uiStore);
+
+const setHead = () => {
+    if(searchQuery.value) {
+        useHead({
+            titleTemplate: () => {
+                return `搜尋 - ${searchQuery.value}`;
+            },
+        });
+    } else {
+        useHead({
+            title: "搜尋",
+        });
+    }
+};
+setHead();
+
 watchEffect(() => {
-    useHead({
-        title: searchQuery.value ?? "Search",
-    });
+    setHead();
     if (searchQuery.value) {
         pageLoading.value = false;
     }

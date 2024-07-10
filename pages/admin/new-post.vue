@@ -22,6 +22,12 @@ const post = ref<Post>({
     photoURL: "",
     userId: "",
 });
+const localContent = useLocalStorage("editorContent", "") as Ref<string>;
+onMounted(() => {
+    if (localContent.value) {
+        post.value.content = localContent.value ?? "";
+    }
+});
 useHead({
     title: `新增文章`,
 });

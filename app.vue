@@ -11,6 +11,12 @@
 </template>
 
 <script setup lang="ts">
+const { public: { siteName }} = useRuntimeConfig();
+useSchemaOrg([
+    defineWebSite({
+        name: siteName,
+    })
+])
 const tagsStore = useTagsStore();
 const userStore = useUserStore();
 const uiStore = useUIStore();
@@ -18,8 +24,6 @@ const { toast, appLoading } = storeToRefs(uiStore);
 const closeToast = () => {
     toast.value.showToast = false;
 };
-const localContent = useLocalStorage("editorContent", "");
-localContent.value = "";
 try {
     await tagsStore.getAllTags();
     const firebaseUserData = await getCurrentUser();

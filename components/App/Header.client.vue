@@ -16,7 +16,7 @@
                     width="30"
                     height="30"
                 />
-                Frontend Fusion
+                {{ siteName }}
             </nuxt-link>
             <SearchBar></SearchBar>
             <ModeSwitcher></ModeSwitcher>
@@ -42,6 +42,7 @@
 <script setup lang="ts">
 const navStore = useNavigationStore();
 const { filteredNavLinks } = storeToRefs(navStore);
+const { public: { siteName }} = useRuntimeConfig();
 </script>
 
 <style scoped>

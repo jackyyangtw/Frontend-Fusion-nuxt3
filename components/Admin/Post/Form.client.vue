@@ -156,9 +156,6 @@ const editedPost = reactive({
 watch(
     () => props.post,
     (newPost, oldPost) => {
-        // if (props.newPost) return;
-        console.log("newPost", newPost.content);
-        console.log("oldPost", oldPost?.content as string);
         Object.assign(editedPost, newPost); // editedPost = newPost 會導致編輯內容不響應式
     },
     { immediate: true, deep: true }
@@ -166,7 +163,7 @@ watch(
 
 const router = useRouter();
 const goBack = () => {
-    router.go(-1);
+    router.back();
 };
 const route = useRoute();
 const atEditedPage = computed(() => {

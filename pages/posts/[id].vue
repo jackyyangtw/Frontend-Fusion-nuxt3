@@ -148,7 +148,37 @@ const getRelatedPosts = async () => {
         );
     }
 };
-
+watchEffect(() => {
+    useSchemaOrg([
+        defineArticle({
+            "@type": "TechArticle",
+            datePublished: loadedPost.value?.updatedDate || "",
+            headline: loadedPost.value?.title ?? "",
+            image: loadedPost.value
+                ? loadedPost.value.previewImgUrl || loadedPost.value.thumbnail || ""
+                : "",
+            description: loadedPost.value?.previewText ?? "",
+            author: {
+                name: loadedPost.value?.author ?? "",
+            },
+        }),
+    ]);
+    useHead({
+        title: loadedPost.value?.title ?? "Loading...",
+        meta: [
+            {
+                hid: "description",
+                name: "description",
+                content: loadedPost.value?.previewText ?? "Loading...",
+            },
+            {
+                hid: "author",
+                name: "author",
+                content: loadedPost.value?.author ?? "Loading...",
+            },
+        ],
+    });
+});
 
 watch(
     loadedPost,
@@ -156,36 +186,36 @@ watch(
         if (newVal) {
             await getRelatedPosts();
             // 其他需要在 loadedPost 加載完成後執行的函數
-            useSchemaOrg([
-                defineArticle({
-                    "@type": "TechArticle",
-                    datePublished: newVal.updatedDate || "",
-                    headline: newVal.title ?? "",
-                    image: newVal
-                        ? newVal.previewImgUrl || newVal.thumbnail || ""
-                        : "",
-                    description: newVal.previewText ?? "",
-                    author: {
-                        name: newVal.author ?? "",
-                    },
-                }),
-            ]);
+            // useSchemaOrg([
+            //     defineArticle({
+            //         "@type": "TechArticle",
+            //         datePublished: newVal.updatedDate || "",
+            //         headline: newVal.title ?? "",
+            //         image: newVal
+            //             ? newVal.previewImgUrl || newVal.thumbnail || ""
+            //             : "",
+            //         description: newVal.previewText ?? "",
+            //         author: {
+            //             name: newVal.author ?? "",
+            //         },
+            //     }),
+            // ]);
 
-            useHead({
-                title: newVal.title ?? "Loading...",
-                meta: [
-                    {
-                        hid: "description",
-                        name: "description",
-                        content: newVal.previewText ?? "Loading...",
-                    },
-                    {
-                        hid: "author",
-                        name: "author",
-                        content: newVal.author ?? "Loading...",
-                    },
-                ],
-            });
+            // useHead({
+            //     title: newVal.title ?? "Loading...",
+            //     meta: [
+            //         {
+            //             hid: "description",
+            //             name: "description",
+            //             content: newVal.previewText ?? "Loading...",
+            //         },
+            //         {
+            //             hid: "author",
+            //             name: "author",
+            //             content: newVal.author ?? "Loading...",
+            //         },
+            //     ],
+            // });
         }
     },
     { immediate: true }

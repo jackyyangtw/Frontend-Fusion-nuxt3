@@ -135,13 +135,4 @@ export default defineNuxtConfig({
     nitro: {
         preset: isDev ? "firebase" : "netlify",
     },
-    // router: {
-    //     extendRoutes(routes, resolve) {
-    //         routes.push({
-    //             name: "posts-id",
-    //             path: "/posts/:id",
-    //             component: resolve(__dirname, "pages/posts/[id].vue"),
-    //         });
-    //     },
-    // },
 });

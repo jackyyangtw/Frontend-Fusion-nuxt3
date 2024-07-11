@@ -10,8 +10,6 @@ import { ref as dbRef, set, get, remove } from "firebase/database";
 import { ref as storageRef, deleteObject, listAll } from "firebase/storage";
 export const useUserStore = defineStore("user", () => {
     const { $auth, $db, $storage } = useNuxtApp();
-    // const config = useRuntimeConfig();
-    // const realTimeDbBaseUrl = config.public.firebaseRealtimeDbBaseUrl as string;
 
     const user = ref<User | null>(null);
     const firebaseUser = ref<FirebaseUser | null>(null);
@@ -25,6 +23,7 @@ export const useUserStore = defineStore("user", () => {
         if (snapshot.exists()) {
             user.value = snapshot.val();
         }
+        return user.value;
     };
 
     const token = ref<string | null>(null);

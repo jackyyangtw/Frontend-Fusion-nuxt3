@@ -22,12 +22,6 @@
 <script setup lang="ts">
 useHead({
     title: "管理員頁面",
-    meta: [
-        {
-            name: "description",
-            content: "這是管理員頁面，您可以在這裡管理您的文章",
-        },
-    ],
 });
 const loadingCard = ref(false);
 

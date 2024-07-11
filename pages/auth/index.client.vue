@@ -43,6 +43,7 @@
                                 class="w-1/2"
                                 type="submit"
                                 btnStyle="primary"
+                                :disabled="isAction"
                             >
                                 {{ isLoginMode ? "登入" : "註冊" }}
                             </AppButton>
@@ -50,6 +51,7 @@
                                 class="w-1/2"
                                 type="button"
                                 btnStyle="secondary"
+                                :disabled="isAction"
                                 @click="isLoginMode = !isLoginMode"
                                 >切換至{{
                                     isLoginMode ? "註冊" : "登入"
@@ -58,9 +60,10 @@
                         </div>
                     </form>
                     <AppButton
-                        @click="SINGINWITHGOOGLE"
+                        @click="handleSigninWithGoogle"
                         btnStyle="danger"
                         class="w-full mt-5 flex justify-center items-center"
+                        :disabled="isAction"
                     >
                         <img
                             class="w-[20px] h-[20px] mr-2"
@@ -92,8 +95,10 @@ if (isAuthenticated.value) {
 }
 
 const { signinWithGoogle, signupWithEmail, signinWithEmail } = userStore;
+const isAction = ref(false);
 const onSubmit = async () => {
     try {
+        isAction.value = true;
         if (!isLoginMode.value) {
             await signupWithEmail(email.value, password.value, name.value);
         } else {
@@ -101,12 +106,18 @@ const onSubmit = async () => {
         }
     } catch (error) {
         console.log(error);
+    } 
+};
+
+const handleSigninWithGoogle = async () => {
+    try {
+        isAction.value = true;
+        await signinWithGoogle();
+    } catch (error) {
+        console.log(error);
     }
 };
 
-const SINGINWITHGOOGLE = async () => {
-    signinWithGoogle();
-};
 </script>
 
 <style scoped></style>

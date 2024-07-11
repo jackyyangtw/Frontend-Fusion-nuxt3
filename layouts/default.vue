@@ -5,14 +5,14 @@
     <div
         class="min-h-screen w-full relative z-10"
         :style="{
-            paddingTop: headerHeight + 'px',
+            paddingTop: at404Route ? 0 : headerHeight + 'px',
         }"
     >
         <slot />
     </div>
     <UIAuroraBg />
-    <LoadingPage />
-    <LoadingApp />
+    <LoadingPage v-if="!at404Route" />
+    <LoadingApp v-if="!at404Route" />
     <AppFooter />
 </template>
 
@@ -22,8 +22,9 @@ const { headerHeight } = storeToRefs(uiStore);
 const route = useRoute();
 const atAdminRoute = computed(() => route.path.includes("/admin"));
 const atSearchRoute = computed(() => route.path.includes("/search"));
+const at404Route = computed(() => route.name === "slug");
 watchEffect(() => {
-    if(atAdminRoute.value || atSearchRoute.value){
+    if (atAdminRoute.value || atSearchRoute.value || at404Route.value) {
         useHead({
             meta: [
                 {

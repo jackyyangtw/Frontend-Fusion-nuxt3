@@ -5,7 +5,7 @@
     <div
         class="min-h-screen w-full relative z-10"
         :style="{
-            paddingTop: at404Route ? 0 : headerHeight + 'px',
+            paddingTop: headerHeight + 'px',
         }"
     >
         <slot />
@@ -13,7 +13,7 @@
     <UIAuroraBg />
     <LoadingPage v-if="!at404Route" />
     <LoadingApp v-if="!at404Route" />
-    <AppFooter />
+    <AppFooter v-if="!at404Route" />
 </template>
 
 <script setup lang="ts">

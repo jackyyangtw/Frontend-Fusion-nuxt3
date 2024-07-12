@@ -127,6 +127,7 @@
 import hljs from "highlight.js";
 import { ref as dbRef, get } from "firebase/database";
 
+const router = useRouter();
 const route = useRoute();
 const postId = route.params.id;
 
@@ -154,13 +155,15 @@ const getRelatedPosts = async () => {
 watch(
     loadedPost,
     async (newVal) => {
+        if (newVal === null) {
+            router.push({ name: "slug" });
+        }
         if (newVal) {
             await getRelatedPosts();
         }
     },
     { immediate: true }
 );
-
 
 // SEO
 useSchemaOrg([
@@ -194,7 +197,6 @@ watchEffect(() => {
         ],
     });
 });
-
 
 const isLoadingBanner = ref(true);
 const uiStore = useUIStore();

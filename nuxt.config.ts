@@ -1,4 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { ref as dbRef, get, getDatabase } from "firebase/database";
 const isDev = process.env.NODE_ENV === "development";
 const siteName = "Frontend Fusion";
 export default defineNuxtConfig({
@@ -13,7 +14,25 @@ export default defineNuxtConfig({
         "nuxt-tiptap-editor",
         "@nuxt/image",
         "nuxt-multi-cache",
+        "@nuxtjs/sitemap",
     ],
+    site: {
+        url: "https://frontend-fusion-3.netlify.app/",
+    },
+    hooks: {
+        // add sitemap routes
+        "app:resolve": (app) => {
+            console.log(app.plugins);
+        },
+    },
+    // sitemap: {
+    //     urls: async () => {
+    //         const db = getDatabase();
+    //         const snapshot = dbRef(db, "/posts");
+    //         const data = await get(snapshot).then((snapshot) => snapshot.val());
+    //         return Object.keys(data).map((key) => `/posts/${key}`);
+    //     },
+    // },
     multiCache: {
         component: {
             enabled: true,
@@ -136,6 +155,6 @@ export default defineNuxtConfig({
         preset: isDev ? "firebase" : "netlify",
     },
     routeRules: {
-        '/admin/**': { ssr: false }
-    }
+        "/admin/**": { ssr: false },
+    },
 });

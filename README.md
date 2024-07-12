@@ -31,7 +31,7 @@
 -   ~~增加 click 文章圖片後，出現文章圖片的 modal~~
 -   ~~component cache :https://nuxt-multi-cache.dulnan.net/overview/introduction~~
 -   ~~登入的時候不能點擊登入按鈕~~
--   404 page
+-   ~~404 page~~
 -   標題、副標題也應加入 localstorage
 -   form content 問題 (如有編輯表單，重整後表單內容雖然在，但不會出現警示視窗)
 -   加入 error page

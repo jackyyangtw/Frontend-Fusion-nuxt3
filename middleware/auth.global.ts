@@ -12,9 +12,9 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         return navigateTo("/auth");
     }
     if (to.path === "/auth" && user) {
-        toast.value.showToast = true;
-        toast.value.messageType = "success";
-        toast.value.message = "您已登入不須再驗證!";
+        // toast.value.showToast = true;
+        // toast.value.messageType = "success";
+        // toast.value.message = "您已登入不須再驗證!";
         return navigateTo("/admin");
     }
 });

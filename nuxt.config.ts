@@ -135,4 +135,7 @@ export default defineNuxtConfig({
     nitro: {
         preset: isDev ? "firebase" : "netlify",
     },
+    routeRules: {
+        '/admin/**': { ssr: false }
+    }
 });

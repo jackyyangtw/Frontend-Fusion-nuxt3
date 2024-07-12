@@ -56,12 +56,9 @@ import { ref as dbRef, push, set, remove } from "firebase/database";
 // import type { FormSubmitEvent, FormErrorEvent } from "#ui/types";
 useHead({
     title: "管理tag",
-    meta: [
-        {
-            name: "description",
-            content: "管理tag",
-        },
-    ],
+});
+definePageMeta({
+    middleware: 'manage-tags'
 });
 const tagsStore = useTagsStore();
 const { tags } = storeToRefs(tagsStore);

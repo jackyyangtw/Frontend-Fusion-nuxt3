@@ -40,7 +40,6 @@ import {
 const { public: { siteName }} = useRuntimeConfig();
 useHead({
     title: siteName,
-    // titleTemplate: () => "Frontend Fusion",
     meta: [
         {
             hid: "description",
@@ -114,7 +113,7 @@ const handleScroll = async (event: Event) => {
 
 const h1Text = ref("");
 const h2Text = ref("");
-const fullH1Text = "Frontend Fusion - 前端技術融合";
+const fullH1Text = `${siteName} - 前端技術融合`;
 const fullH2Text = "探索最新的前端技術和工具";
 const typeEffect = async (text: string, target: { value: string }) => {
     const delay = 40;

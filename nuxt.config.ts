@@ -1,5 +1,5 @@
+// nuxt.config.ts
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import { ref as dbRef, get, getDatabase } from "firebase/database";
 const isDev = process.env.NODE_ENV === "development";
 const siteName = "Frontend Fusion";
 export default defineNuxtConfig({
@@ -25,14 +25,6 @@ export default defineNuxtConfig({
             console.log(app.plugins);
         },
     },
-    // sitemap: {
-    //     urls: async () => {
-    //         const db = getDatabase();
-    //         const snapshot = dbRef(db, "/posts");
-    //         const data = await get(snapshot).then((snapshot) => snapshot.val());
-    //         return Object.keys(data).map((key) => `/posts/${key}`);
-    //     },
-    // },
     multiCache: {
         component: {
             enabled: true,
@@ -40,11 +32,9 @@ export default defineNuxtConfig({
         },
         data: {
             enabled: true,
+            maxAge: 1000 * 60 * 30, // 也增加資料快取時間
         },
     },
-    // image: {
-    //     domains: ["firebasestorage.googleapis.com"],
-    // },
     tiptap: {
         prefix: "Tiptap", //prefix for Tiptap imports, composables not included
         lowlight: {
@@ -152,7 +142,7 @@ export default defineNuxtConfig({
         "~/assets/css/main.css",
     ],
     nitro: {
-        preset: isDev ? "firebase" : "netlify",
+        preset: isDev ? "firebase" : "netlify-edge",
     },
     routeRules: {
         "/admin/**": { ssr: false },

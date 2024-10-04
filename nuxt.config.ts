@@ -26,8 +26,8 @@ export default defineNuxtConfig({
         allow: ["/posts", "/"],
     },
     sitemap: {
+        sources: ["/api/_sitemap_/urls"],
         exclude: ["/admin/**", "/auth/**", "/search/**"],
-        include: ["/posts/**", "/"],
     },
     site: {
         url: "https://frontend-fusion-3.netlify.app/",

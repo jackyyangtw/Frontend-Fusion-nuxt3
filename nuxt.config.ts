@@ -18,7 +18,17 @@ export default defineNuxtConfig({
         "@nuxt/image",
         "nuxt-multi-cache",
         "@nuxtjs/sitemap",
+        "@nuxtjs/robots",
     ],
+    robots: {
+        // provide simple disallow rules for all robots `user-agent: *`
+        disallow: ["/admin", "/auth", "/search"],
+        allow: ["/posts", "/"],
+    },
+    sitemap: {
+        exclude: ["/admin/**", "/auth/**", "/search/**"],
+        include: ["/posts/**", "/"],
+    },
     site: {
         url: "https://frontend-fusion-3.netlify.app/",
     },

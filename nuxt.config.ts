@@ -4,6 +4,9 @@ const isDev = process.env.NODE_ENV === "development";
 const siteName = "Frontend Fusion";
 export default defineNuxtConfig({
     ssr: true,
+    build: {
+        analyze: true,
+    },
     devtools: { enabled: true },
     modules: [
         "@pinia/nuxt",
@@ -142,7 +145,7 @@ export default defineNuxtConfig({
         "~/assets/css/main.css",
     ],
     nitro: {
-        preset: isDev ? "firebase" : "netlify-edge",
+        preset: isDev ? "firebase" : "netlify",
     },
     routeRules: {
         "/admin/**": { ssr: false },

@@ -105,3 +105,6 @@
 -   main/ git add .
 -   main/ git commit -m "..."
 -   main/ git push
+
+Environment Variable: NODE_OPTIONS
+Value: --max_old_space_size=4096

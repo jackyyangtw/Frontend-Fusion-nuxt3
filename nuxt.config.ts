@@ -2,6 +2,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 const isDev = process.env.NODE_ENV === "development";
 const siteName = "Frontend Fusion";
+// const firebaseStorageUrl = isDev
+//     ? "https://firebasestorage.googleapis.com/v0/b/frontend-fusion-test.appspot.com/o/"
+//     : "https://firebasestorage.googleapis.com/v0/b/nuxt-blog-b5610.appspot.com/o/";
+// const firebaseStorageUrl = "https://firebasestorage.googleapis.com/";
 export default defineNuxtConfig({
     ssr: true,
     build: {
@@ -20,6 +24,7 @@ export default defineNuxtConfig({
         "@nuxtjs/sitemap",
         "@nuxtjs/robots",
     ],
+
     robots: {
         // provide simple disallow rules for all robots `user-agent: *`
         disallow: ["/admin", "/auth", "/search"],
@@ -154,8 +159,16 @@ export default defineNuxtConfig({
         "~/assets/css/transition.css",
         "~/assets/css/main.css",
     ],
+    // image: {
+    //     provider: "netlifyImageCdn",
+    //     domains: [firebaseStorageUrl],
+    // },
+    image: {
+        provider: "ipx",
+        domains: ["firebasestorage.googleapis.com"],
+    },
     nitro: {
-        preset: isDev ? "firebase" : "netlify",
+        preset: "netlify",
     },
     routeRules: {
         "/admin/**": { ssr: false },

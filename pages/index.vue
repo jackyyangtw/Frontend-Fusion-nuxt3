@@ -1,3 +1,4 @@
+index.vue
 <template>
     <div class="home-page w-full relative">
         <client-only>
@@ -22,7 +23,7 @@
             </section>
         </client-only>
         <div class="container mx-auto">
-            <LazyPostList :posts="loadedPosts" :isAdmin="false"></LazyPostList>
+            <PostList :posts="loadedPosts" :isAdmin="false"></PostList>
         </div>
         <LazyLoadingLists :isLoading="isLoadingPosts" />
     </div>
@@ -37,7 +38,9 @@ import {
     limitToFirst,
     get,
 } from "firebase/database";
-const { public: { siteName }} = useRuntimeConfig();
+const {
+    public: { siteName },
+} = useRuntimeConfig();
 useHead({
     title: siteName,
     meta: [
@@ -54,11 +57,11 @@ const allPostsLoaded = computed(() => {
     return postsStore.allPostsLoaded;
 });
 const maxPerPage = 6;
-const { $db } = useNuxtApp();
 const getPosts = async () => {
     if (allPostsLoaded.value) return; // 如果已載入所有文章，則返回
     isLoadingPosts.value = true;
-
+    console.log("Loading more posts...");
+    const { $db } = useNuxtApp();
     try {
         const postsRef = dbRef($db, "posts");
         let postsQuery;
@@ -97,11 +100,10 @@ const getPosts = async () => {
     } catch (error) {
         console.error("Failed to load posts:", error);
     }
-    setTimeout(() => {
-        isLoadingPosts.value = false;
-    }, 1000);
+    isLoadingPosts.value = false;
 };
-const handleScroll = async (event: Event) => {
+
+const handleScroll = async () => {
     const bottomOfWindow =
         window.innerHeight + window.scrollY >=
         document.documentElement.offsetHeight - 5;

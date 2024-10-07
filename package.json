@@ -4,10 +4,12 @@
     "type": "module",
     "scripts": {
         "build": "nuxt build",
-        "dev": "nuxt dev",
+        "dev": "netlify dev",
         "generate": "nuxt generate",
         "preview": "nuxt preview",
-        "postinstall": "nuxt prepare"
+        "postinstall": "nuxt prepare",
+        "lhci:mobile": "lhci autorun",
+        "lhci:desktop": "lhci autorun --collect.settings.preset=desktop"
     },
     "dependencies": {
         "@firebase/app-types": "^0.9.1",
@@ -33,6 +35,7 @@
         "yup": "^1.4.0"
     },
     "devDependencies": {
+        "@lhci/cli": "^0.14.0",
         "@tiptap/extension-image": "^2.4.0",
         "nuxt-schema-org": "^3.3.6",
         "typescript": "^5.4.5",

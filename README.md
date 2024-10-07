@@ -1,5 +1,12 @@
 # ISSUE
 
+-   圖片載入速度過慢(firebase storage)
+-   載入圖片出現 400 錯誤(因為 NuxtImg src 必須是絕對路徑)
+-   **使用 [firebase](https://gemini.google.com/app/6553982255aaffbe?hl=zh-TW) getDownloadURL 取得圖片路徑**
+-   繁中教學: https://ithelp.ithome.com.tw/articles/10330879
+-   netlify local dev: https://docs.netlify.com/cli/local-development/
+-   netlify image CDN: https://docs.netlify.com/image-cdn/overview/
+-   nuxtimage netlify: https://image.nuxt.com/providers/netlify
 -   ~~上傳文章圖片後會直接觸發 onsubmit (preventDefault)~~
 -   ~~UCheckbox v-for id 全部指向同一個~~
 -   ~~刪除 post 功能~~
@@ -85,6 +92,9 @@
 -   design https://www.figma.com/community/tag/404%20page/files
 
 # Tips
+
+-   lighthouse ci: https://dev.to/jacobandrewsky/continuous-performance-audits-in-nuxt-with-lighthouse-ci-and-github-actions-2hpf
+-   performance check list: https://dev.to/baroshem/performance-checklist-for-vue-and-nuxt-cog
 
 ## deploy to firebase
 

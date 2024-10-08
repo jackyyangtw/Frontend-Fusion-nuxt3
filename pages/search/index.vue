@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 const postsStore = usePostsStore();
-const { loadedPosts } = storeToRefs(postsStore);
+const { sortedPosts } = storeToRefs(postsStore);
 
 const route = useRoute();
 const searchQuery = computed(() => route.query.search_query as string);
@@ -23,7 +23,7 @@ const uiStore = useUIStore();
 const { pageLoading } = storeToRefs(uiStore);
 
 const setHead = () => {
-    if(searchQuery.value) {
+    if (searchQuery.value) {
         useHead({
             titleTemplate: () => {
                 return `搜尋 - ${searchQuery.value}`;
@@ -44,11 +44,11 @@ watchEffect(() => {
     }
 });
 const searchedPosts = computed(() => {
-    if (!searchQuery.value) return loadedPosts.value;
+    if (!searchQuery.value) return sortedPosts.value;
 
     const searchWords = searchQuery.value.toLowerCase().split(" ");
 
-    return loadedPosts.value.filter((post) => {
+    return sortedPosts.value.filter((post) => {
         const lowerTitle = post.title.toLowerCase();
         const lowerContent = post.content.toLowerCase();
         const lowerPreviewText = post.previewText.toLowerCase();
@@ -68,10 +68,9 @@ const { searchText } = storeToRefs(searchStore);
 onBeforeRouteLeave(() => {
     searchText.value = "";
 });
-onMounted(() => {
-    if (!loadedPosts.value.length) {
-        postsStore.getAllPosts();
-    }
+const { getRestPosts } = postsStore;
+onMounted(async () => {
+    await getRestPosts();
 });
 </script>
 

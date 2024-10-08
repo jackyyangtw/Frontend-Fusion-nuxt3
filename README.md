@@ -1,12 +1,9 @@
 # ISSUE
 
--   圖片載入速度過慢(firebase storage)
--   載入圖片出現 400 錯誤(因為 NuxtImg src 必須是絕對路徑)
--   **使用 [firebase](https://gemini.google.com/app/6553982255aaffbe?hl=zh-TW) getDownloadURL 取得圖片路徑**
--   繁中教學: https://ithelp.ithome.com.tw/articles/10330879
--   netlify local dev: https://docs.netlify.com/cli/local-development/
--   netlify image CDN: https://docs.netlify.com/image-cdn/overview/
--   nuxtimage netlify: https://image.nuxt.com/providers/netlify
+-   確認刪除、新增文章後主頁面是否有更新
+-   netlify 設定只能在 develop、main branch deploy
+-   sidenav lazy load (可能有 CSS 問題)
+-   需要安裝 Google Cloud SDK 才能更改 firebase storage CORS
 -   ~~上傳文章圖片後會直接觸發 onsubmit (preventDefault)~~
 -   ~~UCheckbox v-for id 全部指向同一個~~
 -   ~~刪除 post 功能~~
@@ -30,28 +27,38 @@
 -   ~~google login button 如果刪除帳號回到 auth 頁面樣式會消失~~
 -   ~~第一次使用網頁須點選一次 mode switcher 才能切換 theme 模式~~
 -   ~~文章的 SEO 結構性資料，只要載入後就會出現在每個頁面上，應該要在每個頁面上都有不同的 SEO 結構性資料~~
--   netlify 設定只能在 develop、main branch deploy
--   sidenav lazy load (可能有 CSS 問題)
--   需要安裝 Google Cloud SDK 才能更改 firebase storage CORS
 
-## 優化
+# 優化
 
--   ~~增加 click 文章圖片後，出現文章圖片的 modal~~
--   ~~component cache :https://nuxt-multi-cache.dulnan.net/overview/introduction~~
--   ~~登入的時候不能點擊登入按鈕~~
--   ~~404 page~~
--   site map
+-   ~~refactor allpost fetching~~
+-   refactor user posts fetching
+-   useAsyncData
 -   標題、副標題也應加入 localstorage
 -   form content 問題 (如有編輯表單，重整後表單內容雖然在，但不會出現警示視窗)
 -   加入 error page
 -   posts/[id] 圖片加上 hover 效果
 -   post-preview transition
 -   PWA
+-   ~~- site map~~
+-   ~~增加 click 文章圖片後，出現文章圖片的 modal~~
+-   ~~component cache :https://nuxt-multi-cache.dulnan.net/overview/introduction~~
+-   ~~登入的時候不能點擊登入按鈕~~
+-   ~~404 page~~
 
 # prod issue
 
 -   ~~deploy 後載入 posts 動畫有問題~~
 -   ~~commit 後會失敗，後台 trigger deploy 才有用~~
+
+# 圖片問題
+
+-   圖片載入速度過慢(firebase storage)，目前無解決方法，可考慮使用其他 CDN，但會牽涉到圖片路徑問題
+-   載入圖片出現 400 錯誤(因為 NuxtImg src 必須是絕對路徑)
+-   **使用 [firebase](https://gemini.google.com/app/6553982255aaffbe?hl=zh-TW) getDownloadURL 取得圖片路徑**
+-   繁中教學: https://ithelp.ithome.com.tw/articles/10330879
+-   netlify local dev: https://docs.netlify.com/cli/local-development/
+-   netlify image CDN: https://docs.netlify.com/image-cdn/overview/
+-   nuxtimage netlify: https://image.nuxt.com/providers/netlify
 
 # Resources
 

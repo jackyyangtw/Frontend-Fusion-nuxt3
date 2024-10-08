@@ -69,7 +69,7 @@
                             }"
                         >
                             <span class="ml-3"
-                                >全部類型
+                                >全部文章
                                 <span
                                     class="font-bold text-primary-600 dark:text-primary-400"
                                     >({{ posts.length }})</span

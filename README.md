@@ -127,3 +127,10 @@
 
 -   dynamic site map: https://nuxtseo.com/sitemap/guides/dynamic-urls
 -   robots.txt: https://nuxtseo.com/robots/getting-started/installation
+
+## toml backup
+
+[build]
+command = "npm run build"
+publish = "/opt/build/repo/.output/public"
+functions = ".netlify/functions-internal"

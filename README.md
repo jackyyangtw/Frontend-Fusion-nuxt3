@@ -1,8 +1,6 @@
 # ISSUE
 
--   確認刪除、新增文章後主頁面是否有更新
--   netlify 設定只能在 develop、main branch deploy
--   sidenav lazy load (可能有 CSS 問題)
+-   確認最後的 robots、sitemap
 -   需要安裝 Google Cloud SDK 才能更改 firebase storage CORS
 -   ~~上傳文章圖片後會直接觸發 onsubmit (preventDefault)~~
 -   ~~UCheckbox v-for id 全部指向同一個~~
@@ -30,20 +28,28 @@
 
 # 優化
 
--   ~~refactor allpost fetching~~
--   refactor user posts fetching
+-   rendering mode
 -   useAsyncData
--   標題、副標題也應加入 localstorage
 -   form content 問題 (如有編輯表單，重整後表單內容雖然在，但不會出現警示視窗)
--   加入 error page
--   posts/[id] 圖片加上 hover 效果
--   post-preview transition
 -   PWA
+-   ~~標題、副標題也應加入 localstorage~~
+-   ~~加入 error page~~
+-   ~~posts/[id] 圖片加上 hover 效果~~
+-   ~~post-preview transition~~
+-   ~~refactor allpost fetching~~
+-   ~~refactor user posts fetching~~
 -   ~~- site map~~
 -   ~~增加 click 文章圖片後，出現文章圖片的 modal~~
 -   ~~component cache :https://nuxt-multi-cache.dulnan.net/overview/introduction~~
 -   ~~登入的時候不能點擊登入按鈕~~
 -   ~~404 page~~
+
+# Resources
+
+-   chatgpt SWR、ISR: https://chatgpt.com/c/67064629-2d34-8007-8fc4-95610980c53e
+-   Nuxt 3 混合渲染 (Hybrid Rendering) 中的 SWR 與 ISR: https://ithelp.ithome.com.tw/articles/10339578
+-   nuxt3 rendering mode: https://blog.risingstack.com/nuxt-3-rendering-modes/
+-   Generating Dynamic Routes for Static Site Generation with Nuxt 3 : https://medium.com/@rafaelmagalhaes93/generating-dynamic-routes-for-static-site-generation-with-nuxt-3-335cadf05962
 
 # prod issue
 
@@ -59,11 +65,6 @@
 -   netlify local dev: https://docs.netlify.com/cli/local-development/
 -   netlify image CDN: https://docs.netlify.com/image-cdn/overview/
 -   nuxtimage netlify: https://image.nuxt.com/providers/netlify
-
-# Resources
-
--   nuxt3 rendering mode: https://blog.risingstack.com/nuxt-3-rendering-modes/
--   Generating Dynamic Routes for Static Site Generation with Nuxt 3 : https://medium.com/@rafaelmagalhaes93/generating-dynamic-routes-for-static-site-generation-with-nuxt-3-335cadf05962
 
 ## cursor editor
 

@@ -83,7 +83,7 @@ onBeforeUnmount(() => {
     window.removeEventListener("scroll", handleScroll); // 移除滾動事件
 });
 watchEffect(() => {
-    isLoadingPosts.value = false;
+    // isLoadingPosts.value = false;
     if (allPostsLoaded.value && window) {
         window.removeEventListener("scroll", handleScroll);
     }

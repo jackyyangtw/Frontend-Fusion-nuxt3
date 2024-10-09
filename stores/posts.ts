@@ -8,6 +8,7 @@ import {
     limitToFirst,
     startAfter,
     orderByKey,
+    set,
 } from "firebase/database";
 
 export const usePostsStore = defineStore("posts", () => {
@@ -33,9 +34,8 @@ export const usePostsStore = defineStore("posts", () => {
     const loadPosts = async (limit: number | null = null) => {
         if (allPostsLoaded.value) return;
 
-        isLoadingPosts.value = true;
-
         try {
+            isLoadingPosts.value = true;
             let postsQuery;
 
             if (loadedPosts.value.length > 0) {
@@ -79,14 +79,16 @@ export const usePostsStore = defineStore("posts", () => {
                     loadedPosts.value = [...loadedPosts.value, ...uniquePosts];
                 }
             }
+            setTimeout(() => {
+                isLoadingPosts.value = false;
+            }, 500);
         } catch (error) {
             console.error("Failed to load posts:", error);
         }
-        isLoadingPosts.value = false;
     };
 
     // 使用 limit 時載入部分文章，無 limit 時載入全部
-    const getPosts = () => loadPosts(3);
+    const getPosts = () => loadPosts(6);
     const getRestPosts = () => loadPosts();
 
     // user posts

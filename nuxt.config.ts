@@ -170,10 +170,11 @@ export default defineNuxtConfig({
         preset: "netlify",
     },
     routeRules: {
-        "/": { isr: true },
-        "/posts/**": { isr: true },
-        "/posts": { isr: true },
+        "/": { swr: true },
+        "/posts/**": { swr: true },
+        "/posts": { swr: true },
         "/admin/**": { ssr: false },
+        "/admin": { ssr: false },
     },
     experimental: {
         watcher: "chokidar",

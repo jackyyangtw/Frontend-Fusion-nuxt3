@@ -36,11 +36,5 @@ if (!user.value) {
 
 const postsStore = usePostsStore();
 const { userPosts } = storeToRefs(postsStore);
-const { getAllUserPostsCount, getUserPosts } = postsStore;
 const allUserPostsLoaded = computed(() => postsStore.allUserPostsLoaded);
-if (!allUserPostsLoaded.value) {
-    await getAllUserPostsCount();
-    await getUserPosts();
-}
-
 </script>

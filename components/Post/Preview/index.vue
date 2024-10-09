@@ -129,20 +129,11 @@ const formattedDate = computed(() =>
 const postLink = computed(() =>
     props.isAdmin ? `/admin/${props.post.id}` : `/posts/${props.post.id}`
 );
-const img = useImage();
 const userPhotoUrl = computed(
     () => props.post.photoURL || "/images/no-user-image.gif"
-    // () => {
-    //     const imgUrl = img(props.post.photoURL);
-    //     return imgUrl || "/images/no-user-image.gif";
-    // }
 );
 const previewImg = computed(
     () => props.post.previewImgUrl || "/images/post-preview-picture.png"
-    // () => {
-    //     const imgUrl = img(props.post.previewImgUrl);
-    //     return imgUrl || "/images/post-preview-picture.png";
-    // }
 );
 const truncatedPreviewText = computed(() =>
     props.post.previewText.length > 55

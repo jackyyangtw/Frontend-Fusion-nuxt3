@@ -7,7 +7,6 @@ const siteName = "Frontend Fusion";
 //     : "https://firebasestorage.googleapis.com/v0/b/nuxt-blog-b5610.appspot.com/o/";
 // const firebaseStorageUrl = "https://firebasestorage.googleapis.com/";
 export default defineNuxtConfig({
-    ssr: true,
     build: {
         analyze: true,
     },
@@ -171,6 +170,12 @@ export default defineNuxtConfig({
         preset: "netlify",
     },
     routeRules: {
+        "/": { isr: true },
+        "/posts/**": { isr: true },
+        "/posts": { isr: true },
         "/admin/**": { ssr: false },
+    },
+    experimental: {
+        watcher: "chokidar",
     },
 });

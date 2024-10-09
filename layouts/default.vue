@@ -21,29 +21,4 @@ const uiStore = useUIStore();
 const { headerHeight } = storeToRefs(uiStore);
 const route = useRoute();
 const at404Route = computed(() => route.name === "slug");
-// const atAdminRoute = computed(() => route.path.includes("/admin"));
-// const atSearchRoute = computed(() => route.path.includes("/search"));
-// watchEffect(() => {
-//     if (atAdminRoute.value || atSearchRoute.value || at404Route.value) {
-//         useHead({
-//             meta: [
-//                 {
-//                     hid: "robots",
-//                     name: "robots",
-//                     content: "noindex",
-//                 },
-//             ],
-//         });
-//     } else {
-//         useHead({
-//             meta: [
-//                 {
-//                     hid: "robots",
-//                     name: "robots",
-//                     content: "index",
-//                 },
-//             ],
-//         });
-//     }
-// });
 </script>

@@ -385,10 +385,6 @@ const createPost = async () => {
         };
         await set(newPostRef, newPost);
 
-        // 添加新文章到用戶文章列表
-        await postsStore.getUserPosts();
-        await postsStore.getAllUserPostsCount();
-
         toast.value.message = "文章新增成功!";
         toast.value.showToast = true;
         toast.value.messageType = "success";

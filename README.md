@@ -62,6 +62,9 @@
 
 # Resources
 
+-   nuxt3 rendering mode: https://blog.risingstack.com/nuxt-3-rendering-modes/
+-   Generating Dynamic Routes for Static Site Generation with Nuxt 3 : https://medium.com/@rafaelmagalhaes93/generating-dynamic-routes-for-static-site-generation-with-nuxt-3-335cadf05962
+
 ## cursor editor
 
 -   https://www.cursor.com/features

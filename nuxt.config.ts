@@ -1,9 +1,4 @@
 // nuxt.config.ts
-import { initializeApp } from "firebase/app";
-import { ref as dbRef, getDatabase } from "firebase/database";
-import { useDatabaseList } from "vuefire";
-// import { useNuxtApp } from "#app";
-// import { useDatabaseList } from "vuefire";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 const isDev = process.env.NODE_ENV === "development";
@@ -172,46 +167,8 @@ export default defineNuxtConfig({
     nitro: {
         preset: "netlify",
     },
-    // hooks: {
-    //     "nitro:config": async (nitroConfig: any) => {
-    //         try {
-    //             const firebaseApp = initializeApp({
-    //                 apiKey: isDev
-    //                     ? process.env.DEV_FIREBASE_API_KEY
-    //                     : process.env.FIREBASE_API_KEY,
-    //                 authDomain: isDev
-    //                     ? process.env.DEV_FIREBASE_AUTH_DOMAIN
-    //                     : process.env.FIREBASE_AUTH_DOMAIN,
-    //                 projectId: isDev
-    //                     ? process.env.DEV_FIREBASE_PROJECT_ID
-    //                     : process.env.FIREBASE_PROJECT_ID,
-    //                 storageBucket: isDev
-    //                     ? process.env.DEV_FIREBASE_STORAGE_BUCKET
-    //                     : process.env.FIREBASE_STORAGE_BUCKET,
-    //                 messagingSenderId: isDev
-    //                     ? process.env.DEV_FIREBASE_MESSAGING_SENDER_ID
-    //                     : process.env.FIREBASE_MESSAGING_SENDER_ID,
-    //                 appId: isDev
-    //                     ? process.env.DEV_FIREBASE_APP_ID
-    //                     : process.env.FIREBASE_APP_ID,
-    //                 measurementId: isDev
-    //                     ? process.env.DEV_FIREBASE_MEASUREMENT_ID
-    //                     : process.env.FIREBASE_MEASUREMENT_ID,
-    //             });
-    //             const db = getDatabase(firebaseApp);
-    //             const postsRef = dbRef(db, "posts");
-    //             const posts = useDatabaseList(postsRef);
-    //             const postRoutes = posts.value.map(
-    //                 (post) => `/posts/${post.id}`
-    //             );
-    //             nitroConfig.prerender.routes.push(...postRoutes);
-    //         } catch (error) {
-    //             console.error("Error fetching posts for prerendering", error);
-    //         }
-    //     },
-    // },
     routeRules: {
-        "/": { ssr: false }, // 首頁，取得firebase realtime db 的 post 資料然後render post 資料卡片
+        "/": { ssr: true }, // 首頁，取得firebase realtime db 的 post 資料然後render post 資料卡片
         "/posts/**": { isr: 600 }, // 單篇post頁面，取得firebase realtime db 的 post 資料然後 render post 資料卡片
         "/posts": { ssr: false }, // posts總覽，取得firebase realtime db 的 post 資料然後render頁面
         "/search": { ssr: false }, // 搜尋頁面，不須SSR

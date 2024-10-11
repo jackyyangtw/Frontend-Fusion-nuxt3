@@ -30,6 +30,7 @@
 </template>
 
 <script setup lang="ts">
+import { usePendingPromises } from "vuefire";
 const {
     public: { siteName },
 } = useRuntimeConfig();
@@ -44,6 +45,7 @@ useHead({
     ],
 });
 const postsStore = usePostsStore();
+onServerPrefetch(() => usePendingPromises());
 const { getPosts } = postsStore;
 const { loadedPosts, isLoadingPosts } = storeToRefs(postsStore);
 const allPostsLoaded = computed(() => {

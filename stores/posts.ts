@@ -8,7 +8,6 @@ import {
     limitToFirst,
     startAfter,
     orderByKey,
-    set,
 } from "firebase/database";
 
 export const usePostsStore = defineStore("posts", () => {
@@ -33,7 +32,6 @@ export const usePostsStore = defineStore("posts", () => {
 
     const loadPosts = async (limit: number | null = null) => {
         if (allPostsLoaded.value) return;
-
         try {
             isLoadingPosts.value = true;
             let postsQuery;
@@ -59,16 +57,9 @@ export const usePostsStore = defineStore("posts", () => {
                     : query(postsRef, orderByKey());
             }
 
-            const snapshot = await get(postsQuery);
-            const posts = snapshot.val();
-
-            if (posts) {
-                const postsArray = Object.keys(posts).map((key) => ({
-                    id: key,
-                    ...posts[key],
-                }));
-
-                const uniquePosts = postsArray.filter(
+            const posts = useDatabaseList<Post>(postsQuery);
+            if (posts.value) {
+                const uniquePosts = posts.value.filter(
                     (newPost) =>
                         !loadedPosts.value.some(
                             (post) => post.id === newPost.id
@@ -79,17 +70,18 @@ export const usePostsStore = defineStore("posts", () => {
                     loadedPosts.value = [...loadedPosts.value, ...uniquePosts];
                 }
             }
+        } catch (error) {
+            console.error("Failed to load posts:", error);
+        } finally {
             setTimeout(() => {
                 isLoadingPosts.value = false;
             }, 500);
-        } catch (error) {
-            console.error("Failed to load posts:", error);
         }
     };
 
     // 使用 limit 時載入部分文章，無 limit 時載入全部
-    const getPosts = () => loadPosts(6);
-    const getRestPosts = () => loadPosts();
+    const getPosts = async () => await loadPosts(6);
+    const getRestPosts = async () => await loadPosts();
 
     // user posts
     const user = useCurrentUser();

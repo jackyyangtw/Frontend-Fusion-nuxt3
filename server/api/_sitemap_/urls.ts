@@ -1,4 +1,5 @@
 // server/api/__sitemap__/urls.ts
+// if "/" CSR mode will not work
 import { asSitemapUrl, defineSitemapEventHandler } from "#imports";
 import { useDatabase } from "vuefire";
 import { ref as dbRef, get, DatabaseReference } from "firebase/database";

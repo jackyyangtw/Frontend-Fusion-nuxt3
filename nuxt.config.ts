@@ -12,7 +12,29 @@ const siteName = "Frontend Fusion";
 //     ? "https://firebasestorage.googleapis.com/v0/b/frontend-fusion-test.appspot.com/o/"
 //     : "https://firebasestorage.googleapis.com/v0/b/nuxt-blog-b5610.appspot.com/o/";
 // const firebaseStorageUrl = "https://firebasestorage.googleapis.com/";
-
+const vueFireConfig = {
+    apiKey: isDev
+        ? process.env.DEV_FIREBASE_API_KEY
+        : process.env.FIREBASE_API_KEY,
+    authDomain: isDev
+        ? process.env.DEV_FIREBASE_AUTH_DOMAIN
+        : process.env.FIREBASE_AUTH_DOMAIN,
+    projectId: isDev
+        ? process.env.DEV_FIREBASE_PROJECT_ID
+        : process.env.FIREBASE_PROJECT_ID,
+    storageBucket: isDev
+        ? process.env.DEV_FIREBASE_STORAGE_BUCKET
+        : process.env.FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: isDev
+        ? process.env.DEV_FIREBASE_MESSAGING_SENDER_ID
+        : process.env.FIREBASE_MESSAGING_SENDER_ID,
+    appId: isDev
+        ? process.env.DEV_FIREBASE_APP_ID
+        : process.env.FIREBASE_APP_ID,
+    measurementId: isDev
+        ? process.env.DEV_FIREBASE_MEASUREMENT_ID
+        : process.env.FIREBASE_MEASUREMENT_ID,
+};
 export default defineNuxtConfig({
     build: {
         analyze: true,
@@ -21,12 +43,12 @@ export default defineNuxtConfig({
     modules: [
         "@pinia/nuxt",
         "@vueuse/nuxt",
-        "nuxt-schema-org",
         "nuxt-vuefire",
         "@nuxt/ui",
         "nuxt-tiptap-editor",
         "@nuxt/image",
         "nuxt-multi-cache",
+        "nuxt-schema-org",
         "@nuxtjs/sitemap",
         "@nuxtjs/robots",
     ],
@@ -62,29 +84,7 @@ export default defineNuxtConfig({
         },
     },
     vuefire: {
-        config: {
-            apiKey: isDev
-                ? process.env.DEV_FIREBASE_API_KEY
-                : process.env.FIREBASE_API_KEY,
-            authDomain: isDev
-                ? process.env.DEV_FIREBASE_AUTH_DOMAIN
-                : process.env.FIREBASE_AUTH_DOMAIN,
-            projectId: isDev
-                ? process.env.DEV_FIREBASE_PROJECT_ID
-                : process.env.FIREBASE_PROJECT_ID,
-            storageBucket: isDev
-                ? process.env.DEV_FIREBASE_STORAGE_BUCKET
-                : process.env.FIREBASE_STORAGE_BUCKET,
-            messagingSenderId: isDev
-                ? process.env.DEV_FIREBASE_MESSAGING_SENDER_ID
-                : process.env.FIREBASE_MESSAGING_SENDER_ID,
-            appId: isDev
-                ? process.env.DEV_FIREBASE_APP_ID
-                : process.env.FIREBASE_APP_ID,
-            measurementId: isDev
-                ? process.env.DEV_FIREBASE_MEASUREMENT_ID
-                : process.env.FIREBASE_MEASUREMENT_ID,
-        },
+        config: vueFireConfig,
         auth: {
             enabled: true,
             persistence: ["indexedDBLocal"],
@@ -136,6 +136,7 @@ export default defineNuxtConfig({
             firebaseApiKey: process.env.FIREBASE_API_KEY,
             siteName,
         },
+        vueFireConfig,
     },
     imports: {
         dirs: ["types/*"],
@@ -210,7 +211,7 @@ export default defineNuxtConfig({
     //     },
     // },
     routeRules: {
-        "/": { prerender: true }, // 首頁，取得firebase realtime db 的 post 資料然後render post 資料卡片
+        "/": { ssr: false }, // 首頁，取得firebase realtime db 的 post 資料然後render post 資料卡片
         "/posts/**": { isr: 600 }, // 單篇post頁面，取得firebase realtime db 的 post 資料然後 render post 資料卡片
         "/posts": { ssr: false }, // posts總覽，取得firebase realtime db 的 post 資料然後render頁面
         "/search": { ssr: false }, // 搜尋頁面，不須SSR

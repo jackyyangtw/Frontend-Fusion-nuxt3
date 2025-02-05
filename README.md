@@ -1,5 +1,6 @@
 # ISSUE
 
+-   lazy load deploy 後失效
 -   確認最後的 robots、sitemap
 -   需要安裝 Google Cloud SDK 才能更改 firebase storage CORS
 -   ~~上傳文章圖片後會直接觸發 onsubmit (preventDefault)~~

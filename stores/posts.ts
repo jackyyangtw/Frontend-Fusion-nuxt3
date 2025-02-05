@@ -56,20 +56,34 @@ export const usePostsStore = defineStore("posts", () => {
                     ? query(postsRef, orderByKey(), limitToFirst(limit))
                     : query(postsRef, orderByKey());
             }
+            const snapshot = await get(postsQuery);
+            const posts = snapshot.val();
 
-            const posts = useDatabaseList<Post>(postsQuery);
-            if (posts.value) {
-                const uniquePosts = posts.value.filter(
-                    (newPost) =>
-                        !loadedPosts.value.some(
-                            (post) => post.id === newPost.id
-                        )
-                );
-
-                if (uniquePosts.length > 0) {
-                    loadedPosts.value = [...loadedPosts.value, ...uniquePosts];
-                }
+            const hasSamePosts = Object.keys(posts).some((key) =>
+                loadedPosts.value.some((post) => post.id === key)
+            );
+            if (posts && !hasSamePosts) {
+                // 檢查loadedPosts是否已有此文章，避免重複載入
+                const postsArray = Object.keys(posts).map((key) => ({
+                    id: key,
+                    ...posts[key],
+                }));
+                loadedPosts.value = [...loadedPosts.value, ...postsArray];
             }
+
+            // const posts = useDatabaseList<Post>(postsQuery);
+            // if (posts.value) {
+            //     const uniquePosts = posts.value.filter(
+            //         (newPost) =>
+            //             !loadedPosts.value.some(
+            //                 (post) => post.id === newPost.id
+            //             )
+            //     );
+
+            //     if (uniquePosts.length > 0) {
+            //         loadedPosts.value = [...loadedPosts.value, ...uniquePosts];
+            //     }
+            // }
         } catch (error) {
             console.error("Failed to load posts:", error);
         } finally {

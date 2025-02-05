@@ -80,7 +80,12 @@ export const usePostsStore = defineStore("posts", () => {
     };
 
     // 使用 limit 時載入部分文章，無 limit 時載入全部
-    const getPosts = async () => await loadPosts(6);
+    const getPosts = async () => {
+        console.log("getPosts");
+        await loadPosts(6);
+        return loadedPosts.value; // 確保回傳資料
+    };
+
     const getRestPosts = async () => await loadPosts();
 
     // user posts

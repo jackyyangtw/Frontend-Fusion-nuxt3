@@ -51,7 +51,6 @@ const { loadedPosts, isLoadingPosts } = storeToRefs(postsStore);
 const allPostsLoaded = computed(() => {
     return postsStore.allPostsLoaded;
 });
-
 const handleScroll = async () => {
     const bottomOfWindow =
         window.innerHeight + window.scrollY >=
@@ -85,7 +84,6 @@ onBeforeUnmount(() => {
     window.removeEventListener("scroll", handleScroll); // 移除滾動事件
 });
 watchEffect(() => {
-    // isLoadingPosts.value = false;
     if (allPostsLoaded.value && window) {
         window.removeEventListener("scroll", handleScroll);
     }

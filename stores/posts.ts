@@ -19,15 +19,16 @@ export const usePostsStore = defineStore("posts", () => {
     const isLoadingPosts = ref(true);
     const { data: allPosts } = useDatabaseList(postsRef);
     const allPostCount = computed(() => allPosts.value.length);
-    const allPostsLoaded = computed(() => {
-        return loadedPosts.value.length === allPostCount.value;
-    });
+
     const sortedPosts = computed(() => {
         return loadedPosts.value.sort(
             (a, b) =>
                 new Date(b.updatedDate).getTime() -
                 new Date(a.updatedDate).getTime()
         );
+    });
+    const allPostsLoaded = computed(() => {
+        return loadedPosts.value.length === allPostCount.value;
     });
 
     const loadPosts = async (limit: number | null = null) => {
@@ -70,20 +71,6 @@ export const usePostsStore = defineStore("posts", () => {
                 }));
                 loadedPosts.value = [...loadedPosts.value, ...postsArray];
             }
-
-            // const posts = useDatabaseList<Post>(postsQuery);
-            // if (posts.value) {
-            //     const uniquePosts = posts.value.filter(
-            //         (newPost) =>
-            //             !loadedPosts.value.some(
-            //                 (post) => post.id === newPost.id
-            //             )
-            //     );
-
-            //     if (uniquePosts.length > 0) {
-            //         loadedPosts.value = [...loadedPosts.value, ...uniquePosts];
-            //     }
-            // }
         } catch (error) {
             console.error("Failed to load posts:", error);
         } finally {
@@ -95,9 +82,7 @@ export const usePostsStore = defineStore("posts", () => {
 
     // 使用 limit 時載入部分文章，無 limit 時載入全部
     const getPosts = async () => {
-        console.log("getPosts");
         await loadPosts(6);
-        return loadedPosts.value; // 確保回傳資料
     };
 
     const getRestPosts = async () => await loadPosts();
@@ -123,6 +108,7 @@ export const usePostsStore = defineStore("posts", () => {
         allPostCount,
         allPostsLoaded,
         userPosts,
+        allPosts,
         allUserPostsLoaded,
         allUserPostsCount,
         sortedPosts,

@@ -18,7 +18,8 @@ useHead({
 const selectedTag = ref<string>("全部類型");
 
 const postsStore = usePostsStore();
-const { sortedPosts } = storeToRefs(postsStore);
+const { sortedPosts, allPosts, loadedPosts, isLoadingPosts } =
+    storeToRefs(postsStore);
 const filteredPosts = shallowRef(sortedPosts.value);
 watch([sortedPosts, selectedTag], () => {
     if (selectedTag.value === "全部類型") {
@@ -35,9 +36,13 @@ const setFilter = (tag: string) => {
         selectedTag.value = tag;
     }
 };
-const { getRestPosts } = postsStore;
 
-onMounted(async () => {
-    await getRestPosts();
-});
+// 直接取得所有post
+loadedPosts.value = allPosts.value;
+isLoadingPosts.value = false;
+
+// const { getRestPosts } = postsStore;
+// onMounted(async () => {
+// await getRestPosts();
+// });
 </script>

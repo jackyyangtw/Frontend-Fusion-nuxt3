@@ -73,8 +73,10 @@ onBeforeRouteLeave(() => {
 // onMounted(async () => {
 //     await getRestPosts();
 // });
-loadedPosts.value = allPosts.value;
-isLoadingPosts.value = false;
+onMounted(() => {
+    loadedPosts.value = allPosts.value;
+    isLoadingPosts.value = false;
+});
 </script>
 
 <style scoped></style>

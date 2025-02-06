@@ -38,8 +38,10 @@ const setFilter = (tag: string) => {
 };
 
 // 直接取得所有post
-loadedPosts.value = allPosts.value;
-isLoadingPosts.value = false;
+onMounted(() => {
+    loadedPosts.value = allPosts.value;
+    isLoadingPosts.value = false;
+});
 
 // const { getRestPosts } = postsStore;
 // onMounted(async () => {

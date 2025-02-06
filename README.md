@@ -1,7 +1,7 @@
 # ISSUE
 
--   確認最後的 robots、sitemap(robots 全部都會允許，需再參考官方文件 https://nuxtseo.com/docs/robots/releases/v4)
--   需要安裝 Google Cloud SDK 才能更改 firebase storage CORS
+-   直接訪問/posts 會出現沒有任何 posts 的問題 (解法: 在/posts 直接取得所有 posts)
+-   ~~確認最後的 robots、sitemap(robots 全部都會允許，需再參考官方文件 https://nuxtseo.com/docs/robots/releases/v4)~~
 -   ~~上傳文章圖片後會直接觸發 onsubmit (preventDefault)~~
 -   ~~UCheckbox v-for id 全部指向同一個~~
 -   ~~刪除 post 功能~~

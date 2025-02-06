@@ -2,7 +2,8 @@
     {
         "origin": [
             "http://localhost:3000/",
-            "https://frontend-fusion-3.netlify.app/"
+            "https://frontend-fusion-3.netlify.app/",
+            "https://frontend-fusion.com"
         ],
         "method": ["GET"],
         "maxAgeSeconds": 3600

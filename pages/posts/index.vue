@@ -37,14 +37,13 @@ const setFilter = (tag: string) => {
     }
 };
 
-// 直接取得所有post
-onMounted(() => {
-    loadedPosts.value = allPosts.value;
-    isLoadingPosts.value = false;
+const { data: postsData } = useAsyncData("posts", async () => {
+    await postsStore.getRestPosts();
+    return loadedPosts.value;
 });
-
-// const { getRestPosts } = postsStore;
-// onMounted(async () => {
-// await getRestPosts();
-// });
+watchEffect(() => {
+    if (postsData.value) {
+        loadedPosts.value = postsData.value;
+    }
+});
 </script>

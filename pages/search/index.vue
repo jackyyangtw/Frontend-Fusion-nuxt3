@@ -69,13 +69,14 @@ const { searchText } = storeToRefs(searchStore);
 onBeforeRouteLeave(() => {
     searchText.value = "";
 });
-// const { getRestPosts } = postsStore;
-// onMounted(async () => {
-//     await getRestPosts();
-// });
-onMounted(() => {
-    loadedPosts.value = allPosts.value;
-    isLoadingPosts.value = false;
+const { data: postsData } = useAsyncData("posts", async () => {
+    await postsStore.getRestPosts();
+    return loadedPosts.value;
+});
+watchEffect(() => {
+    if (postsData.value) {
+        loadedPosts.value = postsData.value;
+    }
 });
 </script>
 

@@ -58,7 +58,8 @@ export default defineNuxtConfig({
         exclude: ["/admin/**", "/auth/**", "/search/**"],
     },
     site: {
-        url: "https://frontend-fusion-3.netlify.app/",
+        // "https://frontend-fusion-3.netlify.app/"
+        url: "https://frontend-fusion.com",
     },
 
     multiCache: {

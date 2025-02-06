@@ -27,7 +27,7 @@ export default defineSitemapEventHandler(async () => {
             ...posts.map((post) =>
                 asSitemapUrl({
                     loc: `/posts/${post.id}`,
-                    changefreq: "daily",
+                    changefreq: "weekly",
                     priority: 0.8,
                     lastmod: post.updatedDate,
                 })

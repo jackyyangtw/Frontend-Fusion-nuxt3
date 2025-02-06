@@ -18,6 +18,8 @@ useHead({
 const selectedTag = ref<string>("全部類型");
 
 const postsStore = usePostsStore();
+postsStore.setAllPosts();
+
 const { sortedPosts, allPosts, loadedPosts, isLoadingPosts } =
     storeToRefs(postsStore);
 const filteredPosts = shallowRef(sortedPosts.value);
@@ -37,13 +39,13 @@ const setFilter = (tag: string) => {
     }
 };
 
-const { data: postsData } = useAsyncData("posts", async () => {
-    await postsStore.getRestPosts();
-    return loadedPosts.value;
-});
-watchEffect(() => {
-    if (postsData.value) {
-        loadedPosts.value = postsData.value;
-    }
-});
+// const { data: postsData } = useAsyncData("posts", async () => {
+//     await postsStore.getRestPosts();
+//     return loadedPosts.value;
+// });
+// watchEffect(() => {
+//     if (postsData.value) {
+//         loadedPosts.value = postsData.value;
+//     }
+// });
 </script>

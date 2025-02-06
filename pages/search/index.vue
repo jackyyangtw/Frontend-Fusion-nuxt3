@@ -14,6 +14,8 @@
 
 <script setup lang="ts">
 const postsStore = usePostsStore();
+postsStore.setAllPosts();
+
 const { sortedPosts, loadedPosts, isLoadingPosts, allPosts } =
     storeToRefs(postsStore);
 
@@ -69,15 +71,16 @@ const { searchText } = storeToRefs(searchStore);
 onBeforeRouteLeave(() => {
     searchText.value = "";
 });
-const { data: postsData } = useAsyncData("posts", async () => {
-    await postsStore.getRestPosts();
-    return loadedPosts.value;
-});
-watchEffect(() => {
-    if (postsData.value) {
-        loadedPosts.value = postsData.value;
-    }
-});
+
+// const { data: postsData } = useAsyncData("posts", async () => {
+//     await postsStore.getRestPosts();
+//     return loadedPosts.value;
+// });
+// watchEffect(() => {
+//     if (postsData.value) {
+//         loadedPosts.value = postsData.value;
+//     }
+// });
 </script>
 
 <style scoped></style>

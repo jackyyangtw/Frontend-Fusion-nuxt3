@@ -2,7 +2,7 @@
     <div class="xl:flex items-start lg:ml-[8rem]">
         <div class="sidebar-placeholder w-32 hidden xl:block h:10" ref=""></div>
         <LazyPostFilter
-            :posts="loadedPosts"
+            :posts="sortedPosts"
             :selectedTag="selectedTag"
             @setFilter="setFilter"
         />
@@ -18,13 +18,13 @@ useHead({
 const selectedTag = ref<string>("全部類型");
 
 const postsStore = usePostsStore();
-const { loadedPosts } = storeToRefs(postsStore);
-const filteredPosts = shallowRef(loadedPosts.value);
-watch([loadedPosts, selectedTag], () => {
+const { sortedPosts } = storeToRefs(postsStore);
+const filteredPosts = shallowRef(sortedPosts.value);
+watch([sortedPosts, selectedTag], () => {
     if (selectedTag.value === "全部類型") {
-        filteredPosts.value = loadedPosts.value;
+        filteredPosts.value = sortedPosts.value;
     } else {
-        filteredPosts.value = loadedPosts.value.filter((post) =>
+        filteredPosts.value = sortedPosts.value.filter((post) =>
             post.tags.includes(selectedTag.value)
         );
     }
@@ -35,13 +35,9 @@ const setFilter = (tag: string) => {
         selectedTag.value = tag;
     }
 };
+const { getRestPosts } = postsStore;
 
-const allPostsLoaded = computed(() => {
-    return postsStore.allPostsLoaded;
+onMounted(async () => {
+    await getRestPosts();
 });
-
-await postsStore.getAllPostsCount();
-if (!allPostsLoaded.value) {
-    await postsStore.getAllPosts();
-}
 </script>

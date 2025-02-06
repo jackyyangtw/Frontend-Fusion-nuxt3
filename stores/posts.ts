@@ -1,124 +1,121 @@
+// posts.ts
 import {
     ref as dbRef,
-    onValue,
     query,
     orderByChild,
     equalTo,
     get,
-    type DatabaseReference,
-    type Query,
+    limitToFirst,
+    startAfter,
+    orderByKey,
 } from "firebase/database";
 
 export const usePostsStore = defineStore("posts", () => {
+    const { $db } = useNuxtApp();
+
+    // All posts
+    const postsRef = dbRef($db, "posts");
     const loadedPosts = ref<Post[]>([]);
     const isLoadingPosts = ref(true);
-    const allPostCount = ref(0);
-    const userPosts = ref<Post[]>([]);
-    const allUserPostsCount = ref(0);
-
-    const { $db } = useNuxtApp();
-    const user = useCurrentUser();
-
+    const { data: allPosts } = useDatabaseList(postsRef);
+    const allPostCount = computed(() => allPosts.value.length);
     const allPostsLoaded = computed(() => {
         return loadedPosts.value.length === allPostCount.value;
     });
+    const sortedPosts = computed(() => {
+        return loadedPosts.value.sort(
+            (a, b) =>
+                new Date(b.updatedDate).getTime() -
+                new Date(a.updatedDate).getTime()
+        );
+    });
 
+    const loadPosts = async (limit: number | null = null) => {
+        if (allPostsLoaded.value) return;
+        try {
+            isLoadingPosts.value = true;
+            let postsQuery;
+
+            if (loadedPosts.value.length > 0) {
+                const lastLoadedPostId =
+                    loadedPosts.value[loadedPosts.value.length - 1].id;
+                postsQuery = limit
+                    ? query(
+                          postsRef,
+                          orderByKey(),
+                          startAfter(lastLoadedPostId),
+                          limitToFirst(limit)
+                      )
+                    : query(
+                          postsRef,
+                          orderByKey(),
+                          startAfter(lastLoadedPostId)
+                      );
+            } else {
+                postsQuery = limit
+                    ? query(postsRef, orderByKey(), limitToFirst(limit))
+                    : query(postsRef, orderByKey());
+            }
+            const snapshot = await get(postsQuery);
+            const posts = snapshot.val();
+
+            const hasSamePosts = Object.keys(posts).some((key) =>
+                loadedPosts.value.some((post) => post.id === key)
+            );
+            if (posts && !hasSamePosts) {
+                // 檢查loadedPosts是否已有此文章，避免重複載入
+                const postsArray = Object.keys(posts).map((key) => ({
+                    id: key,
+                    ...posts[key],
+                }));
+                loadedPosts.value = [...loadedPosts.value, ...postsArray];
+            }
+
+            // const posts = useDatabaseList<Post>(postsQuery);
+            // if (posts.value) {
+            //     const uniquePosts = posts.value.filter(
+            //         (newPost) =>
+            //             !loadedPosts.value.some(
+            //                 (post) => post.id === newPost.id
+            //             )
+            //     );
+
+            //     if (uniquePosts.length > 0) {
+            //         loadedPosts.value = [...loadedPosts.value, ...uniquePosts];
+            //     }
+            // }
+        } catch (error) {
+            console.error("Failed to load posts:", error);
+        } finally {
+            setTimeout(() => {
+                isLoadingPosts.value = false;
+            }, 500);
+        }
+    };
+
+    // 使用 limit 時載入部分文章，無 limit 時載入全部
+    const getPosts = async () => {
+        console.log("getPosts");
+        await loadPosts(6);
+        return loadedPosts.value; // 確保回傳資料
+    };
+
+    const getRestPosts = async () => await loadPosts();
+
+    // user posts
+    const user = useCurrentUser();
+    const userId = user.value?.uid;
+    const userPostsQuery = userId
+        ? query(postsRef, orderByChild("userId"), equalTo(userId))
+        : null;
+    const userPosts = useDatabaseList<Post>(userPostsQuery);
+    const allUserPostsCount = computed(() => userPosts.value.length);
     const allUserPostsLoaded = computed(() => {
         return (
             userPosts.value.length === allUserPostsCount.value &&
             allUserPostsCount.value > 0
         );
     });
-
-    // utils
-    const fetchPosts = (
-        postRef: Query | DatabaseReference,
-        targetArray: Ref<Post[]>,
-        existingArray: Ref<Post[]>
-    ) => {
-        onValue(postRef, (snapshot) => {
-            const data = snapshot.val();
-            const postArr: Post[] = [];
-            for (const key in data) {
-                const existingIndex = existingArray.value.findIndex(
-                    (post) => post.id === key
-                );
-                if (existingIndex === -1) {
-                    postArr.push({ ...data[key], id: key });
-                } else {
-                    // 更新現有的文章
-                    existingArray.value[existingIndex] = {
-                        ...data[key],
-                        id: key,
-                    };
-                }
-            }
-            postArr.sort(
-                (a, b) =>
-                    new Date(b.updatedDate).getTime() -
-                    new Date(a.updatedDate).getTime()
-            );
-            targetArray.value = [...existingArray.value, ...postArr];
-        });
-    };
-
-    const fetchPostCount = async (
-        postsRef: Query | DatabaseReference,
-        countRef: Ref<number>
-    ) => {
-        try {
-            const snapshot = await get(postsRef);
-            if (snapshot.exists()) {
-                const postsData = snapshot.val();
-                countRef.value = Object.keys(postsData).length;
-            } else {
-                countRef.value = 0;
-            }
-        } catch (error) {
-            console.error("Error fetching post count:", error);
-            countRef.value = 0;
-        }
-    };
-
-    // methods
-    const getAllPosts = () => {
-        isLoadingPosts.value = true;
-        const postRef = dbRef($db, "posts");
-        fetchPosts(postRef, loadedPosts, loadedPosts);
-    };
-
-    const getAllPostsCount = async () => {
-        const postsRef = dbRef($db, "posts");
-        await fetchPostCount(postsRef, allPostCount);
-    };
-
-    const getUserPosts = async () => {
-        const userId = user.value?.uid;
-        if (!userId) return;
-
-        isLoadingPosts.value = true;
-        const postRef = dbRef($db, "posts");
-        const userPostsQuery = query(
-            postRef,
-            orderByChild("userId"),
-            equalTo(userId)
-        );
-        fetchPosts(userPostsQuery, userPosts, userPosts);
-    };
-
-    const getAllUserPostsCount = async () => {
-        const userId = user.value?.uid;
-        if (!userId) {
-            allUserPostsCount.value = 0;
-            return;
-        }
-        const userPostsQuery = query(
-            dbRef($db, "posts"),
-            orderByChild("userId"),
-            equalTo(userId)
-        );
-        await fetchPostCount(userPostsQuery, allUserPostsCount);
-    };
 
     return {
         loadedPosts,
@@ -128,9 +125,8 @@ export const usePostsStore = defineStore("posts", () => {
         userPosts,
         allUserPostsLoaded,
         allUserPostsCount,
-        getAllPosts,
-        getAllPostsCount,
-        getUserPosts,
-        getAllUserPostsCount,
+        sortedPosts,
+        getPosts,
+        getRestPosts,
     };
 });

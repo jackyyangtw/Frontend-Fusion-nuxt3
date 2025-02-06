@@ -1,3 +1,4 @@
+<!-- index.vue -->
 <template>
     <div class="home-page w-full relative">
         <client-only>
@@ -22,22 +23,17 @@
             </section>
         </client-only>
         <div class="container mx-auto">
-            <LazyPostList :posts="loadedPosts" :isAdmin="false"></LazyPostList>
+            <PostList :posts="loadedPosts" :isAdmin="false"></PostList>
         </div>
         <LazyLoadingLists :isLoading="isLoadingPosts" />
     </div>
 </template>
 
 <script setup lang="ts">
-import {
-    ref as dbRef,
-    query,
-    orderByKey,
-    startAfter,
-    limitToFirst,
-    get,
-} from "firebase/database";
-const { public: { siteName }} = useRuntimeConfig();
+import { usePendingPromises } from "vuefire";
+const {
+    public: { siteName },
+} = useRuntimeConfig();
 useHead({
     title: siteName,
     meta: [
@@ -49,59 +45,13 @@ useHead({
     ],
 });
 const postsStore = usePostsStore();
+onServerPrefetch(() => usePendingPromises());
+const { getPosts } = postsStore;
 const { loadedPosts, isLoadingPosts } = storeToRefs(postsStore);
 const allPostsLoaded = computed(() => {
     return postsStore.allPostsLoaded;
 });
-const maxPerPage = 6;
-const { $db } = useNuxtApp();
-const getPosts = async () => {
-    if (allPostsLoaded.value) return; // 如果已載入所有文章，則返回
-    isLoadingPosts.value = true;
-
-    try {
-        const postsRef = dbRef($db, "posts");
-        let postsQuery;
-
-        if (loadedPosts.value.length > 0) {
-            const lastLoadedPostId =
-                loadedPosts.value[loadedPosts.value.length - 1].id;
-            postsQuery = query(
-                postsRef,
-                orderByKey(),
-                startAfter(lastLoadedPostId),
-                limitToFirst(maxPerPage)
-            );
-        } else {
-            postsQuery = query(
-                postsRef,
-                orderByKey(),
-                limitToFirst(maxPerPage)
-            );
-        }
-
-        const snapshot = await get(postsQuery);
-        const posts = snapshot.val();
-
-        const hasSamePosts = Object.keys(posts).some((key) =>
-            loadedPosts.value.some((post) => post.id === key)
-        );
-        if (posts && !hasSamePosts) {
-            // 檢查loadedPosts是否已有此文章，避免重複載入
-            const postsArray = Object.keys(posts).map((key) => ({
-                id: key,
-                ...posts[key],
-            }));
-            loadedPosts.value = [...loadedPosts.value, ...postsArray];
-        }
-    } catch (error) {
-        console.error("Failed to load posts:", error);
-    }
-    setTimeout(() => {
-        isLoadingPosts.value = false;
-    }, 1000);
-};
-const handleScroll = async (event: Event) => {
+const handleScroll = async () => {
     const bottomOfWindow =
         window.innerHeight + window.scrollY >=
         document.documentElement.offsetHeight - 5;
@@ -124,7 +74,6 @@ const typeEffect = async (text: string, target: { value: string }) => {
 };
 
 onMounted(async () => {
-    await postsStore.getAllPostsCount();
     await getPosts(); // 初次加載文章
     window.addEventListener("scroll", handleScroll, { passive: true }); // 綁定滾動事件
     // 打字效果
@@ -135,7 +84,6 @@ onBeforeUnmount(() => {
     window.removeEventListener("scroll", handleScroll); // 移除滾動事件
 });
 watchEffect(() => {
-    isLoadingPosts.value = false;
     if (allPostsLoaded.value && window) {
         window.removeEventListener("scroll", handleScroll);
     }

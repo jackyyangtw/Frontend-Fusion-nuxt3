@@ -1,19 +1,66 @@
+// nuxt.config.ts
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 const isDev = process.env.NODE_ENV === "development";
 const siteName = "Frontend Fusion";
+// const firebaseStorageUrl = isDev
+//     ? "https://firebasestorage.googleapis.com/v0/b/frontend-fusion-test.appspot.com/o/"
+//     : "https://firebasestorage.googleapis.com/v0/b/nuxt-blog-b5610.appspot.com/o/";
+// const firebaseStorageUrl = "https://firebasestorage.googleapis.com/";
+const vueFireConfig = {
+    apiKey: isDev
+        ? process.env.DEV_FIREBASE_API_KEY
+        : process.env.FIREBASE_API_KEY,
+    authDomain: isDev
+        ? process.env.DEV_FIREBASE_AUTH_DOMAIN
+        : process.env.FIREBASE_AUTH_DOMAIN,
+    projectId: isDev
+        ? process.env.DEV_FIREBASE_PROJECT_ID
+        : process.env.FIREBASE_PROJECT_ID,
+    storageBucket: isDev
+        ? process.env.DEV_FIREBASE_STORAGE_BUCKET
+        : process.env.FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: isDev
+        ? process.env.DEV_FIREBASE_MESSAGING_SENDER_ID
+        : process.env.FIREBASE_MESSAGING_SENDER_ID,
+    appId: isDev
+        ? process.env.DEV_FIREBASE_APP_ID
+        : process.env.FIREBASE_APP_ID,
+    measurementId: isDev
+        ? process.env.DEV_FIREBASE_MEASUREMENT_ID
+        : process.env.FIREBASE_MEASUREMENT_ID,
+};
 export default defineNuxtConfig({
-    ssr: true,
+    build: {
+        analyze: true,
+    },
     devtools: { enabled: true },
     modules: [
         "@pinia/nuxt",
         "@vueuse/nuxt",
-        "nuxt-schema-org",
         "nuxt-vuefire",
         "@nuxt/ui",
         "nuxt-tiptap-editor",
         "@nuxt/image",
         "nuxt-multi-cache",
+        "nuxt-schema-org",
+        "@nuxtjs/sitemap",
+        "@nuxtjs/robots",
     ],
+
+    robots: {
+        // provide simple disallow rules for all robots `user-agent: *`
+        disallow: ["/admin", "/auth", "/search"],
+        allow: ["/posts", "/"],
+    },
+    sitemap: {
+        sources: ["/api/_sitemap_/urls"],
+        exclude: ["/admin/**", "/auth/**", "/search/**"],
+    },
+    site: {
+        url: "https://frontend-fusion-3.netlify.app/",
+    },
+
     multiCache: {
         component: {
             enabled: true,
@@ -21,11 +68,9 @@ export default defineNuxtConfig({
         },
         data: {
             enabled: true,
+            maxAge: 1000 * 60 * 30, // 也增加資料快取時間
         },
     },
-    // image: {
-    //     domains: ["firebasestorage.googleapis.com"],
-    // },
     tiptap: {
         prefix: "Tiptap", //prefix for Tiptap imports, composables not included
         lowlight: {
@@ -34,29 +79,7 @@ export default defineNuxtConfig({
         },
     },
     vuefire: {
-        config: {
-            apiKey: isDev
-                ? process.env.DEV_FIREBASE_API_KEY
-                : process.env.FIREBASE_API_KEY,
-            authDomain: isDev
-                ? process.env.DEV_FIREBASE_AUTH_DOMAIN
-                : process.env.FIREBASE_AUTH_DOMAIN,
-            projectId: isDev
-                ? process.env.DEV_FIREBASE_PROJECT_ID
-                : process.env.FIREBASE_PROJECT_ID,
-            storageBucket: isDev
-                ? process.env.DEV_FIREBASE_STORAGE_BUCKET
-                : process.env.FIREBASE_STORAGE_BUCKET,
-            messagingSenderId: isDev
-                ? process.env.DEV_FIREBASE_MESSAGING_SENDER_ID
-                : process.env.FIREBASE_MESSAGING_SENDER_ID,
-            appId: isDev
-                ? process.env.DEV_FIREBASE_APP_ID
-                : process.env.FIREBASE_APP_ID,
-            measurementId: isDev
-                ? process.env.DEV_FIREBASE_MEASUREMENT_ID
-                : process.env.FIREBASE_MEASUREMENT_ID,
-        },
+        config: vueFireConfig,
         auth: {
             enabled: true,
             persistence: ["indexedDBLocal"],
@@ -108,6 +131,7 @@ export default defineNuxtConfig({
             firebaseApiKey: process.env.FIREBASE_API_KEY,
             siteName,
         },
+        vueFireConfig,
     },
     imports: {
         dirs: ["types/*"],
@@ -132,10 +156,27 @@ export default defineNuxtConfig({
         "~/assets/css/transition.css",
         "~/assets/css/main.css",
     ],
+    // image: {
+    //     provider: "netlifyImageCdn",
+    //     domains: [firebaseStorageUrl],
+    // },
+    // image: {
+    //     provider: "ipx",
+    //     domains: ["firebasestorage.googleapis.com"],
+    // },
     nitro: {
-        preset: isDev ? "firebase" : "netlify",
+        preset: "netlify",
     },
     routeRules: {
-        '/admin/**': { ssr: false }
-    }
+        "/": { ssr: true }, // 首頁，取得firebase realtime db 的 post 資料然後render post 資料卡片
+        "/posts/**": { isr: 600 }, // 單篇post頁面，取得firebase realtime db 的 post 資料然後 render post 資料卡片
+        "/posts": { ssr: false }, // posts總覽，取得firebase realtime db 的 post 資料然後render頁面
+        "/search": { ssr: false, robots: false }, // 搜尋頁面，不須SSR
+        "/admin/**": { ssr: false, robots: false },
+        "/admin": { ssr: false, robots: false },
+        "/auth": { ssr: false, robots: false },
+    },
+    experimental: {
+        watcher: "chokidar",
+    },
 });

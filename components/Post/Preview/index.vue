@@ -95,7 +95,6 @@ const props = defineProps<{
 }>();
 const showButtons = ref(false);
 const isLoadingPost = ref(true);
-
 const postsStore = usePostsStore();
 const { loadedPosts, userPosts } = storeToRefs(postsStore);
 const route = useRoute();

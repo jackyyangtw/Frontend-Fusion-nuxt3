@@ -276,6 +276,9 @@ const { $storage, $db } = useNuxtApp();
 
 // 上傳文章圖片
 const updateImages = async (postId: string) => {
+    const metadata = {
+        cacheControl: "public,max-age=31536000,immutable",
+    };
     if (editedPost.previewImgUrl !== props.post.previewImgUrl) {
         if (previewImgFile.value) {
             const storagePath = `/images/posts/${postId}/previewImg`;
@@ -286,7 +289,11 @@ const updateImages = async (postId: string) => {
             toast.value.showToast = true;
             toast.value.messageType = "loading";
             try {
-                await uploadBytes(storageReference, previewImgFile.value);
+                await uploadBytes(
+                    storageReference,
+                    previewImgFile.value,
+                    metadata
+                );
                 const downloadUrl = await getDownloadURL(storageReference);
                 editedPost.previewImgUrl = downloadUrl;
             } catch (error: any) {
@@ -325,7 +332,7 @@ const updateImages = async (postId: string) => {
                         : "正在更新文章圖片...";
                     toast.value.showToast = true;
                     toast.value.messageType = "loading";
-                    await uploadBytes(storageReference, file);
+                    await uploadBytes(storageReference, file, metadata);
                     const downloadUrl = await getDownloadURL(storageReference);
                     img.src = downloadUrl;
                 } catch (error: any) {
@@ -377,10 +384,6 @@ const createPost = async () => {
             userId: user.value?.id as string,
         };
         await set(newPostRef, newPost);
-
-        // userPosts.value.push(newPost); // 添加新文章到用戶文章列表
-        await postsStore.getUserPosts();
-        await postsStore.getAllUserPostsCount();
 
         toast.value.message = "文章新增成功!";
         toast.value.showToast = true;

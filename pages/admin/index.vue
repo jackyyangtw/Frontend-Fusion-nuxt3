@@ -1,3 +1,4 @@
+<!-- /admin -->
 <template>
     <div class="admin-page container mx-auto">
         <LazyUserCard v-if="user" :loadingCard="loadingCard" />
@@ -36,5 +37,4 @@ if (!user.value) {
 
 const postsStore = usePostsStore();
 const { userPosts } = storeToRefs(postsStore);
-const allUserPostsLoaded = computed(() => postsStore.allUserPostsLoaded);
 </script>

@@ -14,6 +14,8 @@
 
 <script setup lang="ts">
 const postsStore = usePostsStore();
+postsStore.getRestPosts();
+
 const { sortedPosts } = storeToRefs(postsStore);
 
 const route = useRoute();
@@ -67,10 +69,6 @@ const searchStore = useSearchStore();
 const { searchText } = storeToRefs(searchStore);
 onBeforeRouteLeave(() => {
     searchText.value = "";
-});
-const { getRestPosts } = postsStore;
-onMounted(async () => {
-    await getRestPosts();
 });
 </script>
 

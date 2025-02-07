@@ -170,7 +170,7 @@ export default defineNuxtConfig({
     routeRules: {
         "/": { ssr: true }, // 首頁，取得firebase realtime db 的 post 資料然後render post 資料卡片
         "/posts/**": { isr: 600 }, // 單篇post頁面，取得firebase realtime db 的 post 資料然後 render post 資料卡片
-        "/posts": { ssr: false }, // posts總覽，取得firebase realtime db 的 post 資料然後render頁面
+        "/posts": { ssr: true }, // posts總覽，取得firebase realtime db 的 post 資料然後render頁面
         "/search": { ssr: false, robots: false }, // 搜尋頁面，不須SSR
         "/admin/**": { ssr: false, robots: false },
         "/admin": { ssr: false, robots: false },

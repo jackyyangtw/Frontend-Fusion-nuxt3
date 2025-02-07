@@ -1,12 +1,13 @@
 <template>
     <div class="xl:flex items-start lg:ml-[8rem]">
-        <div class="sidebar-placeholder w-32 hidden xl:block h:10" ref=""></div>
+        <div class="sidebar-placeholder w-32 hidden xl:block h:10"></div>
         <LazyPostFilter
             :posts="sortedPosts"
             :selectedTag="selectedTag"
             @setFilter="setFilter"
         />
         <LazyPostList :posts="filteredPosts" :isAdmin="false" />
+        <LazyLoadingLists :isLoading="isLoadingPosts" />
     </div>
 </template>
 
@@ -20,8 +21,7 @@ const selectedTag = ref<string>("全部類型");
 const postsStore = usePostsStore();
 postsStore.getRestPosts();
 
-const { sortedPosts, allPosts, loadedPosts, isLoadingPosts } =
-    storeToRefs(postsStore);
+const { sortedPosts, isLoadingPosts } = storeToRefs(postsStore);
 const filteredPosts = shallowRef(sortedPosts.value);
 watch([sortedPosts, selectedTag], () => {
     if (selectedTag.value === "全部類型") {

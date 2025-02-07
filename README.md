@@ -1,5 +1,6 @@
 # ISSUE
 
+-   首次登次無法取得使用者文章
 -   ~~直接訪問/posts 會出現沒有任何 posts 的問題 (deploy 後無法): routeRules 改成 SSR~~
 -   ~~新增文章後，首頁不會出現新文章，重整後才有 (posts/loadPosts 需調整)~~
 -   ~~切換到/posts 會出現沒有任何 posts 的問題 (解法: 在/posts 直接取得所有 posts)~~

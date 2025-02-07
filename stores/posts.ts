@@ -95,11 +95,14 @@ export const usePostsStore = defineStore("posts", () => {
 
     // user posts
     const user = useCurrentUser();
-    const userId = user.value?.uid;
-    const userPostsQuery = userId
-        ? query(postsRef, orderByChild("userId"), equalTo(userId))
-        : null;
+    const userId = computed(() => user.value?.uid || null);
+    const userPostsQuery = computed(() =>
+        userId.value
+            ? query(postsRef, orderByChild("userId"), equalTo(userId.value))
+            : null
+    );
     const userPosts = useDatabaseList<Post>(userPostsQuery);
+
     const allUserPostsCount = computed(() => userPosts.value.length);
     const allUserPostsLoaded = computed(() => {
         return (

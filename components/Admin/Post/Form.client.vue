@@ -389,6 +389,8 @@ const createPost = async () => {
         toast.value.showToast = true;
         toast.value.messageType = "success";
 
+        postsStore.getRestPosts();
+
         resetForm();
 
         setTimeout(() => {

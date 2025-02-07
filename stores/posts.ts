@@ -20,12 +20,6 @@ export const usePostsStore = defineStore("posts", () => {
     const { data: allPosts } = useDatabaseList(postsRef);
     const allPostCount = computed(() => allPosts.value.length);
 
-    const setAllPosts = () => {
-        if (allPosts.value) {
-            loadedPosts.value = [...allPosts.value] as Post[];
-        }
-    };
-
     const sortedPosts = computed(() => {
         return loadedPosts.value.sort(
             (a, b) =>
@@ -173,7 +167,6 @@ export const usePostsStore = defineStore("posts", () => {
         allUserPostsLoaded,
         allUserPostsCount,
         sortedPosts,
-        setAllPosts,
         getPosts,
         getRestPosts,
     };

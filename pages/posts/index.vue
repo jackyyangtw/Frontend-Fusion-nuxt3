@@ -18,7 +18,7 @@ useHead({
 const selectedTag = ref<string>("全部類型");
 
 const postsStore = usePostsStore();
-postsStore.setAllPosts();
+postsStore.getRestPosts();
 
 const { sortedPosts, allPosts, loadedPosts, isLoadingPosts } =
     storeToRefs(postsStore);
@@ -38,14 +38,4 @@ const setFilter = (tag: string) => {
         selectedTag.value = tag;
     }
 };
-
-// const { data: postsData } = useAsyncData("posts", async () => {
-//     await postsStore.getRestPosts();
-//     return loadedPosts.value;
-// });
-// watchEffect(() => {
-//     if (postsData.value) {
-//         loadedPosts.value = postsData.value;
-//     }
-// });
 </script>

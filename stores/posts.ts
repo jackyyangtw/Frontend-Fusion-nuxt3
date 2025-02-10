@@ -82,7 +82,11 @@ export const usePostsStore = defineStore("posts", () => {
         } catch (error) {
             console.error("Failed to load posts:", error);
         } finally {
-            isLoadingPosts.value = false;
+            if (process.client) {
+                setTimeout(() => {
+                    isLoadingPosts.value = false;
+                }, 500);
+            }
         }
     };
     const getPosts = async () => {

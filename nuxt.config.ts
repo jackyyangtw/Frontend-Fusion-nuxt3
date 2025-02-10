@@ -64,11 +64,11 @@ export default defineNuxtConfig({
     multiCache: {
         component: {
             enabled: true,
-            maxAge: 1000 * 60 * 15,
+            // maxAge: 1000 * 60 * 15,
         },
         data: {
             enabled: true,
-            maxAge: 1000 * 60 * 30, // 也增加資料快取時間
+            // maxAge: 1000 * 60 * 30, // 也增加資料快取時間
         },
     },
     tiptap: {
@@ -134,11 +134,11 @@ export default defineNuxtConfig({
         vueFireConfig,
     },
     imports: {
-        dirs: ["types/*"],
+        dirs: ["types/client/*.ts"],
         autoImport: true,
     },
     ui: {
-        icons: ["la"],
+        // icons: ["la"],
         safelistColors: [
             "sky",
             "cyan",

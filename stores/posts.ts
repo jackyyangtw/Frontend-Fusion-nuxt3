@@ -82,7 +82,7 @@ export const usePostsStore = defineStore("posts", () => {
         } catch (error) {
             console.error("Failed to load posts:", error);
         } finally {
-            if (process.client) {
+            if (import.meta.client) {
                 setTimeout(() => {
                     isLoadingPosts.value = false;
                 }, 500);

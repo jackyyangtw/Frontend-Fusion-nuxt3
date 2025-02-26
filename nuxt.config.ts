@@ -165,7 +165,7 @@ export default defineNuxtConfig({
     //     domains: ["firebasestorage.googleapis.com"],
     // },
     nitro: {
-        preset: "netlify-edge",
+        preset: "netlify",
     },
     routeRules: {
         "/": { ssr: true }, // 首頁，取得firebase realtime db 的 post 資料然後render post 資料卡片
